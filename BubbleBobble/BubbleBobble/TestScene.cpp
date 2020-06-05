@@ -27,8 +27,7 @@ void TestScene::Initialize()
 
 void TestScene::Update(float dt)
 {
-	float something = dt;
-	something += dt;
+	(void)dt;
 }
 
 void TestScene::Render() const

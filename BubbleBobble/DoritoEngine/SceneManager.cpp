@@ -1,30 +1,43 @@
 #include "MiniginPCH.h"
 #include "SceneManager.h"
 #include "Scene.h"
+#include <algorithm>
+
+SceneManager::SceneManager()
+	: m_pScenes(std::vector<Scene*>())
+	, m_pActiveScene(nullptr)
+	, m_pNewActiveScene(nullptr)
+	, m_IsInit(false)
+{
+
+}
 
 SceneManager::~SceneManager()
 {
 	for (auto scene : m_pScenes)
 	{
-		delete scene;
-		scene = nullptr;
+		SafeDelete(scene);
 	}
 }
 
 void SceneManager::Update(float dt)
 {
-	for(auto& scene : m_pScenes)
+	if (m_pNewActiveScene)
 	{
-		scene->RootUpdate(dt);
+		m_pActiveScene = m_pNewActiveScene;
+		m_pNewActiveScene = nullptr;
+	}
+
+	if (m_pActiveScene)
+	{
+		m_pActiveScene->RootUpdate(dt);
 	}
 }
 
 void SceneManager::Render()
 {
-	for (const auto& scene : m_pScenes)
-	{
-		scene->RootRender();
-	}
+	if (m_pActiveScene != nullptr)
+		m_pActiveScene->RootRender();
 }
 
 void SceneManager::CreateScene(Scene* pScene)
@@ -36,5 +49,36 @@ void SceneManager::CreateScene(Scene* pScene)
 		m_pScenes.push_back(pScene);
 
 		pScene->RootInit();
+
+		if (m_pActiveScene == nullptr && m_pNewActiveScene == nullptr)
+			m_pNewActiveScene = pScene;
 	}
+}
+
+void SceneManager::SetActiveGameScene(const std::string& sceneName)
+{
+	const auto it = find_if(m_pScenes.begin(), m_pScenes.end(), [sceneName](Scene* scene)
+		{
+			return strcmp(scene->GetName().c_str(), sceneName.c_str()) == 0;
+		});
+
+	if (it != m_pScenes.end())
+	{
+		m_pNewActiveScene = *it;
+	}
+}
+
+Scene* SceneManager::GetScene(const std::string& sceneName)
+{
+	const auto it = find_if(m_pScenes.begin(), m_pScenes.end(), [sceneName](Scene* scene)
+		{
+			return strcmp(scene->GetName().c_str(), sceneName.c_str()) == 0;
+		});
+
+	if (it != m_pScenes.end())
+	{
+		return *it;
+	}
+
+	return nullptr;
 }

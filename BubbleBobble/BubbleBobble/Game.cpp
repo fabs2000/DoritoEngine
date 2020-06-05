@@ -16,9 +16,12 @@ using namespace std::chrono;
 
 #define TEST_SCENE
 
+
 #ifdef TEST_SCENE
 #include "TestScene.h"
-#endif // TEST_SCENE
+#include "TestScene2.h"
+#endif
+
 
 void Game::Initialize()
 {
@@ -47,7 +50,10 @@ void Game::LoadGame() const
 {
 #ifdef TEST_SCENE
 	SceneManager::GetInstance().CreateScene(new TestScene("Test"));
+	SceneManager::GetInstance().CreateScene(new TestScene2("Test2"));
+	SceneManager::GetInstance().SetActiveGameScene("Test2");
 #endif
+
 }
 
 void Game::Cleanup()

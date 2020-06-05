@@ -17,6 +17,9 @@ public:
 	Scene& operator=(Scene&& other) = delete;
 
 	void AddObject(GameObject* object);
+	void RemoveObject(GameObject* object);
+
+	const std::string& GetName() const { return m_Name; };
 
 	void RootInit();
 	void RootUpdate(float dt);
@@ -32,6 +35,8 @@ private:
 
 	std::string m_Name;
 	std::vector<GameObject*> m_pGameObjects{};
+
+	bool m_IsInit;
 
 	static unsigned int m_IdCounter;
 };

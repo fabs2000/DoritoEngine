@@ -6,22 +6,35 @@ unsigned int Scene::m_IdCounter = 0;
 
 Scene::Scene(const std::string& name) 
 	: m_Name(name) 
-{
-
-}
+	, m_pGameObjects(std::vector<GameObject*>())
+	, m_IsInit(false)
+{}
 
 Scene::~Scene()
 {
 	for (auto& pSceneObject : m_pGameObjects)
 	{
-		delete pSceneObject;
-		pSceneObject = nullptr;
+		SafeDelete(pSceneObject);
 	}
 }
 
 void Scene::AddObject(GameObject* object)
 {
+	object->Initialize();
+
 	m_pGameObjects.push_back(object);
+}
+
+void Scene::RemoveObject(GameObject* object)
+{
+	const auto it = find(m_pGameObjects.begin(), m_pGameObjects.end(), object);
+
+	if (it != m_pGameObjects.end())
+	{
+		m_pGameObjects.erase(it);
+
+		SafeDelete(object);
+	}
 }
 
 void Scene::RootInit()

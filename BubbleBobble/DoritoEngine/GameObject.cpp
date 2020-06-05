@@ -13,7 +13,9 @@ GameObject::~GameObject()
 }
 
 void GameObject::Initialize()
-{}
+{
+
+}
 
 void GameObject::Render() const
 {
