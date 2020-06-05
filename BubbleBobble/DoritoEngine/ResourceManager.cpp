@@ -34,20 +34,20 @@ Texture2D* ResourceManager::LoadTexture(const std::string& file) const
 {
 	const auto fullPath = m_DataPath + file;
 
-	SDL_Texture* texture = IMG_LoadTexture(Renderer::GetInstance().GetSDLRenderer(), fullPath.c_str());
-	if (texture == nullptr) 
-	{
-		throw std::runtime_error(std::string("Failed to load texture: ") + SDL_GetError());
-	}
-	
-	const auto pTexture = new Texture2D(texture);
+	//SDL_Texture* texture = IMG_LoadTexture(Renderer::GetInstance().GetSDLRenderer(), fullPath.c_str());
+	//if (texture == nullptr) 
+	//{
+	//	throw std::runtime_error(std::string("Failed to load texture: ") + SDL_GetError());
+	//}
+	//
+	//const auto pTexture = new Texture2D(texture);
 
-	return pTexture;
+	return nullptr;
 }
 
-Font* ResourceManager::LoadFont(const std::string& file, unsigned int size) const
+CustomFont* ResourceManager::LoadFont(const std::string& file, unsigned int size) const
 {
-	const auto pFont = new Font(m_DataPath + file, size);
+	const auto pFont = new CustomFont(m_DataPath + file, size);
 
 	return pFont;
 }

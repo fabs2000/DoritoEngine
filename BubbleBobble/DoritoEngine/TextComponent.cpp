@@ -12,25 +12,25 @@ TextComponent::~TextComponent()
 
 void TextComponent::Update()
 {
-	if (m_NeedsUpdate && m_Font != nullptr)
-	{
-		const auto surf = TTF_RenderText_Blended(m_Font->GetFont(), m_Text.c_str(), m_Color);
-		if (surf == nullptr)
-		{
-			throw std::runtime_error(std::string("Render text failed: ") + SDL_GetError());
-		}
-		auto texture = SDL_CreateTextureFromSurface(Renderer::GetInstance().GetSDLRenderer(), surf);
-		if (texture == nullptr)
-		{
-			throw std::runtime_error(std::string("Create text texture from surface failed: ") + SDL_GetError());
-		}
-		SDL_FreeSurface(surf);
-		m_Texture = new Texture2D(texture);
-		m_NeedsUpdate = false;
-	}
+	//if (m_NeedsUpdate && m_Font != nullptr)
+	//{
+	//	const auto surf = TTF_RenderText_Blended(m_Font->GetFont(), m_Text.c_str(), m_Color);
+	//	if (surf == nullptr)
+	//	{
+	//		throw std::runtime_error(std::string("Render text failed: ") + SDL_GetError());
+	//	}
+	//	auto texture = SDL_CreateTextureFromSurface(Renderer::GetInstance().GetSDLRenderer(), surf);
+	//	if (texture == nullptr)
+	//	{
+	//		throw std::runtime_error(std::string("Create text texture from surface failed: ") + SDL_GetError());
+	//	}
+	//	SDL_FreeSurface(surf);
+	//	m_Texture = new Texture2D(texture);
+	//	m_NeedsUpdate = false;
+	//}
 }
 
-void TextComponent::InitText(const std::string& text, Font* font, const SDL_Color& color)
+void TextComponent::InitText(const std::string& text, CustomFont* font, const SDL_Color& color)
 {
 	m_NeedsUpdate = true;
 	m_Text = text; 

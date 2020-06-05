@@ -2,7 +2,7 @@
 #include "GameObject.h"
 #include "Transform.h"
 
-class Font;
+class CustomFont;
 class Texture2D;
 
 class TextObject final : public GameObject
@@ -27,5 +27,5 @@ private:
 	std::string m_Text;
 	std::string m_FontName;
 
-	Font* m_pFont;
+	CustomFont* m_pFont;
 };

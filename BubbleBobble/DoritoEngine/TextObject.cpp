@@ -31,23 +31,23 @@ void TextObject::Update(float dt)
 	//TODO: REMOVE BLYAT
 	(void)dt;
 
-	if (m_NeedsUpdate)
-	{
-		const SDL_Color color = { 255,255,255 }; // only white text is supported now
-		const auto surf = TTF_RenderText_Blended(m_pFont->GetFont(), m_Text.c_str(), color);
-		if (surf == nullptr) 
-		{
-			throw std::runtime_error(std::string("Render text failed: ") + SDL_GetError());
-		}
-		auto texture = SDL_CreateTextureFromSurface(Renderer::GetInstance().GetSDLRenderer(), surf);
-		if (texture == nullptr) 
-		{
-			throw std::runtime_error(std::string("Create text texture from surface failed: ") + SDL_GetError());
-		}
-		SDL_FreeSurface(surf);
-		m_pTexture = new Texture2D(texture);
-		m_NeedsUpdate = false;
-	}
+	//if (m_NeedsUpdate)
+	//{
+	//	const SDL_Color color = { 255,255,255 }; // only white text is supported now
+	//	const auto surf = TTF_RenderText_Blended(m_pFont->GetFont(), m_Text.c_str(), color);
+	//	if (surf == nullptr) 
+	//	{
+	//		throw std::runtime_error(std::string("Render text failed: ") + SDL_GetError());
+	//	}
+	//	auto texture = SDL_CreateTextureFromSurface(Renderer::GetInstance().GetSDLRenderer(), surf);
+	//	if (texture == nullptr) 
+	//	{
+	//		throw std::runtime_error(std::string("Create text texture from surface failed: ") + SDL_GetError());
+	//	}
+	//	SDL_FreeSurface(surf);
+	//	m_pTexture = new Texture2D(texture);
+	//	m_NeedsUpdate = false;
+	//}
 }
 
 void TextObject::Render() const
@@ -68,7 +68,9 @@ void TextObject::SetText(const std::string& textToDisplay)
 
 void TextObject::SetFont(const std::string& fontName)
 {
-	m_pFont = ResourceManager::GetInstance().LoadFont(fontName, 46);
+	(void)fontName;
+
+	//m_pFont = ResourceManager::GetInstance().LoadFont(fontName, 46);
 }
 
 

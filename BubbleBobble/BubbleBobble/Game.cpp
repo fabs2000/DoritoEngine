@@ -1,106 +1,88 @@
 #include "Game.h"
 #include "MiniginPCH.h"
+
 #include <chrono>
 #include <thread>
-#include "InputManager.h"
-#include "SceneManager.h"
+
 #include "Renderer.h"
 #include "ResourceManager.h"
-#include <SDL.h>
-#include "TextObject.h"
-#include "GameObject.h"
 #include "Scene.h"
 
-using namespace std;
-using namespace std::chrono;
 
 #define TEST_SCENE
-
 
 #ifdef TEST_SCENE
 #include "TestScene.h"
 #include "TestScene2.h"
 #endif
 
-
-void Game::Initialize()
+void Game::Initialize(unsigned int width, unsigned int height, const std::string& title)
 {
-	if (SDL_Init(SDL_INIT_VIDEO) != 0)
-	{
-		throw std::runtime_error(std::string("SDL_Init Error: ") + SDL_GetError());
-	}
+	m_GameInfo = std::make_shared<GameInfo>();
 
-	m_Window = SDL_CreateWindow(
-		"Programming 4 assignment",
-		SDL_WINDOWPOS_UNDEFINED,
-		SDL_WINDOWPOS_UNDEFINED,
-		1024,
-		768,
-		SDL_WINDOW_OPENGL
-	);
-	if (m_Window == nullptr)
-	{
-		throw std::runtime_error(std::string("SDL_CreateWindow Error: ") + SDL_GetError());
-	}
+	m_GameInfo->window.create(VideoMode(width, height), title, sf::Style::Titlebar | sf::Style::Close);
+	
+	m_GameInfo->input = InputManager::GetInstance();
+	m_GameInfo->sceneManager = SceneManager::GetInstance();
 
-	Renderer::GetInstance().Init(m_Window);
+
+	//Renderer::GetInstance().Init(m_Window);
 }
 
 void Game::LoadGame() const
 {
 #ifdef TEST_SCENE
-	SceneManager::GetInstance().CreateScene(new TestScene("Test"));
-	SceneManager::GetInstance().CreateScene(new TestScene2("Test2"));
-	SceneManager::GetInstance().SetActiveGameScene("Test2");
+	m_GameInfo->sceneManager.CreateScene(new TestScene("Test"));
+	m_GameInfo->sceneManager.CreateScene(new TestScene2("Test2"));
+	m_GameInfo->sceneManager.SetActiveGameScene("Test2");
 #endif
-
 }
 
 void Game::Cleanup()
 {
-	Renderer::GetInstance().Destroy();
-	SDL_DestroyWindow(m_Window);
-	m_Window = nullptr;
-	SDL_Quit();
+	//Renderer::GetInstance().Destroy();
+	//SDL_DestroyWindow(m_Window);
+	//m_Window = nullptr;
+	//SDL_Quit();
+
+
 }
 
 void Game::Run()
 {
-	Initialize();
-
 	// tell the resource manager where he can find the game data
 	ResourceManager::GetInstance().Init("../Data/");
 
 	LoadGame();
 
 	auto& renderer = Renderer::GetInstance();
-	auto& sceneManager = SceneManager::GetInstance();
-	auto& input = InputManager::GetInstance();
 
-	bool doContinue = true;
-	auto lastTime = std::chrono::high_resolution_clock::now();
-	float lag = 0.f;
-	auto msPerUpdate = duration_cast<duration<float>>(milliseconds(MsPerFrame));
+	float newTime, frameTime;
 
-	while (doContinue)
+	float currentTime = m_Clock.getElapsedTime().asSeconds();
+	float accumulator = 0.f;
+
+	while (m_GameInfo->window.isOpen())
 	{
-		const auto currentTime = high_resolution_clock::now();
-		float deltaTime = std::chrono::duration<float>(currentTime - lastTime).count();
-		lastTime = currentTime;
-		lag += deltaTime;
+		newTime = m_Clock.getElapsedTime().asSeconds();
+		frameTime = newTime - currentTime;
 
-		doContinue = input.ProcessInput();
-
-		while (lag >= msPerUpdate.count())
+		if (frameTime > 0.25f)
 		{
-			sceneManager.Update(msPerUpdate.count());
-			lag -= msPerUpdate.count();
+			frameTime = 0.25f;
 		}
+
+		currentTime = newTime;
+		accumulator += frameTime;
+		m_GameInfo->input.ProcessInput();
+		
+		while (accumulator >= dt)
+		{
+			m_GameInfo->sceneManager.Update(dt);
+
+			accumulator -= dt;
+		}
+
 		renderer.Render();
-
-		auto sleepTime = duration_cast<duration<float>>(currentTime + milliseconds(MsPerFrame) - high_resolution_clock::now());
-		this_thread::sleep_for(sleepTime);
 	}
-
-	Cleanup();
 }

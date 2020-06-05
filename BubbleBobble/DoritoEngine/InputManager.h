@@ -1,6 +1,5 @@
 #pragma once
 #include <XInput.h>
-#include "Singleton.h"
 
 enum class ControllerButton
 {
@@ -10,12 +9,22 @@ enum class ControllerButton
 	ButtonY
 };
 
-class InputManager final : public Singleton<InputManager>
+class InputManager 
 {
 public:
+	static InputManager& GetInstance()
+	{
+		static InputManager instance{};
+		return instance;
+	}
+
+	~InputManager() = default;
+
 	bool ProcessInput();
 	bool IsPressed(ControllerButton button) const;
 
 private:
+	InputManager() = default;
+
 	XINPUT_STATE m_CurrentState{};
 };

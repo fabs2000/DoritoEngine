@@ -5,17 +5,17 @@ struct _TTF_Font;
 /**
  * Simple RAII wrapper for an _TTF_Font
  */
-class Font
+class CustomFont
 {
 public:
 	_TTF_Font* GetFont() const;
-	explicit Font(const std::string& fullPath, unsigned int size);
-	~Font();
+	explicit CustomFont(const std::string& fullPath, unsigned int size);
+	~CustomFont();
 
-	Font(const Font&) = delete;
-	Font(Font&&) = delete;
-	Font& operator= (const Font&) = delete;
-	Font& operator= (const Font&&) = delete;
+	CustomFont(const CustomFont&) = delete;
+	CustomFont(CustomFont&&) = delete;
+	CustomFont& operator= (const CustomFont&) = delete;
+	CustomFont& operator= (const CustomFont&&) = delete;
 private:
 	_TTF_Font* m_Font;
 	unsigned int m_Size;

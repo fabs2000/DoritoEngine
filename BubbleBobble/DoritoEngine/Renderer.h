@@ -1,25 +1,25 @@
 #pragma once
 #include "Singleton.h"
-
-struct SDL_Window;
-struct SDL_Renderer;
+#include "SFML/Graphics/RenderWindow.hpp"
 
 class Texture2D;
 /**
- * Simple RAII wrapper for the SDL renderer
- */
+ * Simple RAII wrapper for the SFML renderer
+ **/
+
+using namespace sf;
 
 class Renderer final : public Singleton<Renderer>
 {
 public:
-	void Init(SDL_Window* window);
+	void Init(Window* window);
 	void Render() const;
 	void Destroy();
 
 	void RenderTexture(const Texture2D& texture, float x, float y) const;
 	void RenderTexture(const Texture2D& texture, float x, float y, float width, float height) const;
 
-	SDL_Renderer* GetSDLRenderer() const { return m_Renderer; }
+	sf::RenderWindow* GetSDLRenderer() const { return m_pRenderer; }
 private:
-	SDL_Renderer* m_Renderer{};
+	sf::RenderWindow* m_pRenderer{};
 };

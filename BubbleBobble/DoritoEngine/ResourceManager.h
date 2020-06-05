@@ -2,7 +2,7 @@
 #include "Singleton.h"
 
 class Texture2D;
-class Font;
+class CustomFont;
 class ResourceManager
 {
 public:
@@ -14,7 +14,7 @@ public:
 
 	void Init(const std::string& data);
 	Texture2D* LoadTexture(const std::string& file) const;
-	Font* LoadFont(const std::string& file, unsigned int size) const;
+	CustomFont* LoadFont(const std::string& file, unsigned int size) const;
 
 private:
 
