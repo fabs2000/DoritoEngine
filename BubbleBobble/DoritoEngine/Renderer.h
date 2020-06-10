@@ -1,25 +1,29 @@
 #pragma once
 #include "Singleton.h"
-#include "SFML/Graphics/RenderWindow.hpp"
+#include "../BubbleBobble/Game.h"
+#include "SFML/Graphics.hpp"
 
-class Texture2D;
-/**
- * Simple RAII wrapper for the SFML renderer
- **/
+class SpriteComponent;
+class TransformComponent;
 
-using namespace sf;
-
-class Renderer final : public Singleton<Renderer>
+class Renderer final
 {
 public:
-	void Init(Window* window);
-	void Render() const;
-	void Destroy();
 
-	void RenderTexture(const Texture2D& texture, float x, float y) const;
-	void RenderTexture(const Texture2D& texture, float x, float y, float width, float height) const;
+	static Renderer* GetInstance()
+	{
+		static Renderer instance{};
+		return &instance;
+	}
 
-	sf::RenderWindow* GetSDLRenderer() const { return m_pRenderer; }
+	void Init(const GameInfo::WindowSettings& windowSettings);
+	void Render();
+
+	void RenderTexture(sf::Sprite* texture, TransformComponent* transform);
+	void RenderText(sf::Text* pText, TransformComponent* transform);
+
+	sf::RenderWindow& GetRenderer() { return m_pRenderer; };
+
 private:
-	sf::RenderWindow* m_pRenderer{};
+	sf::RenderWindow m_pRenderer;
 };

@@ -1,12 +1,13 @@
-#include "MiniginPCH.h"
+#include "DoritoPCH.h"
 #include "Scene.h"
 #include "GameObject.h"
 
 unsigned int Scene::m_IdCounter = 0;
 
-Scene::Scene(const std::string& name) 
+Scene::Scene(const std::string& name, const GameInfo& gameInfo) 
 	: m_Name(name) 
 	, m_pGameObjects(std::vector<GameObject*>())
+	, m_GameInfo( gameInfo )
 	, m_IsInit(false)
 {}
 
@@ -20,8 +21,7 @@ Scene::~Scene()
 
 void Scene::AddObject(GameObject* object)
 {
-	object->Initialize();
-
+	object->SetScene(this);
 	m_pGameObjects.push_back(object);
 }
 
@@ -43,7 +43,7 @@ void Scene::RootInit()
 
 	for (auto& pSceneObj : m_pGameObjects)
 	{
-		pSceneObj->Initialize();
+		pSceneObj->RootInit();
 	}
 }
 
@@ -53,7 +53,7 @@ void Scene::RootUpdate(float dt)
 
 	for(auto& pSceneObject : m_pGameObjects)
 	{
-		pSceneObject->Update(dt);
+		pSceneObject->RootUpdate(dt);
 	}
 }
 
@@ -63,7 +63,7 @@ void Scene::RootRender() const
 
 	for (const auto& pSceneObject : m_pGameObjects)
 	{
-		pSceneObject->Render();
+		pSceneObject->RootRender();
 	}
 }
 

@@ -8,15 +8,11 @@
 	class SceneManager
 	{
 	public:
-
-		static SceneManager& GetInstance()
+		static SceneManager* GetInstance()
 		{
 			static SceneManager instance{};
-			return instance;
+			return &instance;
 		}
-
-		~SceneManager();
-		
 		void CreateScene(Scene* pScene);
 		void SetActiveGameScene(const std::string& sceneName);
 
@@ -26,8 +22,12 @@
 		void Update(float dt);
 		void Render();
 
+		void Destroy();
+
 	private:
 		SceneManager();
+
+
 
 		std::vector<Scene*> m_pScenes;
 		Scene* m_pActiveScene;
@@ -35,5 +35,4 @@
 
 		bool m_IsInit;
 
-		//Scene* m_pActiveScene;
 	};

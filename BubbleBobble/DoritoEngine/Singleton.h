@@ -4,10 +4,10 @@ template <typename T>
 class Singleton
 {
 public:
-	static T& GetInstance()
+	static T* GetInstance()
 	{
 		static T instance{};
-		return instance;
+		return &instance;
 	}
 
 	virtual ~Singleton() = default;

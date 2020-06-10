@@ -4,7 +4,7 @@
 class TestScene2 : public Scene
 {
 public:
-	TestScene2(const std::string& sceneName);
+	TestScene2(const std::string& sceneName, const GameInfo& gameInfo);
 
 	virtual ~TestScene2() = default;
 	TestScene2(const TestScene2& other) = delete;

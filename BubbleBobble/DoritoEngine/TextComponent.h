@@ -1,25 +1,26 @@
 #pragma once
-#include <SDL.h>
-#include <SDL_ttf.h>
+#include "BaseComponent.h"
+#include <SFML/Graphics.hpp>
 
-
-class CustomFont;
-class Texture2D;
-class TextComponent final
+class TextComponent final : public BaseComponent
 {
 public:
-	~TextComponent();
+	explicit TextComponent(const std::string& text, const std::string& file, unsigned int size);
 
-	void Update();
-	void Render(float posX, float posY) const;
+	void SetText(const std::string& textToDisplay);
+	void SetSize(unsigned int size);
+	void SetFont(const std::string& fontName);
 
-	void InitText(const std::string& text, CustomFont* font, const SDL_Color& color);
-	void SetText(const std::string& text);
+	TextComponent(const TextComponent&) = delete;
+	TextComponent(TextComponent&&) = delete;
+	TextComponent& operator= (const TextComponent&) = delete;
+	TextComponent& operator= (const TextComponent&&) = delete;
+
+protected:
+	void Initialize() override;
+	void Update(float dt) override;
+	void Render() override;
 
 private:
-	bool m_NeedsUpdate;
-	std::string m_Text;
-	CustomFont* m_Font;
-	Texture2D* m_Texture;
-	SDL_Color m_Color;
+	sf::Text* m_pText;
 };

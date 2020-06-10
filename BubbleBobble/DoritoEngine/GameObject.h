@@ -1,28 +1,77 @@
 #pragma once
 #include "Transform.h"
-#include "Texture2D.h"
+
 #include <string>
 #include <memory>
+#include <vector>
 
-class GameObject
+class BaseComponent;
+class Scene;
+
+class GameObject final
 {
 public:
-	virtual void Initialize();
-	virtual void Update(float) {};
-	virtual void Render() const;
-
-	void SetTexture(const std::string& filename);
-	void SetPosition(float x, float y);
-
-	GameObject() = default;
+	GameObject();
 	virtual ~GameObject();
+
 	GameObject(const GameObject& other) = delete;
 	GameObject(GameObject&& other) = delete;
 	GameObject& operator=(const GameObject& other) = delete;
 	GameObject& operator=(GameObject&& other) = delete;
 
-protected:
+	void RootInit();
+	void RootUpdate(float dt);
+	void RootRender() const;
 
-	Transform m_Transform;
-	Texture2D* m_pTexture{};
+	TransformComponent* GetTransform() const { return m_pTransform; };
+
+	Scene* GetScene() const { return m_pScene; };
+	void SetScene(Scene* pScene) { m_pScene = pScene; };
+
+	void AddComponent(BaseComponent* pComp);
+	void RemoveComponent(BaseComponent* pComp);
+
+	//Templated Getters
+#pragma region
+
+	template <class T>
+	T* GetComponent()
+	{
+		const type_info& ti = typeid(T);
+		for (auto* component : m_pComponents)
+		{
+			if (component && typeid(*component) == ti)
+				return static_cast<T*>(component);
+		}
+
+		return nullptr;
+	}
+
+	template <class T>
+	T* GetComponents()
+	{
+		const type_info& ti = typeid(T);
+		std::vector<T*> components;
+
+		for (auto* component : m_pComponents)
+		{
+			if (component && typeid(*component) == ti)
+				components.push_back(static_cast<T*>(component));
+		}
+
+		return components;
+	}
+
+#pragma endregion
+
+protected:
+	virtual void Initialize() {};
+	virtual void Update(float) {};
+	virtual void Render() const {};
+
+private:
+	TransformComponent* m_pTransform;
+	std::vector<BaseComponent*> m_pComponents;
+
+	Scene* m_pScene;
 };

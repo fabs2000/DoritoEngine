@@ -1,23 +1,30 @@
 #pragma once
 #include "Singleton.h"
 
-class Texture2D;
-class CustomFont;
 class ResourceManager
 {
 public:
-	static ResourceManager& GetInstance()
+
+	static ResourceManager* GetInstance()
 	{
 		static ResourceManager instance{};
-		return instance;
+		return &instance;
 	}
 
 	void Init(const std::string& data);
-	Texture2D* LoadTexture(const std::string& file) const;
-	CustomFont* LoadFont(const std::string& file, unsigned int size) const;
+	sf::Sprite* LoadSprite(const std::string& file);
+	sf::Text* LoadText(const std::string& text, const std::string& file, unsigned int size);
+
+	void Destroy();
 
 private:
 
 	ResourceManager() = default;
 	std::string m_DataPath;
+
+	std::vector<sf::Texture*> m_pTextures;
+	std::vector<sf::Sprite*> m_pSprites;
+
+	std::vector<sf::Font*> m_pFonts;
+	std::vector<sf::Text*> m_pText;
 };

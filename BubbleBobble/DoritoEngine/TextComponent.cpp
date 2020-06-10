@@ -1,54 +1,36 @@
-#include "MiniginPCH.h"
+#include "DoritoPCH.h"
 #include "TextComponent.h"
+
+#include "ResourceManager.h"
 #include "Renderer.h"
-#include "Font.h"
-#include "Texture2D.h"
 
-TextComponent::~TextComponent()
+TextComponent::TextComponent(const std::string& text, const std::string& file, unsigned int size)
+	: m_pText(ResourceManager::GetInstance()->LoadText(text, file, size))
 {
-	delete m_Texture;
-	m_Texture = nullptr;
 }
 
-void TextComponent::Update()
+void TextComponent::Initialize()
+{}
+
+void TextComponent::Update(float dt)
 {
-	//if (m_NeedsUpdate && m_Font != nullptr)
-	//{
-	//	const auto surf = TTF_RenderText_Blended(m_Font->GetFont(), m_Text.c_str(), m_Color);
-	//	if (surf == nullptr)
-	//	{
-	//		throw std::runtime_error(std::string("Render text failed: ") + SDL_GetError());
-	//	}
-	//	auto texture = SDL_CreateTextureFromSurface(Renderer::GetInstance().GetSDLRenderer(), surf);
-	//	if (texture == nullptr)
-	//	{
-	//		throw std::runtime_error(std::string("Create text texture from surface failed: ") + SDL_GetError());
-	//	}
-	//	SDL_FreeSurface(surf);
-	//	m_Texture = new Texture2D(texture);
-	//	m_NeedsUpdate = false;
-	//}
+	dt;
 }
 
-void TextComponent::InitText(const std::string& text, CustomFont* font, const SDL_Color& color)
+void TextComponent::Render()
 {
-	m_NeedsUpdate = true;
-	m_Text = text; 
-	m_Font = font;
-	m_Color = color;
+	Renderer::GetInstance()->RenderText(m_pText, GetTransform());
 }
 
-// This implementation uses the "dirty flag" pattern
-void TextComponent::SetText(const std::string& text)
+void TextComponent::SetText(const std::string& textToDisplay)
 {
-	m_Text = text;
-	m_NeedsUpdate = true;
+	m_pText->setString(textToDisplay);
 }
 
-void TextComponent::Render(float posX, float posY) const
+void TextComponent::SetSize(unsigned int size)
 {
-	if (m_Texture != nullptr)
-	{
-		Renderer::GetInstance().RenderTexture(*m_Texture, posX, posY);
-	}
+	m_pText->setCharacterSize(size);
 }
+
+
+

@@ -1,4 +1,4 @@
-#include "MiniginPCH.h"
+#include "DoritoPCH.h"
 #include "SceneManager.h"
 #include "Scene.h"
 #include <algorithm>
@@ -10,14 +10,6 @@ SceneManager::SceneManager()
 	, m_IsInit(false)
 {
 
-}
-
-SceneManager::~SceneManager()
-{
-	for (auto scene : m_pScenes)
-	{
-		SafeDelete(scene);
-	}
 }
 
 void SceneManager::Update(float dt)
@@ -38,6 +30,14 @@ void SceneManager::Render()
 {
 	if (m_pActiveScene != nullptr)
 		m_pActiveScene->RootRender();
+}
+
+void SceneManager::Destroy()
+{
+	for (auto scene : m_pScenes)
+	{
+		SafeDelete(scene);
+	}
 }
 
 void SceneManager::CreateScene(Scene* pScene)

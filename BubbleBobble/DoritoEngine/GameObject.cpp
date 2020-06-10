@@ -1,35 +1,73 @@
-#include "MiniginPCH.h"
+#include "DoritoPCH.h"
 #include "GameObject.h"
+#include "BaseComponent.h"
+
 #include "ResourceManager.h"
 #include "Renderer.h"
 
+GameObject::GameObject() 
+	: m_pTransform(nullptr)
+{
+	m_pTransform = new TransformComponent();
+	AddComponent(m_pTransform);
+}
+
 GameObject::~GameObject()
 {
-	if (m_pTexture != nullptr)
+	for (auto component : m_pComponents)
 	{
-		delete m_pTexture;
-		m_pTexture = nullptr;
+		SafeDelete(component);
 	}
 }
 
-void GameObject::Initialize()
+void GameObject::AddComponent(BaseComponent* pComp)
 {
-
+	m_pComponents.push_back(pComp);
+	pComp->SetGameObject(this);
 }
 
-void GameObject::Render() const
+void GameObject::RemoveComponent(BaseComponent* pComp)
 {
-	const auto pos = m_Transform.GetPosition();
+	auto it = find(m_pComponents.begin(), m_pComponents.end(), pComp);
 
-	Renderer::GetInstance().RenderTexture(*m_pTexture, pos.x, pos.y);
+#if _DEBUG
+	if (it == m_pComponents.end())
+	{
+		std::cout << "GameObject::RemoveComponent > Component is not attached to this GameObject!\n";
+		return;
+	}
+#endif
+
+	m_pComponents.erase(it);
+	pComp->SetGameObject(nullptr);
 }
 
-void GameObject::SetTexture(const std::string& filename)
+void GameObject::RootInit()
 {
-	m_pTexture = ResourceManager::GetInstance().LoadTexture(filename);
+	Initialize();
+
+	for (auto component : m_pComponents)
+	{
+		component->RootInitialize();
+	}
 }
 
-void GameObject::SetPosition(float x, float y)
+void GameObject::RootUpdate(float dt)
 {
-	m_Transform.SetPosition(x, y, 0.0f);
+	Update(dt);
+
+	for (auto component : m_pComponents)
+	{
+		component->RootUpdate(dt);
+	}
+}
+
+void GameObject::RootRender() const
+{
+	Render();
+
+	for (auto component : m_pComponents)
+	{
+		component->RootRender();
+	}
 }

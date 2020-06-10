@@ -1,65 +1,38 @@
-#include "MiniginPCH.h"
+#include "DoritoPCH.h"
 #include "Renderer.h"
 #include <SDL.h>
 #include "SceneManager.h"
-#include "Texture2D.h"
+#include "Transform.h"
 
 #include "SFML/Graphics.hpp"
 
-void Renderer::Init(sf::Window* window)
+void Renderer::Init(const GameInfo::WindowSettings& windowSettings)
 {
-	(void)window;
-	//m_pRenderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-	//if (m_pRenderer == nullptr) 
-	//{
-	//	throw std::runtime_error(std::string("SDL_CreateRenderer Error: ") + SDL_GetError());
-	//}
+	m_pRenderer.create(sf::VideoMode(windowSettings.width, windowSettings.height), windowSettings.title,
+		sf::Style::Titlebar | sf::Style::Close);
+
+	if (!m_pRenderer.isOpen()) 
+	{
+		throw std::runtime_error(std::string("SFML Window not created"));
+	}
 }
 
-void Renderer::Render() const
+void Renderer::Render()
 {
-	//SDL_RenderClear(m_pRenderer);
+	m_pRenderer.clear();
 
-	//SceneManager::GetInstance().Render();
-	//
-	//SDL_RenderPresent(m_pRenderer);
+	SceneManager::GetInstance()->Render();
+	
+	m_pRenderer.display();
 }
 
-void Renderer::Destroy()
+void Renderer::RenderTexture(sf::Sprite* pSprite, TransformComponent* transform)
 {
-	//if (m_pRenderer != nullptr)
-	//{
-	//	SDL_DestroyRenderer(m_pRenderer);
-	//	m_pRenderer = nullptr;
-	//}
+	m_pRenderer.draw(*pSprite, transform->GetBaseTransform());
 }
 
-void Renderer::RenderTexture(const Texture2D& texture, const float x, const float y) const
+void Renderer::RenderText(sf::Text* pText, TransformComponent* transform)
 {
-	(void)texture;
-	(void)x;
-	(void)y;
-
-
-	//SDL_Rect dst;
-	//dst.x = static_cast<int>(x);
-	//dst.y = static_cast<int>(y);
-	//SDL_QueryTexture(texture.GetSDLTexture(), nullptr, nullptr, &dst.w, &dst.h);
-	//SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
+	m_pRenderer.draw(*pText, transform->GetBaseTransform());
 }
 
-void Renderer::RenderTexture(const Texture2D& texture, const float x, const float y, const float width, const float height) const
-{
-	(void)texture;
-	(void)x;
-	(void)y;
-	(void)width;
-	(void)height;
-
-	//SDL_Rect dst;
-	//dst.x = static_cast<int>(x);
-	//dst.y = static_cast<int>(y);
-	//dst.w = static_cast<int>(width);
-	//dst.h = static_cast<int>(height);
-	//SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
-}

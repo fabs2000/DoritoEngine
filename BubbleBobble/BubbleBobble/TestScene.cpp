@@ -1,33 +1,37 @@
+#include "DoritoPCH.h"
 #include "TestScene.h"
-#include "GameObject.h"
-#include "TextObject.h"
 
-TestScene::TestScene(const std::string& sceneName) : Scene(sceneName)
+#include "DoritoFactory.h"
+
+TestScene::TestScene(const std::string& sceneName, const GameInfo& gameInfo)
+	: Scene(sceneName, gameInfo)
+	, m_pFPS( nullptr )
+	, m_pRATTLED( nullptr )
+	, m_pTextComp( nullptr )
+	, m_FPSNb()
 {
 }
 
 void TestScene::Initialize()
 {
-	auto go = new GameObject();
+	m_pRATTLED = DoritoFactory::MakeSpriteObject("rattled.jpg");
+	AddObject(m_pRATTLED);
 
-	go->SetTexture("background.jpg");
-	AddObject(go);
+	m_pFPS = DoritoFactory::MakeTextObject("FPS: ", "Lingua.otf", 50);
+	AddObject(m_pFPS);
 
-	go = new GameObject();
-	go->SetTexture("logo.png");
-	go->SetPosition(216, 180);
-	AddObject(go);
-
-	auto to = new TextObject();
-	to->SetFont("Lingua.otf");
-	to->SetText("Programming 4 Assignment");
-	to->SetPosition(80, 20);
-	AddObject(to);
+	m_pTextComp = m_pFPS->GetComponent<TextComponent>();
 }
 
 void TestScene::Update(float dt)
 {
-	(void)dt;
+	m_pRATTLED->GetTransform()->SetPosition(650, 360);
+	//m_pRATTLED->GetTransform()->Rotate(dt, true);
+
+	//m_pRATTLED->GetTransform()->Move(dt * 10, dt * 10);
+
+	m_FPSNb = int(1 / dt);
+	m_pTextComp->SetText("FPS: " + std::to_string(m_FPSNb));
 }
 
 void TestScene::Render() const

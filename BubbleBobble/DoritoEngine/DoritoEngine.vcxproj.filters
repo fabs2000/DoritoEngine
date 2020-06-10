@@ -4,9 +4,6 @@
     <Filter Include="Managers">
       <UniqueIdentifier>{036d35ae-57f9-4f34-b901-f83b00935c74}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Components">
-      <UniqueIdentifier>{04273450-8a6b-44fb-8249-c366903e97a5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Core">
       <UniqueIdentifier>{a9b73f56-25e9-4c7c-b8c2-efac8c358e67}</UniqueIdentifier>
     </Filter>
@@ -16,19 +13,19 @@
     <Filter Include="SceneContent\GameObjects">
       <UniqueIdentifier>{4dcc8c7c-56a6-45e9-9a04-4cfcef3c7ea4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SceneContent\Components">
+      <UniqueIdentifier>{04273450-8a6b-44fb-8249-c366903e97a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MathHelpers">
+      <UniqueIdentifier>{565dceda-78dd-4cd3-8c02-89eaee9798cf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ResourceManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
-    <ClCompile Include="InputManager.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
     <ClCompile Include="SceneManager.cpp">
       <Filter>Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="MiniginPCH.cpp">
-      <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
       <Filter>Core</Filter>
@@ -36,33 +33,36 @@
     <ClCompile Include="Scene.cpp">
       <Filter>SceneContent</Filter>
     </ClCompile>
-    <ClCompile Include="TextComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="Transform.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Font.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture2D.cpp">
-      <Filter>Components</Filter>
+      <Filter>SceneContent\Components</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>SceneContent\GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="TextObject.cpp">
-      <Filter>SceneContent\GameObjects</Filter>
+    <ClCompile Include="BaseComponent.cpp">
+      <Filter>SceneContent\Components</Filter>
     </ClCompile>
-    <ClCompile Include="FPSObject.cpp">
-      <Filter>SceneContent\GameObjects</Filter>
+    <ClCompile Include="TextComponent.cpp">
+      <Filter>SceneContent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteComponent.cpp">
+      <Filter>SceneContent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="DoritoEngine.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="DoritoPCH.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="ControllerComponent.cpp">
+      <Filter>SceneContent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>Managers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ResourceManager.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="InputManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
     <ClInclude Include="SceneManager.h">
@@ -71,9 +71,6 @@
     <ClInclude Include="Singleton.h">
       <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="MiniginPCH.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="Renderer.h">
       <Filter>Core</Filter>
     </ClInclude>
@@ -81,31 +78,42 @@
       <Filter>SceneContent</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
-      <Filter>Components</Filter>
+      <Filter>SceneContent\Components</Filter>
     </ClInclude>
     <ClInclude Include="FPSComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="TextComponent.h">
-      <Filter>Components</Filter>
+      <Filter>SceneContent\Components</Filter>
     </ClInclude>
     <ClInclude Include="Transform.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Font.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture2D.h">
-      <Filter>Components</Filter>
+      <Filter>SceneContent\Components</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>SceneContent\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="TextObject.h">
-      <Filter>SceneContent\GameObjects</Filter>
+    <ClInclude Include="BaseComponent.h">
+      <Filter>SceneContent\Components</Filter>
     </ClInclude>
-    <ClInclude Include="FPSObject.h">
-      <Filter>SceneContent\GameObjects</Filter>
+    <ClInclude Include="TextComponent.h">
+      <Filter>SceneContent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteComponent.h">
+      <Filter>SceneContent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="MathHelpers.h">
+      <Filter>MathHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="DoritoEngine.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="DoritoPCH.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="DoritoFactory.h" />
+    <ClInclude Include="Components.h" />
+    <ClInclude Include="ControllerComponent.h">
+      <Filter>SceneContent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Managers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

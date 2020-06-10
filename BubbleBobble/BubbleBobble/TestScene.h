@@ -1,10 +1,12 @@
 #pragma once
 #include "Scene.h"
 
+class TextComponent;
+
 class TestScene : public Scene
 {
 public:
-	TestScene(const std::string& sceneName);
+	TestScene(const std::string& sceneName, const GameInfo& gameInfo);
 
 	virtual ~TestScene() = default;
 	TestScene(const TestScene& other) = delete;
@@ -17,7 +19,11 @@ public:
 	void Render() const override;
 
 private:
+	GameObject* m_pFPS;
+	GameObject* m_pRATTLED;
 
+	TextComponent* m_pTextComp;
 
+	int m_FPSNb;
 };
 
