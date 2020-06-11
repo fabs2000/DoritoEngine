@@ -2,47 +2,44 @@
 #include "InputManager.h"
 #include <map>
 
-void InputManager::ProcessInput(sf::RenderWindow& pWindow)
+void InputManager::Initialize()
 {
 	//Check for controllers connected
-	RefreshControllers();
-	
-	//Check for window closed
-	sf::Event e;
-	while (pWindow.pollEvent(e)) 
+	CheckControllerConnections();
+}
+
+void InputManager::ProcessInput(sf::RenderWindow& window)
+{
+	//Check if any controllers updated
+	UpdateControllers();
+
+	sf::Event e = {};
+	while (window.pollEvent(e))
 	{
-		if (e.type == sf::Event::Closed) 
+		//Check for window closed
+		if (e.type == sf::Event::Closed)
 		{
-			pWindow.close();
+			window.close();
 		}
+
+		window.setKeyRepeatEnabled(RegisterKetboardInput(e));
 	}
 
+	//Gamepad Input
 	RegisterGamepadInput();
 }
 
-void InputManager::AddGamePadEvent(GamePadEvent event)
+void InputManager::AddGamePadEvent(const GamePadEvent& event)
 {
 	m_GamepadEvents.emplace(event.ActionDesc, event);
 }
 
-bool InputManager::IsGamepadEventTriggered(const std::string& event, PlayerControllers playerID)
+void InputManager::AddKeyboardEvent(const KeyBoardEvent& event)
 {
-	auto range = m_GamepadEvents.equal_range(event);
-
-	for (auto it = range.first; it != range.second; it++)
-	{
-		auto element = *it;
-		
-		if (element.second.ControllerID == playerID)
-		{
-			return element.second.IsTriggered;
-		}
-	}
-
-	return false;
+	m_KeyboardEvents.emplace(event.ActionDesc, event);
 }
 
-void InputManager::RefreshControllers()
+void InputManager::CheckControllerConnections()
 {
 	DWORD dwResult;
 
@@ -53,16 +50,24 @@ void InputManager::RefreshControllers()
 
 		// Simply get the state of the controller from XInput.
 		dwResult = XInputGetState(i, &state);
+		m_ConnectedGamepads.at(i) = (dwResult == ERROR_SUCCESS);
 
-		if (dwResult == ERROR_SUCCESS)
-		{
-			m_GamepadStates.at(i) = state;
-			m_ConnectedGamepads.at(i) = true;
-		}
-		else
-		{
-			m_ConnectedGamepads.at(i) = false;
-		}
+		if(m_ConnectedGamepads.at(i))
+			m_CurrentGamepadStates.at(i) = state;
+	}
+}
+
+void InputManager::UpdateControllers()
+{
+	for (DWORD i = 0; i < XUSER_MAX_COUNT; ++i)
+	{
+		if (!m_ConnectedGamepads[i])
+			return;
+
+		m_OldGamepadStates[i] = m_CurrentGamepadStates[i];
+
+		const DWORD dwResult = XInputGetState(i, &m_CurrentGamepadStates[i]);
+		m_ConnectedGamepads[i] = (dwResult == ERROR_SUCCESS);
 	}
 }
 
@@ -70,39 +75,99 @@ void InputManager::RegisterGamepadInput()
 {
 	for (auto it = m_GamepadEvents.begin(); it != m_GamepadEvents.end(); ++it)
 	{
-		auto currEvent = &(it->second);
+		auto currEvent = it->second;
 
-		currEvent->IsTriggered = false;
-
-		if (!currEvent->IsTriggered && currEvent->GamepadButtonCode != 0)
+		if (currEvent.GamepadButtonCode != 0)
 		{
-			if (IsGamePadButtonDown(currEvent->GamepadButtonCode, currEvent->ControllerID))
+			switch (currEvent.State)
 			{
-				currEvent->IsTriggered = true;
+				//Pressed
+			case InputTriggerState::Pressed:
+				if (!IsGamePadButtonDown(currEvent.GamepadButtonCode, currEvent.ControllerID, true) &&
+					IsGamePadButtonDown(currEvent.GamepadButtonCode, currEvent.ControllerID))
+				{
+					currEvent.EventFunction();
+				}
+				break;
+
+				//Released
+			case InputTriggerState::Released:
+				if (IsGamePadButtonDown(currEvent.GamepadButtonCode, currEvent.ControllerID, true) && 
+					!IsGamePadButtonDown(currEvent.GamepadButtonCode, currEvent.ControllerID))
+				{
+					currEvent.EventFunction();
+				}
+				break;
+
+				//Down
+			case InputTriggerState::Down:
+				if (IsGamePadButtonDown(currEvent.GamepadButtonCode, currEvent.ControllerID, true))
+				{
+					currEvent.EventFunction();
+				}
+				break;
 			}
 		}
 	}
 }
 
-bool InputManager::IsGamePadButtonDown(WORD button, PlayerControllers playerID)
+bool InputManager::RegisterKetboardInput(const sf::Event& e)
+{
+	for (auto it = m_KeyboardEvents.begin(); it != m_KeyboardEvents.end(); ++it)
+	{
+		auto& currEvent = it->second;
+
+		if (currEvent.KeyboardButton != sf::Keyboard::Unknown)
+		{
+			switch (currEvent.State)
+			{
+			case InputTriggerState::Pressed:
+
+				if ((e.type == sf::Event::KeyPressed) 
+					&& (e.key.code == currEvent.KeyboardButton))
+				{
+					currEvent.EventFunction();
+
+					m_IsKeyDown = false;
+				}
+				break;
+
+			case InputTriggerState::Released:
+
+				if ((e.type == sf::Event::KeyReleased)
+					&& (e.key.code == currEvent.KeyboardButton))
+				{
+					currEvent.EventFunction();
+
+					m_IsKeyDown = false;
+				}
+				break;
+
+			case InputTriggerState::Down:
+				if ((e.type == sf::Event::KeyPressed)
+					&& (e.key.code == currEvent.KeyboardButton))
+				{
+					currEvent.EventFunction();
+
+					m_IsKeyDown = true;
+				}
+				break;
+			}
+		}
+	}
+
+	return m_IsKeyDown;
+}
+
+bool InputManager::IsGamePadButtonDown(WORD button, PlayerControllers playerID, bool isPrevFrame)
 {
 	UINT pi = static_cast<UINT>(playerID);
 
-	if(!m_ConnectedGamepads[pi])
+	if (!m_ConnectedGamepads[pi])
 		return false;
 
-	return (m_GamepadStates[pi].Gamepad.wButtons & button) != 0;
-}
+	if (isPrevFrame)
+		return (m_OldGamepadStates[pi].Gamepad.wButtons & button) != 0;
 
-//TODO: Use SFML gamepad implementation? (INDEED(NOT))
-//bool InputManager::IsControllerPressed(unsigned int controllerID, unsigned int button) const
-//{
-//	if (sf::Joystick::isConnected(controllerID))
-//	{
-//		if (sf::Joystick::isButtonPressed(controllerID, button))
-//		{
-//			return true;
-//		}
-//	}
-//	return false;
-//}
+	return (m_CurrentGamepadStates[pi].Gamepad.wButtons & button) != 0;
+}

@@ -21,7 +21,6 @@ Scene::~Scene()
 
 void Scene::AddObject(GameObject* object)
 {
-	object->SetScene(this);
 	m_pGameObjects.push_back(object);
 }
 

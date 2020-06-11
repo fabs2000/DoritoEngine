@@ -26,6 +26,8 @@ void TransformComponent::SetPosition(sf::Vector2f& pos)
 
 void TransformComponent::Move(float offX, float offY)
 {
+	m_Position += sf::Vector2f(offX, offY);
+
 	m_BaseTransform.move(offX, offY);
 }
 

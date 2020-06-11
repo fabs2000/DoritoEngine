@@ -16,6 +16,9 @@ public:
 	TextComponent& operator= (const TextComponent&) = delete;
 	TextComponent& operator= (const TextComponent&&) = delete;
 
+	////Fix this dumb shit ples
+	//const sf::FloatRect& GetCollisionRect() const { return m_pText->getGlobalBounds(); };
+
 protected:
 	void Initialize() override;
 	void Update(float dt) override;

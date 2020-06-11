@@ -60,6 +60,9 @@
     <ClCompile Include="InputManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
+    <ClCompile Include="PhysicsComponent.cpp">
+      <Filter>SceneContent\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ResourceManager.h">
@@ -78,9 +81,6 @@
       <Filter>SceneContent</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
-      <Filter>SceneContent\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="FPSComponent.h">
       <Filter>SceneContent\Components</Filter>
     </ClInclude>
     <ClInclude Include="Transform.h">
@@ -114,6 +114,9 @@
     </ClInclude>
     <ClInclude Include="InputManager.h">
       <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsComponent.h">
+      <Filter>SceneContent\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -24,6 +24,10 @@ private:
 
 	TextComponent* m_pTextComp;
 
+	void Pressed() { std::cout << "Pressed\n"; };
+	void Released() { std::cout << "Released\n"; };
+	void Down() { std::cout << "Down\n"; };
+
 	int m_FPSNb;
 };
 

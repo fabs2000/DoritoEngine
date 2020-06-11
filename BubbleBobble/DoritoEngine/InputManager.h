@@ -7,6 +7,10 @@
 #include <Xinput.h>
 #include <array>
 #include <map>
+#include <functional>
+
+
+typedef sf::Keyboard::Key KeyboardButton;
 
 enum class PlayerControllers : DWORD 
 {
@@ -29,56 +33,68 @@ struct GamePadEvent
 		: ActionDesc("No Action")
 		, GamepadButtonCode(0)
 		, ControllerID(PlayerControllers::Player1)
-		, IsTriggered(false)
+		, State()
+		, EventFunction()
 	{}
 
-	GamePadEvent(const std::string& actionDesc, WORD gamepadButtonCode, PlayerControllers controllerID)
+	GamePadEvent(const std::string& actionDesc, WORD gamepadButtonCode, PlayerControllers controllerID, std::function<void()> function, InputTriggerState state = InputTriggerState::Down)
 		: ActionDesc(actionDesc)
 		, GamepadButtonCode(gamepadButtonCode)
 		, ControllerID(controllerID)
-		, IsTriggered(false)
+		, EventFunction(function)
+		, State(state)
 	{}
 
 	std::string ActionDesc;
 	WORD GamepadButtonCode; //XINPUT_GAMEPAD_...
 	PlayerControllers ControllerID;
-	bool IsTriggered;
+	InputTriggerState State;
+
+	std::function<void()> EventFunction;
 };
 
-//struct ControllerLayout
-//{
-//	enum Buttons : int
-//	{
-//		//Face buttons
-//		A_BUTTON = static_cast<int>(sf::Joystick::X),
-//		B_BUTTON = static_cast<int>(sf::Joystick::Y),
-//		X_BUTTON = static_cast<int>(sf::Joystick::Z),
-//		Y_BUTTON = static_cast<int>(sf::Joystick::R),
-//
-//		//D-Pad
-//		DPAD_LEFT = static_cast<int>(sf::Joystick::PovX),
-//		//DPAD_RIGHT = sf::Joystick::PovX,
-//		DPAD_UP = static_cast<int>(sf::Joystick::PovY),
-//		//DPAD_DOWN = sf::Joystick::PovY,
-//
-//		//Bumpers
-//		LB = sf::Joystick::U,
-//		RB = sf::Joystick::V
-//	};
-//
-//	enum AnalogInput : int
-//	{
-//		//Triggers
-//		LT = sf::Joystick::Axis::Z,
-//		RT = -sf::Joystick::Axis::Z,
-//
-//		//Joysticks
-//		LEFT_AXIS_X = sf::Joystick::Axis::X,
-//		LEFT_AXIS_Y = sf::Joystick::Axis::Y,
-//		RIGHT_AXIS_X = sf::Joystick::Axis::U,
-//		RIGHT_AXIS_Y = sf::Joystick::Axis::R
-//	};
-//};
+
+struct KeyBoardEvent
+{
+	KeyBoardEvent()
+		: ActionDesc("No Action")
+		, KeyboardButton(KeyboardButton::Unknown)
+		, State()
+		, ControllerID(PlayerControllers::Player1)
+		, EventFunction()
+	{}
+
+	KeyBoardEvent(const std::string& actionDesc, KeyboardButton button, std::function<void()> function, InputTriggerState state = InputTriggerState::Down)
+		: ActionDesc(actionDesc)
+		, KeyboardButton(button)
+		, State(state)
+		, ControllerID(PlayerControllers::Player1)
+		, EventFunction(function)
+	{}
+
+	std::string ActionDesc;
+	KeyboardButton KeyboardButton;
+	InputTriggerState State;
+	PlayerControllers ControllerID;
+
+	std::function<void()> EventFunction;
+};
+
+enum GamepadButtons : WORD
+{
+	A = XINPUT_GAMEPAD_A,
+	B = XINPUT_GAMEPAD_B,
+	X = XINPUT_GAMEPAD_X,
+	Y = XINPUT_GAMEPAD_Y,
+
+	RSB = XINPUT_GAMEPAD_RIGHT_SHOULDER,
+	LSB = XINPUT_GAMEPAD_LEFT_SHOULDER,
+
+	LEFT_D = XINPUT_GAMEPAD_DPAD_LEFT,
+	RIGHT_D = XINPUT_GAMEPAD_DPAD_RIGHT,
+	UP_D = XINPUT_GAMEPAD_DPAD_UP,
+	DOWN_D = XINPUT_GAMEPAD_DPAD_DOWN
+};
 
 class InputManager 
 {
@@ -90,20 +106,33 @@ public:
 	}
 	~InputManager() = default;
 
-	void ProcessInput(sf::RenderWindow& pWindow);
+	void Initialize();
 
-	void AddGamePadEvent(GamePadEvent event);
-	bool IsGamepadEventTriggered(const std::string& event, PlayerControllers playerID);
+	//Processes user input
+	void ProcessInput(sf::RenderWindow& window);
+
+	//Manually checks for input
+	bool IsGamePadButtonDown(WORD button, PlayerControllers playerID, bool isPrevFrame = false);
+	
+	//Adding Events
+	void AddGamePadEvent(const GamePadEvent& event);
+	void AddKeyboardEvent(const KeyBoardEvent& event);
 
 private:
 	InputManager() = default;
 
-	void RefreshControllers();
-	bool IsGamePadButtonDown(WORD button, PlayerControllers playerID);
+	void CheckControllerConnections();
+	void UpdateControllers();
 	void RegisterGamepadInput();
+	
+	bool RegisterKetboardInput(const sf::Event& e);
 
+	bool m_IsKeyDown = false;
 
-	std::array<XINPUT_STATE, XUSER_MAX_COUNT> m_GamepadStates = 
+	//Gamepad Variables
+	std::array<XINPUT_STATE, XUSER_MAX_COUNT> m_CurrentGamepadStates = 
+		std::array<XINPUT_STATE, XUSER_MAX_COUNT>();
+	std::array<XINPUT_STATE, XUSER_MAX_COUNT> m_OldGamepadStates =
 		std::array<XINPUT_STATE, XUSER_MAX_COUNT>();
 
 	std::array<bool, XUSER_MAX_COUNT> m_ConnectedGamepads = 
@@ -111,4 +140,8 @@ private:
 
 	std::multimap<std::string, GamePadEvent> m_GamepadEvents =
 		std::multimap<std::string, GamePadEvent>();
+
+	//Keyboard
+	std::map<std::string, KeyBoardEvent> m_KeyboardEvents =
+		std::map<std::string, KeyBoardEvent>();
 };

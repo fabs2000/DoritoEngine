@@ -3,9 +3,9 @@
 
 //Memory Leak detection
 //More detailed explanation of where leak is
-#define _CRTDBG_MAP_ALLOC
-#include <stdlib.h>
-#include <crtdbg.h>
+//#define _CRTDBG_MAP_ALLOC
+//#include <stdlib.h>
+//#include <crtdbg.h>
 
 #ifdef _DEBUG
 #include <vld.h>

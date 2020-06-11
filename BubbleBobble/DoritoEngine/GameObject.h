@@ -11,7 +11,7 @@ class Scene;
 class GameObject final
 {
 public:
-	GameObject();
+	GameObject(Scene* pParentScene);
 	virtual ~GameObject();
 
 	GameObject(const GameObject& other) = delete;
@@ -70,8 +70,8 @@ protected:
 	virtual void Render() const {};
 
 private:
-	TransformComponent* m_pTransform;
-	std::vector<BaseComponent*> m_pComponents;
-
 	Scene* m_pScene;
+	TransformComponent* m_pTransform;
+
+	std::vector<BaseComponent*> m_pComponents;
 };

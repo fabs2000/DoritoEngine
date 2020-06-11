@@ -145,6 +145,7 @@
     <ClCompile Include="BaseComponent.cpp" />
     <ClCompile Include="ControllerComponent.cpp" />
     <ClCompile Include="DoritoEngine.cpp" />
+    <ClCompile Include="PhysicsComponent.cpp" />
     <ClCompile Include="TextComponent.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="InputManager.cpp" />
@@ -163,8 +164,8 @@
     <ClInclude Include="DoritoEngine.h" />
     <ClInclude Include="DoritoFactory.h" />
     <ClInclude Include="MathHelpers.h" />
+    <ClInclude Include="PhysicsComponent.h" />
     <ClInclude Include="TextComponent.h" />
-    <ClInclude Include="FPSComponent.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="DoritoPCH.h" />

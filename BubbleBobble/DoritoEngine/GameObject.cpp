@@ -5,8 +5,9 @@
 #include "ResourceManager.h"
 #include "Renderer.h"
 
-GameObject::GameObject() 
-	: m_pTransform(nullptr)
+GameObject::GameObject(Scene* pParentScene)
+	: m_pScene(pParentScene)
+	, m_pTransform(nullptr)
 {
 	m_pTransform = new TransformComponent();
 	AddComponent(m_pTransform);
