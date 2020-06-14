@@ -2,12 +2,16 @@
 #include "Transform.h"
 #include "MathHelpers.h"
 
+#include "GameObject.h"
+#include "PhysicsComponent.h"
+
 TransformComponent::TransformComponent()
-	: m_BaseTransform{}
-	, m_Origin{}
-	, m_Position{}
-	, m_Rotation{}
-	, m_Scale{}
+	: m_BaseTransform()
+	, m_Origin()
+	, m_Position()
+	, m_Rotation()
+	, m_Scale()
+	, m_IsChanged(false)
 {
 }
 
@@ -41,7 +45,7 @@ void TransformComponent::SetRotation(float angle, bool isRadian)
 	float totRot = angle;
 
 	if (isRadian)
-		totRot = RadiansToDegrees(angle);
+		totRot = DoritoMath::RadiansToDegrees(angle);
 
 	m_Rotation = totRot;
 	m_BaseTransform.setRotation(totRot);
@@ -52,13 +56,15 @@ void TransformComponent::Rotate(float angleOff, bool isRadian)
 	float totRot = angleOff;
 
 	if (isRadian)
-		totRot = RadiansToDegrees(angleOff);
+		totRot = DoritoMath::RadiansToDegrees(angleOff);
 
 	m_BaseTransform.rotate(totRot);
 }
 
 void TransformComponent::SetScale(float x, float y)
 {
+	//m_IsChanged = true;
+
 	m_Scale.x = x;
 	m_Scale.y = y;
 
@@ -72,6 +78,8 @@ void TransformComponent::SetScale(sf::Vector2f& scale)
 
 void TransformComponent::Scale(float factorX, float factorY)
 {
+	//m_IsChanged = true;
+
 	m_BaseTransform.scale(factorX, factorY);
 }
 
@@ -92,3 +100,4 @@ void TransformComponent::SetOrigin(sf::Vector2f& pos)
 {
 	SetOrigin(pos.x, pos.y);
 }
+

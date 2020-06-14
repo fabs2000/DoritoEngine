@@ -27,12 +27,9 @@
 	private:
 		SceneManager();
 
-
-
 		std::vector<Scene*> m_pScenes;
 		Scene* m_pActiveScene;
 		Scene* m_pNewActiveScene;
 
 		bool m_IsInit;
-
 	};

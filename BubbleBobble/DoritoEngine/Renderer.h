@@ -21,9 +21,14 @@ public:
 
 	void RenderTexture(sf::Sprite* texture, TransformComponent* transform);
 	void RenderText(sf::Text* pText, TransformComponent* transform);
+	void RenderShape(const sf::Shape& shapeToDraw);
 
 	sf::RenderWindow& GetRenderer() { return m_pRenderer; };
 
+	void SetDebugRendering(bool isOn) { m_IsDebugRenderingOn = isOn; }
+
 private:
 	sf::RenderWindow m_pRenderer;
+
+	bool m_IsDebugRenderingOn = false;
 };

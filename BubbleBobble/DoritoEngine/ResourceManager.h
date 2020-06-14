@@ -12,8 +12,11 @@ public:
 	}
 
 	void Init(const std::string& data);
+	
 	sf::Sprite* LoadSprite(const std::string& file);
 	sf::Text* LoadText(const std::string& text, const std::string& file, unsigned int size);
+
+	sf::Texture* LoadTexture(const std::string& file);
 
 	void Destroy();
 

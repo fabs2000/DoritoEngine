@@ -23,6 +23,7 @@ void SceneManager::Update(float dt)
 	if (m_pActiveScene)
 	{
 		m_pActiveScene->RootUpdate(dt);
+		m_pActiveScene->RootCollisionUpdate();
 	}
 }
 
@@ -34,7 +35,7 @@ void SceneManager::Render()
 
 void SceneManager::Destroy()
 {
-	for (auto scene : m_pScenes)
+	for (auto& scene : m_pScenes)
 	{
 		SafeDelete(scene);
 	}

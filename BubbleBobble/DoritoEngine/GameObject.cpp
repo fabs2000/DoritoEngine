@@ -8,14 +8,16 @@
 GameObject::GameObject(Scene* pParentScene)
 	: m_pScene(pParentScene)
 	, m_pTransform(nullptr)
+	, m_Tag( "Default" )
 {
 	m_pTransform = new TransformComponent();
-	AddComponent(m_pTransform);
 }
 
 GameObject::~GameObject()
 {
-	for (auto component : m_pComponents)
+	SafeDelete(m_pTransform);
+
+	for (auto& component : m_pComponents)
 	{
 		SafeDelete(component);
 	}
@@ -45,9 +47,7 @@ void GameObject::RemoveComponent(BaseComponent* pComp)
 
 void GameObject::RootInit()
 {
-	Initialize();
-
-	for (auto component : m_pComponents)
+	for (auto& component : m_pComponents)
 	{
 		component->RootInitialize();
 	}
@@ -55,9 +55,7 @@ void GameObject::RootInit()
 
 void GameObject::RootUpdate(float dt)
 {
-	Update(dt);
-
-	for (auto component : m_pComponents)
+	for (auto& component : m_pComponents)
 	{
 		component->RootUpdate(dt);
 	}
@@ -65,9 +63,7 @@ void GameObject::RootUpdate(float dt)
 
 void GameObject::RootRender() const
 {
-	Render();
-
-	for (auto component : m_pComponents)
+	for (auto& component : m_pComponents)
 	{
 		component->RootRender();
 	}

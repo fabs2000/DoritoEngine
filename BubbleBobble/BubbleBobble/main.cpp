@@ -26,6 +26,8 @@ int main()
 }
 
 
+//Using this causes memory leaks since SFML deletes its resurces after application exits
+
 #pragma region MemoryLeak
 
 ////DETECTS LEAKS

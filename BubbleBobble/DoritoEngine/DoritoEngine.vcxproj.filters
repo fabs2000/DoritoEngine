@@ -16,7 +16,7 @@
     <Filter Include="SceneContent\Components">
       <UniqueIdentifier>{04273450-8a6b-44fb-8249-c366903e97a5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MathHelpers">
+    <Filter Include="Helpers">
       <UniqueIdentifier>{565dceda-78dd-4cd3-8c02-89eaee9798cf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -99,7 +99,7 @@
       <Filter>SceneContent\Components</Filter>
     </ClInclude>
     <ClInclude Include="MathHelpers.h">
-      <Filter>MathHelpers</Filter>
+      <Filter>Helpers</Filter>
     </ClInclude>
     <ClInclude Include="DoritoEngine.h">
       <Filter>Core</Filter>
@@ -107,8 +107,6 @@
     <ClInclude Include="DoritoPCH.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="DoritoFactory.h" />
-    <ClInclude Include="Components.h" />
     <ClInclude Include="ControllerComponent.h">
       <Filter>SceneContent\Components</Filter>
     </ClInclude>
@@ -117,6 +115,15 @@
     </ClInclude>
     <ClInclude Include="PhysicsComponent.h">
       <Filter>SceneContent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="PracticalHelpers.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="DoritoFactory.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Components.h">
+      <Filter>Helpers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

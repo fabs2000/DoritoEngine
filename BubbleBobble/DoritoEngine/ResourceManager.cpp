@@ -14,7 +14,7 @@ sf::Sprite* ResourceManager::LoadSprite(const std::string& file)
 
 	m_pTextures.push_back(pTexture);
 
-	const auto fullPath = m_DataPath + file;
+	const auto& fullPath = m_DataPath + file;
 
 	if (!pTexture->loadFromFile(fullPath))
 	{
@@ -34,7 +34,7 @@ sf::Text* ResourceManager::LoadText(const std::string& text, const std::string& 
 
 	m_pFonts.push_back(font);
 
-	auto fullPath = m_DataPath + file;
+	const auto& fullPath = m_DataPath + file;
 
 	if (!font->loadFromFile(m_DataPath + file))
 	{
@@ -48,24 +48,40 @@ sf::Text* ResourceManager::LoadText(const std::string& text, const std::string& 
 	return pText;
 }
 
+sf::Texture* ResourceManager::LoadTexture(const std::string& file)
+{
+	sf::Texture* pTexture = new sf::Texture();
+
+	m_pTextures.push_back(pTexture);
+
+	const auto& fullPath = m_DataPath + file;
+
+	if (!pTexture->loadFromFile(fullPath))
+	{
+		throw  std::runtime_error(std::string("Failed to load texture: " + fullPath));
+	}
+
+	return pTexture;
+}
+
 void ResourceManager::Destroy()
 {
-	for (auto sprite : m_pSprites)
+	for (auto& sprite : m_pSprites)
 	{
 		SafeDelete(sprite);
 	}
 
-	for (auto text : m_pText)
+	for (auto& text : m_pText)
 	{
 		SafeDelete(text);
 	}
 
-	for (auto texture : m_pTextures)
+	for (auto& texture : m_pTextures)
 	{
 		SafeDelete(texture);
 	}
 
-	for (auto font : m_pFonts)
+	for (auto& font : m_pFonts)
 	{
 		SafeDelete(font);
 	}

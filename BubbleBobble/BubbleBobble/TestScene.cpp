@@ -3,6 +3,9 @@
 
 #include "DoritoFactory.h"
 
+#include <istream>
+
+
 TestScene::TestScene(const std::string& sceneName, const GameInfo& gameInfo)
 	: Scene(sceneName, gameInfo)
 	, m_pFPS( nullptr )
@@ -14,16 +17,27 @@ TestScene::TestScene(const std::string& sceneName, const GameInfo& gameInfo)
 
 void TestScene::Initialize()
 {
-	m_pRATTLED = DoritoFactory::MakeSpriteObject(this, "rattled.jpg");
-	AddObject(m_pRATTLED);
-	
-	m_pRATTLED->GetTransform()->SetPosition(650, 360);
+	//Map
+	auto map = DoritoFactory::MakeLevel(this, "Map.png", "level1.json");
+	map->GetTransform()->SetPosition(
+		float(GetGameInfo().windowSettings.width / 2), 
+		float(GetGameInfo().windowSettings.height / 2)
+	);
+	map->GetTransform()->Scale(2.8f, 2.8f);
+	AddObject(map);
 
+	//Player
+	m_pRATTLED = DoritoFactory::MakeCharacter(this, "Bub.png", PlayerControllers::Player1);
+	m_pRATTLED->SetTag("Physics");
+	m_pRATTLED->GetTransform()->SetPosition(650, 150);
+	m_pRATTLED->GetTransform()->Scale(0.3f,0.3f);
+	AddObject(m_pRATTLED);
+
+	//FPS
 	m_pFPS = DoritoFactory::MakeTextObject(this, "FPS: ", "Lingua.otf", 50);
 	AddObject(m_pFPS);
 
 	m_pTextComp = m_pFPS->GetComponent<TextComponent>();
-
 }
 
 void TestScene::Update(float dt)

@@ -14,7 +14,7 @@ void Game::LoadGame(const GameInfo& gameInfo)
 {
 #ifdef TEST_SCENE
 	gameInfo.pSceneManager->CreateScene(new TestScene("Test", gameInfo));
-	gameInfo.pSceneManager->CreateScene(new TestScene2("Test2", gameInfo));
+	//gameInfo.pSceneManager->CreateScene(new TestScene2("Test2", gameInfo));
 	gameInfo.pSceneManager->SetActiveGameScene("Test");
 #endif
 }

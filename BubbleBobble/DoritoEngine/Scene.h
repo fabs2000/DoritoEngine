@@ -4,6 +4,7 @@
 #include <string>
 
 class GameObject;
+class PhysicsComponent;
 
 class Scene
 {
@@ -25,6 +26,7 @@ public:
 
 	void RootInit();
 	void RootUpdate(float dt);
+	void RootCollisionUpdate();
 	void RootRender() const;
 
 protected:
@@ -34,11 +36,11 @@ protected:
 
 private:
 	std::string m_Name;
-	std::vector<GameObject*> m_pGameObjects{};
+
+	std::vector<GameObject*> m_pBasicObjects;
+	std::vector<PhysicsComponent*> m_pPhysicsComponents;
 
 	GameInfo m_GameInfo;
 	bool m_IsInit;
-
-	static unsigned int m_IdCounter;
 };
 

@@ -4,7 +4,7 @@
 #include "SFML/Graphics/Transform.hpp"
 
 
-class TransformComponent final : public BaseComponent
+class TransformComponent final
 {
 public:
 	TransformComponent();
@@ -43,14 +43,11 @@ public:
 
 	const sf::Transform& GetBaseTransform() const { return m_BaseTransform.getTransform(); };
 
-protected:
-	void Initialize() override {};
-	void Update(float dt) override { dt; };
-	void Render() override {};
-
 private:
 	sf::Transformable m_BaseTransform;
 
 	sf::Vector2f m_Position, m_Scale, m_Origin;
 	float m_Rotation;
+
+	bool m_IsChanged;
 };

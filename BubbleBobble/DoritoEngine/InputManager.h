@@ -115,8 +115,8 @@ public:
 	bool IsGamePadButtonDown(WORD button, PlayerControllers playerID, bool isPrevFrame = false);
 	
 	//Adding Events
-	void AddGamePadEvent(const GamePadEvent& event);
-	void AddKeyboardEvent(const KeyBoardEvent& event);
+	void AddGamePadEvent(const GamePadEvent& padEvent);
+	void AddKeyboardEvent(const KeyBoardEvent& keyEvent);
 
 private:
 	InputManager() = default;
@@ -125,7 +125,7 @@ private:
 	void UpdateControllers();
 	void RegisterGamepadInput();
 	
-	bool RegisterKetboardInput(const sf::Event& e);
+	void RegisterKetboardInput(const sf::Event& e);
 
 	bool m_IsKeyDown = false;
 

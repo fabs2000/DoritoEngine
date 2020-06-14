@@ -15,6 +15,10 @@ void Renderer::Init(const GameInfo::WindowSettings& windowSettings)
 	{
 		throw std::runtime_error(std::string("SFML Window not created"));
 	}
+
+	m_pRenderer.setVerticalSyncEnabled(windowSettings.isVsyncOn);
+
+	//m_pRenderer.setFramerateLimit(60);
 }
 
 void Renderer::Render()
@@ -36,3 +40,8 @@ void Renderer::RenderText(sf::Text* pText, TransformComponent* transform)
 	m_pRenderer.draw(*pText, transform->GetBaseTransform());
 }
 
+void Renderer::RenderShape(const sf::Shape& shapeToDraw)
+{
+	if (m_IsDebugRenderingOn)
+		m_pRenderer.draw(shapeToDraw);
+}

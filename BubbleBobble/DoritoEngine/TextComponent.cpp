@@ -19,7 +19,7 @@ void TextComponent::Update(float dt)
 
 void TextComponent::Render()
 {
-	Renderer::GetInstance()->RenderText(m_pText, GetTransform());
+	Renderer::GetInstance()->RenderText(m_pText, GetParentTransform());
 }
 
 void TextComponent::SetText(const std::string& textToDisplay)

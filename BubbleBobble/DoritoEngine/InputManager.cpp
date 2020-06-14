@@ -22,21 +22,22 @@ void InputManager::ProcessInput(sf::RenderWindow& window)
 			window.close();
 		}
 
-		window.setKeyRepeatEnabled(RegisterKetboardInput(e));
+		window.setKeyRepeatEnabled(m_IsKeyDown);
+		RegisterKetboardInput(e);
 	}
 
 	//Gamepad Input
 	RegisterGamepadInput();
 }
 
-void InputManager::AddGamePadEvent(const GamePadEvent& event)
+void InputManager::AddGamePadEvent(const GamePadEvent& padEvent)
 {
-	m_GamepadEvents.emplace(event.ActionDesc, event);
+	m_GamepadEvents.emplace(padEvent.ActionDesc, padEvent);
 }
 
-void InputManager::AddKeyboardEvent(const KeyBoardEvent& event)
+void InputManager::AddKeyboardEvent(const KeyBoardEvent& keyEvent)
 {
-	m_KeyboardEvents.emplace(event.ActionDesc, event);
+	m_KeyboardEvents.emplace(keyEvent.ActionDesc, keyEvent);
 }
 
 void InputManager::CheckControllerConnections()
@@ -111,7 +112,7 @@ void InputManager::RegisterGamepadInput()
 	}
 }
 
-bool InputManager::RegisterKetboardInput(const sf::Event& e)
+void InputManager::RegisterKetboardInput(const sf::Event& e)
 {
 	for (auto it = m_KeyboardEvents.begin(); it != m_KeyboardEvents.end(); ++it)
 	{
@@ -155,8 +156,6 @@ bool InputManager::RegisterKetboardInput(const sf::Event& e)
 			}
 		}
 	}
-
-	return m_IsKeyDown;
 }
 
 bool InputManager::IsGamePadButtonDown(WORD button, PlayerControllers playerID, bool isPrevFrame)

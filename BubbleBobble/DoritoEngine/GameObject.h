@@ -23,16 +23,27 @@ public:
 	void RootUpdate(float dt);
 	void RootRender() const;
 
-	TransformComponent* GetTransform() const { return m_pTransform; };
+	TransformComponent* GetTransform() const { return m_pTransform; }
 
-	Scene* GetScene() const { return m_pScene; };
-	void SetScene(Scene* pScene) { m_pScene = pScene; };
+	Scene* GetScene() const { return m_pScene; }
+	void SetScene(Scene* pScene) { m_pScene = pScene; }
 
 	void AddComponent(BaseComponent* pComp);
 	void RemoveComponent(BaseComponent* pComp);
 
+	const std::string& GetTag() { return m_Tag; }
+	void SetTag(const std::string& tag) { m_Tag = tag; }
+
 	//Templated Getters
-#pragma region
+#pragma region Component Searches
+
+	template <class T>
+	bool HasComponent(BaseComponent* base)
+	{
+		base = GetComponent<T>();
+
+		return GetComponent<T>() != nullptr;
+	}
 
 	template <class T>
 	T* GetComponent()
@@ -48,7 +59,7 @@ public:
 	}
 
 	template <class T>
-	T* GetComponents()
+	std::vector<T*> GetComponents()
 	{
 		const type_info& ti = typeid(T);
 		std::vector<T*> components;
@@ -64,14 +75,11 @@ public:
 
 #pragma endregion
 
-protected:
-	virtual void Initialize() {};
-	virtual void Update(float) {};
-	virtual void Render() const {};
-
 private:
-	Scene* m_pScene;
 	TransformComponent* m_pTransform;
+
+	Scene* m_pScene;
+	std::string m_Tag;
 
 	std::vector<BaseComponent*> m_pComponents;
 };
