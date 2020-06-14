@@ -66,6 +66,9 @@
     <ClCompile Include="ColliderComponent.cpp">
       <Filter>SceneContent\Components</Filter>
     </ClCompile>
+    <ClCompile Include="BubbleComponent.cpp">
+      <Filter>SceneContent\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ResourceManager.h">
@@ -129,6 +132,9 @@
       <Filter>SceneContent\Components</Filter>
     </ClInclude>
     <ClInclude Include="ColliderComponent.h">
+      <Filter>SceneContent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="BubbleComponent.h">
       <Filter>SceneContent\Components</Filter>
     </ClInclude>
   </ItemGroup>

@@ -4,6 +4,7 @@
 #include <string>
 #include <memory>
 #include <vector>
+#include <list>
 
 class BaseComponent;
 class Scene;
@@ -30,6 +31,9 @@ public:
 
 	void AddComponent(BaseComponent* pComp);
 	void RemoveComponent(BaseComponent* pComp);
+
+	bool GetMarkedForDelete() { return m_MarkedForDelete; }
+	void Delete() { m_MarkedForDelete = true; }
 
 	const std::string& GetTag() { return m_Tag; }
 	void SetTag(const std::string& tag) { m_Tag = tag; }
@@ -81,5 +85,7 @@ private:
 	Scene* m_pScene;
 	std::string m_Tag;
 
-	std::vector<BaseComponent*> m_pComponents;
+	std::list<BaseComponent*> m_pComponents;
+
+	bool m_MarkedForDelete;
 };

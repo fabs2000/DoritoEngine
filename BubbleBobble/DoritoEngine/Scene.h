@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include "DoritoEngine.h"
 #include <string>
+#include <list>
 
 class GameObject;
 class ColliderComponent;
@@ -37,8 +38,8 @@ protected:
 private:
 	std::string m_Name;
 
-	std::vector<GameObject*> m_pBasicObjects;
-	std::vector<ColliderComponent*> m_pPhysicsComponents;
+	std::list<GameObject*> m_pBasicObjects;
+	std::list<ColliderComponent*> m_pPhysicsComponents;
 
 	GameInfo m_GameInfo;
 	bool m_IsInit;
