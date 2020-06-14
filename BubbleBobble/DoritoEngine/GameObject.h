@@ -88,4 +88,5 @@ private:
 	std::list<BaseComponent*> m_pComponents;
 
 	bool m_MarkedForDelete;
+	bool m_IsInit;
 };

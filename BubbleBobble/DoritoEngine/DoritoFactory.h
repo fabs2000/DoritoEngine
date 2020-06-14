@@ -28,7 +28,7 @@ namespace DoritoFactory
 		auto pCollider = new ColliderComponent(true);
 		pPlayer->AddComponent(pCollider);
 
-		pPlayer->SetTag("Physics");
+		pPlayer->SetTag("Player");
 
 		return pPlayer;
 	}
@@ -61,7 +61,7 @@ namespace DoritoFactory
 			pCollider->GetTransform()->SetPosition(collider["X"], collider["Y"]);
 		}
 
-		level->SetTag("Physics");
+		level->SetTag("Level");
 
 		return level;
 	}
@@ -87,6 +87,8 @@ namespace DoritoFactory
 		auto pCollider = new ColliderComponent(true);
 		pEnemy->AddComponent(pCollider);
 
+		pEnemy->SetTag("Enemy");
+
 		return pEnemy;
 	}
 
@@ -100,7 +102,7 @@ namespace DoritoFactory
 		return pSprite;
 	}
 
-	inline GameObject* MakeBubble(Scene* pScene, const std::string& fileName)
+	inline GameObject* MakeBubble(Scene* pScene, const std::string& fileName, float direction)
 	{
 		auto pBubble = new GameObject(pScene);
 
@@ -111,10 +113,12 @@ namespace DoritoFactory
 		pCollider->SetIsTrigger(true);
 		pBubble->AddComponent(pCollider);
 
-		auto pBubcomp = new BubbleComponent();
+		auto pBubcomp = new BubbleComponent(direction);
 		pBubble->AddComponent(pBubcomp);
 
-		pBubble->GetTransform()->SetScale(0.3f,0.3f);
+		pBubble->GetTransform()->SetScale(2.5f,2.5f);
+
+		pBubble->SetTag("Bubble");
 
 		return pBubble;
 	}

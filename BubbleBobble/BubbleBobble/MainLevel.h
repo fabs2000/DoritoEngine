@@ -29,5 +29,8 @@ private:
 	void Down() { std::cout << "Down\n"; };
 
 	int m_FPSNb;
+	bool m_2PlayerMode;
+
+	void AddPlayer2();
 };
 

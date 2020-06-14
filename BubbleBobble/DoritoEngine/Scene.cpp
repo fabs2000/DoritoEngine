@@ -21,6 +21,8 @@ Scene::~Scene()
 
 void Scene::AddObject(GameObject* object)
 {
+	object->RootInit();
+
 	auto physComp = object->GetComponents<ColliderComponent>();
 
 	if (!physComp.empty())

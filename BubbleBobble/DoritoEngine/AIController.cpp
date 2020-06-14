@@ -8,9 +8,13 @@
 #include "MathHelpers.h"
 
 AIController::AIController()
-	: m_Velocity(static_cast<float>(DoritoMath::Rand(-1, 1)), 0)
+	: m_EnemyState(EnemyState::DEFAULT)
+	, m_Velocity(static_cast<float>(DoritoMath::Rand(-1, 1)), 0)
 	, m_Gravity(0.f, 800.f)
-	, m_MovementAcceleration(DoritoMath::RandF(100.f, 200.f))
+	, m_MovementAcceleration(DoritoMath::RandF(50.f, 100.f))
+	, m_FloatTime()
+	, m_FloatRate()
+	, m_OriginalVelX()
 	, m_pCollider(nullptr)
 {
 }
@@ -22,7 +26,7 @@ void AIController::Initialize()
 	if (m_pCollider)
 	{
 		auto callback = std::bind(&AIController::HandleCollisions,
-			this, std::placeholders::_1);
+			this, std::placeholders::_1, std::placeholders::_2);
 
 		m_pCollider->SetCollisionCallback(callback);
 	}
@@ -31,12 +35,14 @@ void AIController::Initialize()
 		m_Velocity.x = 1.f;
 
 	m_Velocity *= m_MovementAcceleration;
-
 }
 
 void AIController::Update(float dt)
 {
-	HandleMovement(dt);
+	if (m_EnemyState == EnemyState::INBUBBLE)
+		FloatUp(dt);
+	else
+		HandleMovement(dt);
 
 	Teleport();
 }
@@ -53,35 +59,63 @@ void AIController::HandleMovement(float dt)
 
 	offset = m_Velocity * dt;
 
+	m_OriginalVelX = m_Velocity.x;
+
 	GetParentTransform()->Move(offset);
 }
 
-void AIController::HandleCollisions(const SDL_Rect& intersect)
+void AIController::FloatUp(float dt)
 {
-	auto pos = GetParentTransform()->GetPosition();
-
-	if (intersect.h < intersect.w)
+	m_FloatRate += dt;
+	
+	if (m_FloatRate <= m_FloatTime)
 	{
-		if (m_Velocity.y > 0)
-		{
-			m_Velocity.y = 0;
-			GetParentTransform()->SetPosition(pos.x, pos.y - intersect.h);
-		}
+		sf::Vector2f offset{};
+
+		offset = m_Velocity * dt;
+
+		GetParentTransform()->Move(offset);
 	}
 	else
 	{
-		float direction = 0;
+		m_EnemyState = EnemyState::DEFAULT;
 
-		if (m_Velocity.x > 0.f)
+		m_Velocity.x = m_OriginalVelX;
+		m_Velocity.y = 0.f;
+
+		m_FloatRate = 0.f;
+	}
+}
+
+void AIController::HandleCollisions(const SDL_Rect& intersect, ColliderComponent* other)
+{
+	if (!other->GetIsTrigger())
+	{
+		auto pos = GetParentTransform()->GetPosition();
+
+		if (intersect.h < intersect.w)
 		{
-			direction = -1.f;
+			if (m_Velocity.y > 0)
+			{
+				m_Velocity.y = 0;
+				GetParentTransform()->SetPosition(pos.x, pos.y - intersect.h);
+			}
 		}
 		else
-			direction = 1.f;
+		{
+			float direction = 0;
 
-		GetParentTransform()->SetPosition(pos.x + (direction * 2.f), pos.y);
-		GetParentTransform()->SetScale(direction * 0.3f, 0.3f);
-		m_Velocity.x = -m_Velocity.x;
+			if (m_Velocity.x > 0.f)
+			{
+				direction = -1.f;
+			}
+			else
+				direction = 1.f;
+
+			GetParentTransform()->SetPosition(pos.x + (direction * intersect.w), pos.y);
+			GetParentTransform()->SetScale(direction * 0.3f, 0.3f);
+			m_Velocity.x = -m_Velocity.x;
+		}
 	}
 }
 

@@ -22,10 +22,10 @@ public:
 	void SetIsTrigger(bool isTrigger) { m_IsTrigger = isTrigger; }
 	void SetUsingSprite(bool usingSprite) { m_UseSpriteCollisions = usingSprite; }
 
-	void SetCollisionCallback(std::function<void(const SDL_Rect&)> callback)
+	void SetCollisionCallback(std::function<void(const SDL_Rect&, ColliderComponent*)> callback)
 	{ if(!m_IsTrigger)m_CollisionCallback = callback; }
 
-	void SetTriggerCallback(std::function<void()> callback) 
+	void SetTriggerCallback(std::function<void(GameObject*, GameObject*)> callback)
 	{ if(m_IsTrigger)m_TriggerCallback = callback; }
 
 	bool GetIsTrigger() { return m_IsTrigger; }
@@ -36,8 +36,8 @@ protected:
 	virtual void Render();
 
 private:
-	std::function<void(const SDL_Rect&)> m_CollisionCallback;
-	std::function<void()> m_TriggerCallback;
+	std::function<void(const SDL_Rect&, ColliderComponent*)> m_CollisionCallback;
+	std::function<void(GameObject*, GameObject*)> m_TriggerCallback;
 
 	sf::RectangleShape m_Shape;
 	SDL_Rect m_Collider;

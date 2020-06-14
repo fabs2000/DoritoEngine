@@ -9,6 +9,8 @@ GameObject::GameObject(Scene* pParentScene)
 	: m_pScene(pParentScene)
 	, m_pTransform(nullptr)
 	, m_Tag( "Default" )
+	, m_MarkedForDelete(false)
+	, m_IsInit(false)
 {
 	m_pTransform = new TransformComponent();
 }
@@ -47,9 +49,13 @@ void GameObject::RemoveComponent(BaseComponent* pComp)
 
 void GameObject::RootInit()
 {
-	for (auto& component : m_pComponents)
+	if (!m_IsInit)
 	{
-		component->RootInitialize();
+		for (auto& component : m_pComponents)
+		{
+			component->RootInitialize();
+		}
+		m_IsInit = true;
 	}
 }
 

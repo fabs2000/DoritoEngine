@@ -30,7 +30,7 @@ void ControllerComponent::Initialize()
 	if (!m_pCollider->GetIsTrigger())
 	{
 		auto callback = std::bind(&ControllerComponent::HandleCollisions,
-			this, std::placeholders::_1);
+			this, std::placeholders::_1, std::placeholders::_2);
 
 		m_pCollider->SetCollisionCallback(callback);
 	}
@@ -86,23 +86,26 @@ void ControllerComponent::HandleMovement(float dt)
 	m_Velocity.x = 0;
 }
 
-void ControllerComponent::HandleCollisions(const SDL_Rect& intersect)
+void ControllerComponent::HandleCollisions(const SDL_Rect& intersect, ColliderComponent*other)
 {
-	auto pos = GetParentTransform()->GetPosition();
+	if (!other->GetIsTrigger())
+	{
+		auto pos = GetParentTransform()->GetPosition();
 
-	if (intersect.h < intersect.w)
-	{
-		if (m_Velocity.y > 0)
+		if (intersect.h < intersect.w)
 		{
-			m_Velocity.y = 0;
-			GetParentTransform()->SetPosition(pos.x, pos.y - intersect.h - 0.01f);
-			m_PlayerState = PlayerStates::GROUNDED;
+			if (m_Velocity.y > 0)
+			{
+				m_Velocity.y = 0;
+				GetParentTransform()->SetPosition(pos.x, pos.y - intersect.h - 0.01f);
+				m_PlayerState = PlayerStates::GROUNDED;
+			}
 		}
-	}
-	else
-	{
-		m_Velocity.x = 0;
-		GetParentTransform()->SetPosition(pos.x + (-m_MoveDirection * intersect.w), pos.y);
+		else
+		{
+			m_Velocity.x = 0;
+			GetParentTransform()->SetPosition(pos.x + (-m_MoveDirection * intersect.w), pos.y);
+		}
 	}
 }
 
@@ -119,17 +122,17 @@ void ControllerComponent::Teleport()
 
 void ControllerComponent::ShootBubbles()
 {
-	auto pBubble = DoritoFactory::MakeBubble(GetGameObject()->GetScene(), "Bob.png");
+	auto pBubble = DoritoFactory::MakeBubble(GetGameObject()->GetScene(), "bubble.png", m_MoveDirection);
 
 	auto pos = GetParentTransform()->GetPosition();
-	pBubble->GetTransform()->SetPosition(pos.x, pos.y - 30.f);
+	pBubble->GetTransform()->SetPosition(pos.x + (50.f * m_MoveDirection), pos.y - 30.f);
 
 	GetGameObject()->GetScene()->AddObject(pBubble);
 }
 
 void ControllerComponent::Jump()
 {
-	if (m_PlayerState == PlayerStates::GROUNDED || m_PlayerState != PlayerStates::FALLING)
+	if (m_PlayerState == PlayerStates::GROUNDED)
 	{
 		m_Velocity.y = -m_JumpForce;
 		m_PlayerState = PlayerStates::JUMPING;
@@ -139,11 +142,13 @@ void ControllerComponent::Jump()
 void ControllerComponent::MoveRight()
 {
 	m_Velocity.x = m_MovementAcceleration;
+	GetParentTransform()->SetScale(0.3f,0.3f);
 	m_MoveDirection = 1.f;
 }
 
 void ControllerComponent::MoveLeft()
 {
 	m_Velocity.x = -m_MovementAcceleration;
+	GetParentTransform()->SetScale(-0.3f, 0.3f);
 	m_MoveDirection = -1.f;
 }
