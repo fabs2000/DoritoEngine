@@ -3,7 +3,7 @@
 #include "MathHelpers.h"
 
 #include "GameObject.h"
-#include "PhysicsComponent.h"
+#include "ColliderComponent.h"
 
 TransformComponent::TransformComponent()
 	: m_BaseTransform()

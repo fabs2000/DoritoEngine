@@ -6,15 +6,15 @@
 #define TEST_SCENE
 
 #ifdef TEST_SCENE
-#include "TestScene.h"
-#include "TestScene2.h"
+#include "MainLevel.h"
+#include "Menu.h"
 #endif
 
 void Game::LoadGame(const GameInfo& gameInfo)
 {
 #ifdef TEST_SCENE
-	gameInfo.pSceneManager->CreateScene(new TestScene("Test", gameInfo));
-	//gameInfo.pSceneManager->CreateScene(new TestScene2("Test2", gameInfo));
-	gameInfo.pSceneManager->SetActiveGameScene("Test");
+	gameInfo.pSceneManager->CreateScene(new MainLevel("Main", gameInfo));
+	gameInfo.pSceneManager->CreateScene(new MenuScene("Menu", gameInfo));
+	gameInfo.pSceneManager->SetActiveGameScene("Menu");
 #endif
 }

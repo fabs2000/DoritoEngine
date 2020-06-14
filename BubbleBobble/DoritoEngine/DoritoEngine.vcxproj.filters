@@ -60,7 +60,10 @@
     <ClCompile Include="InputManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
-    <ClCompile Include="PhysicsComponent.cpp">
+    <ClCompile Include="AIController.cpp">
+      <Filter>SceneContent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ColliderComponent.cpp">
       <Filter>SceneContent\Components</Filter>
     </ClCompile>
   </ItemGroup>
@@ -113,9 +116,6 @@
     <ClInclude Include="InputManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="PhysicsComponent.h">
-      <Filter>SceneContent\Components</Filter>
-    </ClInclude>
     <ClInclude Include="PracticalHelpers.h">
       <Filter>Helpers</Filter>
     </ClInclude>
@@ -124,6 +124,12 @@
     </ClInclude>
     <ClInclude Include="Components.h">
       <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="AIController.h">
+      <Filter>SceneContent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ColliderComponent.h">
+      <Filter>SceneContent\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

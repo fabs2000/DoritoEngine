@@ -1,7 +1,7 @@
 #include "DoritoPCH.h"
 #include "Scene.h"
 #include "GameObject.h"
-#include "PhysicsComponent.h"
+#include "ColliderComponent.h"
 
 Scene::Scene(const std::string& name, const GameInfo& gameInfo)
 	: m_Name(name)
@@ -23,7 +23,7 @@ void Scene::AddObject(GameObject* object)
 {
 	if(object->GetTag() == "Physics")
 	{
-		auto physComp = object->GetComponents<PhysicsComponent>();
+		auto physComp = object->GetComponents<ColliderComponent>();
 
 		if (!physComp.empty())
 		{

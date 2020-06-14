@@ -20,10 +20,10 @@
     <ClCompile Include="Game.cpp">
       <Filter>MainFiles</Filter>
     </ClCompile>
-    <ClCompile Include="TestScene.cpp">
+    <ClCompile Include="MainLevel.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="TestScene2.cpp">
+    <ClCompile Include="Menu.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
   </ItemGroup>
@@ -31,10 +31,10 @@
     <ClInclude Include="Game.h">
       <Filter>MainFiles</Filter>
     </ClInclude>
-    <ClInclude Include="TestScene.h">
+    <ClInclude Include="MainLevel.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="TestScene2.h">
+    <ClInclude Include="Menu.h">
       <Filter>Scenes</Filter>
     </ClInclude>
   </ItemGroup>

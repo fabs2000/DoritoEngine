@@ -146,10 +146,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AIController.cpp" />
     <ClCompile Include="BaseComponent.cpp" />
     <ClCompile Include="ControllerComponent.cpp" />
     <ClCompile Include="DoritoEngine.cpp" />
-    <ClCompile Include="PhysicsComponent.cpp" />
+    <ClCompile Include="ColliderComponent.cpp" />
     <ClCompile Include="TextComponent.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="InputManager.cpp" />
@@ -162,13 +163,14 @@
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AIController.h" />
     <ClInclude Include="BaseComponent.h" />
     <ClInclude Include="Components.h" />
     <ClInclude Include="ControllerComponent.h" />
     <ClInclude Include="DoritoEngine.h" />
     <ClInclude Include="DoritoFactory.h" />
     <ClInclude Include="MathHelpers.h" />
-    <ClInclude Include="PhysicsComponent.h" />
+    <ClInclude Include="ColliderComponent.h" />
     <ClInclude Include="PracticalHelpers.h" />
     <ClInclude Include="TextComponent.h" />
     <ClInclude Include="GameObject.h" />

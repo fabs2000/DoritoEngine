@@ -4,7 +4,7 @@
 #include <string>
 
 class GameObject;
-class PhysicsComponent;
+class ColliderComponent;
 
 class Scene
 {
@@ -38,7 +38,7 @@ private:
 	std::string m_Name;
 
 	std::vector<GameObject*> m_pBasicObjects;
-	std::vector<PhysicsComponent*> m_pPhysicsComponents;
+	std::vector<ColliderComponent*> m_pPhysicsComponents;
 
 	GameInfo m_GameInfo;
 	bool m_IsInit;
