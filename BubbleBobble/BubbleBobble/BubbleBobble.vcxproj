@@ -107,6 +107,16 @@
     <ProjectReference>
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
     </ProjectReference>
+    <PostBuildEvent>
+      <Command>//Debug x86
+xcopy "$(SolutionDir)3rdParty\SFML\SFML(x86)\bin\openal32.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\SFML\SFML(x86)\bin\sfml-audio-d-2.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\SFML\SFML(x86)\bin\sfml-graphics-d-2.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\SFML\SFML(x86)\bin\sfml-network-d-2.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\SFML\SFML(x86)\bin\sfml-system-d-2.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\SFML\SFML(x86)\bin\sfml-window-d-2.dll" "$(OutputPath)" /R /Y
+</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -123,6 +133,14 @@
       <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\vld\Win64;$(SolutionDir)3rdParty\SFML\SFML%28x64%29\lib;$(SolutionDir)3rdParty\SDL2_ttf\lib;$(SolutionDir)3rdParty\SDL2_image\lib;$(SolutionDir)3rdParty\SDL2\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-network-d.lib;sfml-audio-d.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;SDL2_image.lib;SDL2_ttf.lib;xinput.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)3rdParty\SFML\SFML(x64)\bin\openal32.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\SFML\SFML(x64)\bin\sfml-audio-d-2.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\SFML\SFML(x64)\bin\sfml-graphics-d-2.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\SFML\SFML(x64)\bin\sfml-network-d-2.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\SFML\SFML(x64)\bin\sfml-system-d-2.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\SFML\SFML(x64)\bin\sfml-window-d-2.dll" "$(OutputPath)" /R /Y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -143,6 +161,15 @@
       <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\vld\Win32;$(SolutionDir)3rdParty\SFML\SFML%28x86%29\lib;$(SolutionDir)3rdParty\SDL2_ttf\lib;$(SolutionDir)3rdParty\SDL2_image\lib;$(SolutionDir)3rdParty\SDL2\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-network.lib;sfml-audio.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;SDL2_image.lib;SDL2_ttf.lib;xinput.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)3rdParty\SFML\SFML(x86)\bin\openal32.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\SFML\SFML(x86)\bin\sfml-audio-2.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\SFML\SFML(x86)\bin\sfml-graphics-2.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\SFML\SFML(x86)\bin\sfml-network-2.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\SFML\SFML(x86)\bin\sfml-system-2.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\SFML\SFML(x86)\bin\sfml-window-2.dll" "$(OutputPath)" /R /Y
+</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -163,6 +190,14 @@
       <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\vld\Win64;$(SolutionDir)3rdParty\SFML\SFML%28x64%29\lib;$(SolutionDir)3rdParty\SDL2_ttf\lib;$(SolutionDir)3rdParty\SDL2_image\lib;$(SolutionDir)3rdParty\SDL2\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-network.lib;sfml-audio.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;SDL2_image.lib;SDL2_ttf.lib;xinput.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)3rdParty\SFML\SFML(x64)\bin\openal32.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\SFML\SFML(x64)\bin\sfml-audio-2.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\SFML\SFML(x64)\bin\sfml-graphics-2.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\SFML\SFML(x64)\bin\sfml-network-2.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\SFML\SFML(x64)\bin\sfml-system-2.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\SFML\SFML(x64)\bin\sfml-window-2.dll" "$(OutputPath)" /R /Y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ProjectReference Include="..\DoritoEngine\DoritoEngine.vcxproj">
