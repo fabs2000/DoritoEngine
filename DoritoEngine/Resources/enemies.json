@@ -1,0 +1,28 @@
+{
+	"Enemies":
+	[
+		{
+			"Texture": "ZenChan.png",
+			"X": 800,
+			"Y": 180 
+		},
+		
+		{
+			"Texture": "Maita.png",
+			"X": 840,
+			"Y": 450 
+		}, 
+		
+		{
+			"Texture": "ZenChan.png",
+			"X": 440,
+			"Y": 170 
+		},
+		
+		{
+			"Texture": "Maita.png",
+			"X": 440,
+			"Y": 440 
+		}
+	]
+}

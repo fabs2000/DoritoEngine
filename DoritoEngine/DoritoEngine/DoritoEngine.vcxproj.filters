@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Managers">
+      <UniqueIdentifier>{036d35ae-57f9-4f34-b901-f83b00935c74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{a9b73f56-25e9-4c7c-b8c2-efac8c358e67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SceneContent">
+      <UniqueIdentifier>{6725656b-f4ff-4b4f-8d94-792d8c87b482}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SceneContent\GameObjects">
+      <UniqueIdentifier>{4dcc8c7c-56a6-45e9-9a04-4cfcef3c7ea4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SceneContent\Components">
+      <UniqueIdentifier>{04273450-8a6b-44fb-8249-c366903e97a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helpers">
+      <UniqueIdentifier>{565dceda-78dd-4cd3-8c02-89eaee9798cf}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>SceneContent</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>SceneContent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>SceneContent\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseComponent.cpp">
+      <Filter>SceneContent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="TextComponent.cpp">
+      <Filter>SceneContent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteComponent.cpp">
+      <Filter>SceneContent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="DoritoEngine.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="DoritoPCH.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="ControllerComponent.cpp">
+      <Filter>SceneContent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="AIController.cpp">
+      <Filter>SceneContent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ColliderComponent.cpp">
+      <Filter>SceneContent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="BubbleComponent.cpp">
+      <Filter>SceneContent\Components</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>SceneContent</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>SceneContent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>SceneContent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>SceneContent\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseComponent.h">
+      <Filter>SceneContent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="TextComponent.h">
+      <Filter>SceneContent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteComponent.h">
+      <Filter>SceneContent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="MathHelpers.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="DoritoEngine.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="DoritoPCH.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="ControllerComponent.h">
+      <Filter>SceneContent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="PracticalHelpers.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="DoritoFactory.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Components.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="AIController.h">
+      <Filter>SceneContent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ColliderComponent.h">
+      <Filter>SceneContent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="BubbleComponent.h">
+      <Filter>SceneContent\Components</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
