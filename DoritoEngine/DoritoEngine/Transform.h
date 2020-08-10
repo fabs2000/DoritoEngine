@@ -1,7 +1,7 @@
 #pragma once
 #include "BaseComponent.h"
 
-#include "SFML/Graphics/Transform.hpp"
+#include "SFML/Graphics/Transformable.hpp"
 
 
 class TransformComponent final

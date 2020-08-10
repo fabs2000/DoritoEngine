@@ -198,10 +198,12 @@ xcopy "$(SolutionDir)3rdParty\SFML\SFML(x64)\bin\sfml-window-2.dll" "$(OutputPat
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PlayerStatsSystem.cpp" />
     <ClCompile Include="TestScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
+    <ClInclude Include="PlayerStatsSystem.h" />
     <ClInclude Include="TestScene.h" />
   </ItemGroup>
   <ItemGroup>

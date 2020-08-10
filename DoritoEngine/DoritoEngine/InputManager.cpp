@@ -23,7 +23,7 @@ void InputManager::ProcessInput(sf::RenderWindow& window)
 		}
 
 		window.setKeyRepeatEnabled(m_IsKeyDown);
-		RegisterKetboardInput(e);
+		RegisterKeyboardInput(e);
 	}
 
 	//Gamepad Input
@@ -151,7 +151,7 @@ void InputManager::RegisterGamepadInput()
 	}
 }
 
-void InputManager::RegisterKetboardInput(const sf::Event& e)
+void InputManager::RegisterKeyboardInput(const sf::Event& e)
 {
 	for (auto it = m_KeyboardEvents.begin(); it != m_KeyboardEvents.end(); ++it)
 	{

@@ -152,6 +152,8 @@
     <ClCompile Include="ControllerComponent.cpp" />
     <ClCompile Include="DoritoEngine.cpp" />
     <ClCompile Include="ColliderComponent.cpp" />
+    <ClCompile Include="LifeTimeComponent.cpp" />
+    <ClCompile Include="Observer.cpp" />
     <ClCompile Include="TextComponent.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="InputManager.cpp" />
@@ -171,8 +173,10 @@
     <ClInclude Include="ControllerComponent.h" />
     <ClInclude Include="DoritoEngine.h" />
     <ClInclude Include="DoritoFactory.h" />
+    <ClInclude Include="LifeTimeComponent.h" />
     <ClInclude Include="MathHelpers.h" />
     <ClInclude Include="ColliderComponent.h" />
+    <ClInclude Include="Observer.h" />
     <ClInclude Include="PracticalHelpers.h" />
     <ClInclude Include="TextComponent.h" />
     <ClInclude Include="GameObject.h" />

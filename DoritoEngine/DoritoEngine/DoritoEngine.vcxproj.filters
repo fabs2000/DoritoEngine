@@ -10,9 +10,6 @@
     <Filter Include="SceneContent">
       <UniqueIdentifier>{6725656b-f4ff-4b4f-8d94-792d8c87b482}</UniqueIdentifier>
     </Filter>
-    <Filter Include="SceneContent\GameObjects">
-      <UniqueIdentifier>{4dcc8c7c-56a6-45e9-9a04-4cfcef3c7ea4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="SceneContent\Components">
       <UniqueIdentifier>{04273450-8a6b-44fb-8249-c366903e97a5}</UniqueIdentifier>
     </Filter>
@@ -21,6 +18,9 @@
     </Filter>
     <Filter Include="SceneContent\Components\BubbleBobble">
       <UniqueIdentifier>{6a0384c7-1473-4b17-acb1-902c798e2f80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SceneContent\BaseFiles">
+      <UniqueIdentifier>{4dcc8c7c-56a6-45e9-9a04-4cfcef3c7ea4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -33,17 +33,11 @@
     <ClCompile Include="Renderer.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>SceneContent</Filter>
-    </ClCompile>
     <ClCompile Include="Transform.cpp">
       <Filter>SceneContent\Components</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
-      <Filter>SceneContent\GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="BaseComponent.cpp">
-      <Filter>SceneContent\Components</Filter>
+      <Filter>SceneContent\BaseFiles</Filter>
     </ClCompile>
     <ClCompile Include="TextComponent.cpp">
       <Filter>SceneContent\Components</Filter>
@@ -72,6 +66,18 @@
     <ClCompile Include="BubbleComponent.cpp">
       <Filter>SceneContent\Components\BubbleBobble</Filter>
     </ClCompile>
+    <ClCompile Include="BaseComponent.cpp">
+      <Filter>SceneContent\BaseFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>SceneContent\BaseFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="LifeTimeComponent.cpp">
+      <Filter>SceneContent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Observer.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ResourceManager.h">
@@ -86,9 +92,6 @@
     <ClInclude Include="Renderer.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>SceneContent</Filter>
-    </ClInclude>
     <ClInclude Include="targetver.h">
       <Filter>SceneContent\Components</Filter>
     </ClInclude>
@@ -96,10 +99,7 @@
       <Filter>SceneContent\Components</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
-      <Filter>SceneContent\GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseComponent.h">
-      <Filter>SceneContent\Components</Filter>
+      <Filter>SceneContent\BaseFiles</Filter>
     </ClInclude>
     <ClInclude Include="TextComponent.h">
       <Filter>SceneContent\Components</Filter>
@@ -139,6 +139,18 @@
     </ClInclude>
     <ClInclude Include="BubbleComponent.h">
       <Filter>SceneContent\Components\BubbleBobble</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseComponent.h">
+      <Filter>SceneContent\BaseFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>SceneContent\BaseFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="LifeTimeComponent.h">
+      <Filter>SceneContent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Observer.h">
+      <Filter>Managers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

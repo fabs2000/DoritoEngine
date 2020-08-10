@@ -165,7 +165,7 @@ private:
 	void UpdateControllers();
 	void RegisterGamepadInput();
 	
-	void RegisterKetboardInput(const sf::Event& e);
+	void RegisterKeyboardInput(const sf::Event& e);
 
 	bool IsLStick_InDeadZone(PlayerControllers playerID);
 	bool IsRStick_InDeadZone(PlayerControllers playerID);
