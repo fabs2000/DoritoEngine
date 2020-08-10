@@ -27,14 +27,9 @@ void ControllerComponent::Initialize()
 {
 	m_pCollider = GetGameObject()->GetComponent<ColliderComponent>();
 
-	if (!m_pCollider->GetIsTrigger())
+	if (m_pCollider)
 	{
-		auto callback = std::bind(&ControllerComponent::HandleCollisions,
-			this, std::placeholders::_1, std::placeholders::_2);
-
-
-
-		m_pCollider->SetCollisionCallback(callback);
+		HandleCollisions();
 	}
 
 	InitInput();
@@ -92,11 +87,11 @@ void ControllerComponent::InitInput()
 	gameInfo.pInput->AddKeyboardEvent(KeyBoardEvent("Shoot", KeyboardButton::LControl, shoot, InputTriggerState::Pressed));
 
 	//Controller enabled
-	gameInfo.pInput->AddGamePadEvent(GamePadEvent("Right", GamepadButtons::RIGHT_D, m_PlayerID, right));
-	gameInfo.pInput->AddGamePadEvent(GamePadEvent("Left", GamepadButtons::LEFT_D, m_PlayerID, left));
+	gameInfo.pInput->AddGamePadActionEvent(GamePadActionEvent("Right", GamepadButtons::RIGHT_D, m_PlayerID, right));
+	gameInfo.pInput->AddGamePadActionEvent(GamePadActionEvent("Left", GamepadButtons::LEFT_D, m_PlayerID, left));
 
-	gameInfo.pInput->AddGamePadEvent(GamePadEvent("Jump", GamepadButtons::A, m_PlayerID, shoot, InputTriggerState::Pressed));
-	gameInfo.pInput->AddGamePadEvent(GamePadEvent("Shoot", GamepadButtons::B, m_PlayerID, jump, InputTriggerState::Pressed));
+	gameInfo.pInput->AddGamePadActionEvent(GamePadActionEvent("Jump", GamepadButtons::A, m_PlayerID, shoot, InputTriggerState::Pressed));
+	gameInfo.pInput->AddGamePadActionEvent(GamePadActionEvent("Shoot", GamepadButtons::B, m_PlayerID, jump, InputTriggerState::Pressed));
 }
 
 void ControllerComponent::HandleMovement(float dt)
@@ -112,27 +107,32 @@ void ControllerComponent::HandleMovement(float dt)
 	m_Velocity.x = 0;
 }
 
-void ControllerComponent::HandleCollisions(const SDL_Rect& intersect, ColliderComponent*other)
+void ControllerComponent::HandleCollisions()
 {
-	if (!other->GetIsTrigger())
+	auto callback = [this](const SDL_Rect& intersect, ColliderComponent* other)->void
 	{
-		auto pos = GetParentTransform()->GetPosition();
-
-		if (intersect.h < intersect.w)
+		if (!other->GetIsTrigger())
 		{
-			if (m_Velocity.y > 0)
+			auto pos = GetParentTransform()->GetPosition();
+
+			if (intersect.h < intersect.w)
 			{
-				m_Velocity.y = 0;
-				GetParentTransform()->SetPosition(pos.x, pos.y - intersect.h - 0.01f);
-				m_PlayerState = PlayerStates::GROUNDED;
+				if (m_Velocity.y > 0)
+				{
+					m_Velocity.y = 0;
+					GetParentTransform()->SetPosition(pos.x, pos.y - intersect.h - 0.01f);
+					m_PlayerState = PlayerStates::GROUNDED;
+				}
+			}
+			else
+			{
+				m_Velocity.x = 0;
+				GetParentTransform()->SetPosition(pos.x + (-m_MoveDirection * intersect.w), pos.y);
 			}
 		}
-		else
-		{
-			m_Velocity.x = 0;
-			GetParentTransform()->SetPosition(pos.x + (-m_MoveDirection * intersect.w), pos.y);
-		}
-	}
+	};
+
+	m_pCollider->SetCollisionCallback(callback);
 }
 
 void ControllerComponent::Teleport()

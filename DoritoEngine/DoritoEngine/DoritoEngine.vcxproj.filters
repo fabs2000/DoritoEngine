@@ -19,6 +19,9 @@
     <Filter Include="Helpers">
       <UniqueIdentifier>{565dceda-78dd-4cd3-8c02-89eaee9798cf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SceneContent\Components\BubbleBobble">
+      <UniqueIdentifier>{6a0384c7-1473-4b17-acb1-902c798e2f80}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ResourceManager.cpp">
@@ -67,7 +70,7 @@
       <Filter>SceneContent\Components</Filter>
     </ClCompile>
     <ClCompile Include="BubbleComponent.cpp">
-      <Filter>SceneContent\Components</Filter>
+      <Filter>SceneContent\Components\BubbleBobble</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -135,7 +138,7 @@
       <Filter>SceneContent\Components</Filter>
     </ClInclude>
     <ClInclude Include="BubbleComponent.h">
-      <Filter>SceneContent\Components</Filter>
+      <Filter>SceneContent\Components\BubbleBobble</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

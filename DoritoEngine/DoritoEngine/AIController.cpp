@@ -25,10 +25,7 @@ void AIController::Initialize()
 
 	if (m_pCollider)
 	{
-		auto callback = std::bind(&AIController::HandleCollisions,
-			this, std::placeholders::_1, std::placeholders::_2);
-
-		m_pCollider->SetCollisionCallback(callback);
+		HandleCollisions();
 	}
 
 	if (m_Velocity.x == 0)
@@ -87,36 +84,41 @@ void AIController::FloatUp(float dt)
 	}
 }
 
-void AIController::HandleCollisions(const SDL_Rect& intersect, ColliderComponent* other)
+void AIController::HandleCollisions()
 {
-	if (!other->GetIsTrigger())
+	auto callback = [this](const SDL_Rect& intersect, ColliderComponent* other)->void
 	{
-		auto pos = GetParentTransform()->GetPosition();
-
-		if (intersect.h < intersect.w)
+		if (!other->GetIsTrigger())
 		{
-			if (m_Velocity.y > 0)
-			{
-				m_Velocity.y = 0;
-				GetParentTransform()->SetPosition(pos.x, pos.y - intersect.h);
-			}
-		}
-		else
-		{
-			float direction = 0;
+			auto pos = GetParentTransform()->GetPosition();
 
-			if (m_Velocity.x > 0.f)
+			if (intersect.h < intersect.w)
 			{
-				direction = -1.f;
+				if (m_Velocity.y > 0)
+				{
+					m_Velocity.y = 0;
+					GetParentTransform()->SetPosition(pos.x, pos.y - intersect.h);
+				}
 			}
 			else
-				direction = 1.f;
+			{
+				float direction = 0;
 
-			GetParentTransform()->SetPosition(pos.x + (direction * intersect.w), pos.y);
-			GetParentTransform()->SetScale(direction * 0.3f, 0.3f);
-			m_Velocity.x = -m_Velocity.x;
+				if (m_Velocity.x > 0.f)
+				{
+					direction = -1.f;
+				}
+				else
+					direction = 1.f;
+
+				GetParentTransform()->SetPosition(pos.x + (direction * intersect.w), pos.y);
+				GetParentTransform()->SetScale(direction * 0.3f, 0.3f);
+				m_Velocity.x = -m_Velocity.x;
+			}
 		}
-	}
+	};
+
+	m_pCollider->SetCollisionCallback(callback);
 }
 
 void AIController::Teleport()

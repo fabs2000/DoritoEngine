@@ -30,7 +30,6 @@ void ColliderComponent::CheckCollisions(std::list<ColliderComponent*>& other)
 					{
 						if (m_TriggerCallback)
 						{
-							//std::cout << "Trigger\n";
 							m_TriggerCallback(this->GetGameObject(), otherPhysComp->GetGameObject());
 						}
 					}

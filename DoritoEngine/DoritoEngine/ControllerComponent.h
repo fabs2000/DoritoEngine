@@ -45,7 +45,6 @@ private:
 
 	ColliderComponent* m_pCollider;
 
-	void HandleCollisions(const SDL_Rect&, ColliderComponent*);
+	void HandleCollisions();
 	void Teleport();
 };
-

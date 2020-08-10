@@ -13,7 +13,7 @@
 typedef sf::Keyboard::Key KeyboardButton;
 
 typedef std::function<void()> DoritoAction;
-typedef std::function<void(float axis)> DoritoAxis;
+typedef std::function<void(const sf::Vector2f& axis)> DoritoAxis;
 
 enum class PlayerControllers : DWORD 
 {
@@ -30,21 +30,21 @@ enum class InputTriggerState
 	Down
 };
 
-struct GamePadEvent
+struct GamePadActionEvent
 {
-	GamePadEvent()
+	GamePadActionEvent()
 		: ActionDesc("No Action")
 		, GamepadButtonCode(0)
 		, ControllerID(PlayerControllers::Player1)
 		, State()
-		, EventFunction()
+		, EventActionFunc()
 	{}
 
-	GamePadEvent(const std::string& actionDesc, WORD gamepadButtonCode, PlayerControllers controllerID, DoritoAction action, InputTriggerState state = InputTriggerState::Down)
+	GamePadActionEvent(const std::string& actionDesc, WORD gamepadButtonCode, PlayerControllers controllerID, DoritoAction func, InputTriggerState state = InputTriggerState::Down)
 		: ActionDesc(actionDesc)
 		, GamepadButtonCode(gamepadButtonCode)
 		, ControllerID(controllerID)
-		, EventFunction(action)
+		, EventActionFunc(func)
 		, State(state)
 	{}
 
@@ -53,9 +53,31 @@ struct GamePadEvent
 	PlayerControllers ControllerID;
 	InputTriggerState State;
 
-	DoritoAction EventFunction;
+	DoritoAction EventActionFunc;
 };
 
+struct GamePadAxisEvent
+{
+	GamePadAxisEvent()
+		: AxisDesc("No Axis")
+		, GamepadAxisCode()
+		, ControllerID()
+		, EventAxisFunc()
+	{}
+
+	GamePadAxisEvent(const std::string& desc, WORD gamepadAxisCode, PlayerControllers controllerID, DoritoAxis func)
+		: AxisDesc(desc)
+		, GamepadAxisCode(gamepadAxisCode)
+		, ControllerID(controllerID)
+		, EventAxisFunc(func)
+	{}
+
+	std::string AxisDesc;
+	WORD GamepadAxisCode; //XINPUT_GAMEPAD_...
+	PlayerControllers ControllerID;
+
+	DoritoAxis EventAxisFunc;
+};
 
 struct KeyBoardEvent
 {
@@ -67,12 +89,12 @@ struct KeyBoardEvent
 		, EventFunction()
 	{}
 
-	KeyBoardEvent(const std::string& actionDesc, KeyboardButton button, DoritoAction function, InputTriggerState state = InputTriggerState::Down)
+	KeyBoardEvent(const std::string& actionDesc, KeyboardButton button, DoritoAction func, InputTriggerState state = InputTriggerState::Down)
 		: ActionDesc(actionDesc)
 		, KeyboardButton(button)
 		, State(state)
 		, ControllerID(PlayerControllers::Player1)
-		, EventFunction(function)
+		, EventFunction(func)
 	{}
 
 	std::string ActionDesc;
@@ -101,6 +123,12 @@ enum GamepadButtons : WORD
 	START = XINPUT_GAMEPAD_START
 };
 
+enum GamepadAxis : WORD
+{
+	L_STICK = XINPUT_GAMEPAD_LEFT_THUMB,
+	R_STICK = XINPUT_GAMEPAD_RIGHT_THUMB
+};
+
 class InputManager 
 {
 public:
@@ -120,8 +148,15 @@ public:
 	bool IsGamePadButtonDown(WORD button, PlayerControllers playerID, bool isPrevFrame = false);
 	
 	//Adding Events
-	void AddGamePadEvent(const GamePadEvent& padEvent);
+	void AddGamePadActionEvent(const GamePadActionEvent& padEvent);
+	void AddGamePadAxisEvent(const GamePadAxisEvent& padEvent);
 	void AddKeyboardEvent(const KeyBoardEvent& keyEvent);
+
+
+	void BindGamepadAction(const std::string& actionName, DoritoAction func);
+	void BindGamepadAxisAction(const std::string& actionName, DoritoAxis func);
+	void BindKeyboardAction(const std::string& actionName, DoritoAction func);
+
 
 private:
 	InputManager() = default;
@@ -131,6 +166,13 @@ private:
 	void RegisterGamepadInput();
 	
 	void RegisterKetboardInput(const sf::Event& e);
+
+	bool IsLStick_InDeadZone(PlayerControllers playerID);
+	bool IsRStick_InDeadZone(PlayerControllers playerID);
+
+	sf::Vector2f RightStickPos(PlayerControllers playerID);
+	sf::Vector2f LeftStickPos(PlayerControllers playerID);
+
 
 	bool m_IsKeyDown = false;
 
@@ -143,8 +185,13 @@ private:
 	std::array<bool, XUSER_MAX_COUNT> m_ConnectedGamepads = 
 		std::array<bool, XUSER_MAX_COUNT>();
 
-	std::multimap<std::string, GamePadEvent> m_GamepadEvents =
-		std::multimap<std::string, GamePadEvent>();
+	std::multimap<std::string, GamePadActionEvent> m_GamepadActionEvents =
+		std::multimap<std::string, GamePadActionEvent>();
+
+	std::multimap<std::string, GamePadAxisEvent> m_GamepadAxisEvents =
+		std::multimap<std::string, GamePadAxisEvent>();
+
+	sf::Vector2f m_JoyStickPos;
 
 	//Keyboard
 	std::map<std::string, KeyBoardEvent> m_KeyboardEvents =
