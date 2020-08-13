@@ -22,8 +22,12 @@ public:
 private:
 
 	GameObject* m_pFPS;
+	GameObject* m_pCharacter;
+
 	TextComponent* m_pTextComp;
 
 	int m_FPSNb;
+
+	void InitInput();
 };
 

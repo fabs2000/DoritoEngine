@@ -19,11 +19,12 @@ namespace DoritoFactory
 	inline GameObject* MakeCharacter(Scene* pScene, const std::string& fileName, PlayerControllers player)
 	{
 		GameObject* pPlayer = new GameObject(pScene);
-		auto pSprite = new SpriteComponent(fileName, false);
+
+		auto pSprite = new SpriteComponent(fileName, true);
 		pPlayer->AddComponent(pSprite);
 
-		auto pController = new ControllerComponent(player);
-		pPlayer->AddComponent(pController);
+		auto pDigger = new DiggerComponent(player);
+		pPlayer->AddComponent(pDigger);
 
 		auto pCollider = new ColliderComponent(true);
 		pPlayer->AddComponent(pCollider);
@@ -102,24 +103,27 @@ namespace DoritoFactory
 		return pSprite;
 	}
 
-	inline GameObject* MakeBubble(Scene* pScene, const std::string& fileName, float direction)
+	inline GameObject* MakeShot(Scene* pScene, const std::string& fileName, const sf::Vector2f& direction)
 	{
-		auto pBubble = new GameObject(pScene);
+		auto pShot = new GameObject(pScene);
+
+		auto pLifeTime = new LifeTimeComponent(4.f);
+		pShot->AddComponent(pLifeTime);
 
 		auto pComp = new SpriteComponent(fileName);
-		pBubble->AddComponent(pComp);
+		pShot->AddComponent(pComp);
 
 		auto pCollider = new ColliderComponent(true);
 		pCollider->SetIsTrigger(true);
-		pBubble->AddComponent(pCollider);
+		pShot->AddComponent(pCollider);
 
-		auto pBubcomp = new BubbleComponent(direction);
-		pBubble->AddComponent(pBubcomp);
+		auto pBubcomp = new FireBallComponent(direction);
+		pShot->AddComponent(pBubcomp);
 
-		pBubble->GetTransform()->SetScale(2.5f,2.5f);
+		pShot->GetTransform()->SetScale(2.5f,2.5f);
 
-		pBubble->SetTag("Bubble");
+		pShot->SetTag("Shot");
 
-		return pBubble;
+		return pShot;
 	}
 }

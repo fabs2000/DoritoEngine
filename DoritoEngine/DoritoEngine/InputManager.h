@@ -4,11 +4,12 @@
 #include "SFML/Window/Keyboard.hpp"
 #include "SFML/Window/Mouse.hpp"
 
+#include "SDL_events.h"
+
 #include <Xinput.h>
 #include <array>
 #include <map>
 #include <functional>
-
 
 typedef sf::Keyboard::Key KeyboardButton;
 
@@ -63,18 +64,21 @@ struct GamePadAxisEvent
 		, GamepadAxisCode()
 		, ControllerID()
 		, EventAxisFunc()
+		, AlwaysOne(false)
 	{}
 
-	GamePadAxisEvent(const std::string& desc, WORD gamepadAxisCode, PlayerControllers controllerID, DoritoAxis func)
+	GamePadAxisEvent(const std::string& desc, WORD gamepadAxisCode, PlayerControllers controllerID, DoritoAxis func, bool alwaysOne = false)
 		: AxisDesc(desc)
 		, GamepadAxisCode(gamepadAxisCode)
 		, ControllerID(controllerID)
 		, EventAxisFunc(func)
+		, AlwaysOne(alwaysOne)
 	{}
 
 	std::string AxisDesc;
 	WORD GamepadAxisCode; //XINPUT_GAMEPAD_...
 	PlayerControllers ControllerID;
+	bool AlwaysOne;
 
 	DoritoAxis EventAxisFunc;
 };
@@ -89,7 +93,7 @@ struct KeyBoardEvent
 		, EventFunction()
 	{}
 
-	KeyBoardEvent(const std::string& actionDesc, KeyboardButton button, DoritoAction func, InputTriggerState state = InputTriggerState::Down)
+	KeyBoardEvent(const std::string& actionDesc, KeyboardButton button, DoritoAction func, InputTriggerState state = InputTriggerState::Pressed)
 		: ActionDesc(actionDesc)
 		, KeyboardButton(button)
 		, State(state)
@@ -146,7 +150,8 @@ public:
 
 	//Manually checks for input
 	bool IsGamePadButtonDown(WORD button, PlayerControllers playerID, bool isPrevFrame = false);
-	
+	bool IsKeyDown(KeyboardButton key);
+
 	//Adding Events
 	void AddGamePadActionEvent(const GamePadActionEvent& padEvent);
 	void AddGamePadAxisEvent(const GamePadAxisEvent& padEvent);
@@ -157,43 +162,44 @@ public:
 	void BindGamepadAxisAction(const std::string& actionName, DoritoAxis func);
 	void BindKeyboardAction(const std::string& actionName, DoritoAction func);
 
-
 private:
 	InputManager() = default;
 
 	void CheckControllerConnections();
-	void UpdateControllers();
 	void RegisterGamepadInput();
+	
+	void UpdateControllers();
 	
 	void RegisterKeyboardInput(const sf::Event& e);
 
 	bool IsLStick_InDeadZone(PlayerControllers playerID);
 	bool IsRStick_InDeadZone(PlayerControllers playerID);
 
-	sf::Vector2f RightStickPos(PlayerControllers playerID);
-	sf::Vector2f LeftStickPos(PlayerControllers playerID);
+	const sf::Vector2f RightStickPos(PlayerControllers playerID, bool alwaysOne);
+	const sf::Vector2f LeftStickPos(PlayerControllers playerID, bool alwaysOne);
 
-
-	bool m_IsKeyDown = false;
-
-	//Gamepad Variables
+	//== Gamepad Variables ==//
 	std::array<XINPUT_STATE, XUSER_MAX_COUNT> m_CurrentGamepadStates = 
 		std::array<XINPUT_STATE, XUSER_MAX_COUNT>();
+
 	std::array<XINPUT_STATE, XUSER_MAX_COUNT> m_OldGamepadStates =
 		std::array<XINPUT_STATE, XUSER_MAX_COUNT>();
 
 	std::array<bool, XUSER_MAX_COUNT> m_ConnectedGamepads = 
 		std::array<bool, XUSER_MAX_COUNT>();
 
+	// -- EVENTS -- //
 	std::multimap<std::string, GamePadActionEvent> m_GamepadActionEvents =
 		std::multimap<std::string, GamePadActionEvent>();
-
 	std::multimap<std::string, GamePadAxisEvent> m_GamepadAxisEvents =
 		std::multimap<std::string, GamePadAxisEvent>();
 
 	sf::Vector2f m_JoyStickPos;
 
-	//Keyboard
+	//== Keyboard ==//
+	// -- EVENTS -- //
 	std::map<std::string, KeyBoardEvent> m_KeyboardEvents =
 		std::map<std::string, KeyBoardEvent>();
+
+	bool m_IsKeyDown = false;
 };

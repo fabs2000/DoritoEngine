@@ -13,17 +13,19 @@ void InputManager::ProcessInput(sf::RenderWindow& window)
 	//Check if any controllers updated
 	UpdateControllers();
 
-	sf::Event e = {};
-	while (window.pollEvent(e))
-	{
-		//Check for window closed
-		if (e.type == sf::Event::Closed)
-		{
-			window.close();
-		}
+	sf::Event eS{};
 
-		window.setKeyRepeatEnabled(m_IsKeyDown);
-		RegisterKeyboardInput(e);
+	while (window.pollEvent(eS))
+	{
+		switch (eS.type)
+		{
+		case sf::Event::Closed:
+			window.close();
+			break;
+		}
+		window.setKeyRepeatEnabled(false);
+		
+		RegisterKeyboardInput(eS);
 	}
 
 	//Gamepad Input
@@ -78,7 +80,7 @@ void InputManager::CheckControllerConnections()
 		dwResult = XInputGetState(i, &state);
 		m_ConnectedGamepads.at(i) = (dwResult == ERROR_SUCCESS);
 
-		if(m_ConnectedGamepads.at(i))
+		if (m_ConnectedGamepads.at(i))
 			m_CurrentGamepadStates.at(i) = state;
 	}
 }
@@ -118,7 +120,7 @@ void InputManager::RegisterGamepadInput()
 
 				//Released
 			case InputTriggerState::Released:
-				if (IsGamePadButtonDown(currEvent.GamepadButtonCode, currEvent.ControllerID, true) && 
+				if (IsGamePadButtonDown(currEvent.GamepadButtonCode, currEvent.ControllerID, true) &&
 					!IsGamePadButtonDown(currEvent.GamepadButtonCode, currEvent.ControllerID))
 				{
 					currEvent.EventActionFunc();
@@ -142,11 +144,11 @@ void InputManager::RegisterGamepadInput()
 
 		if (currEvent.GamepadAxisCode == L_STICK && !IsLStick_InDeadZone(currEvent.ControllerID))
 		{
-			currEvent.EventAxisFunc(LeftStickPos(currEvent.ControllerID));
+			currEvent.EventAxisFunc(LeftStickPos(currEvent.ControllerID, currEvent.AlwaysOne));
 		}
 		if (currEvent.GamepadAxisCode == R_STICK && !IsRStick_InDeadZone(currEvent.ControllerID))
 		{
-			currEvent.EventAxisFunc(RightStickPos(currEvent.ControllerID));
+			currEvent.EventAxisFunc(RightStickPos(currEvent.ControllerID, currEvent.AlwaysOne));
 		}
 	}
 }
@@ -162,34 +164,26 @@ void InputManager::RegisterKeyboardInput(const sf::Event& e)
 			switch (currEvent.State)
 			{
 			case InputTriggerState::Pressed:
-
-				if ((e.type == sf::Event::KeyPressed) 
-					&& (e.key.code == currEvent.KeyboardButton))
-				{
-					currEvent.EventFunction();
-
-					m_IsKeyDown = false;
-				}
-				break;
-
-			case InputTriggerState::Released:
-
-				if ((e.type == sf::Event::KeyReleased)
-					&& (e.key.code == currEvent.KeyboardButton))
-				{
-					currEvent.EventFunction();
-
-					m_IsKeyDown = false;
-				}
-				break;
-
-			case InputTriggerState::Down:
 				if ((e.type == sf::Event::KeyPressed)
 					&& (e.key.code == currEvent.KeyboardButton))
 				{
 					currEvent.EventFunction();
+				}
+				break;
 
-					m_IsKeyDown = true;
+			case InputTriggerState::Released:
+				if ((e.type == sf::Event::KeyReleased)
+					&& (e.key.code == currEvent.KeyboardButton))
+				{
+					currEvent.EventFunction();
+				}
+				break;
+
+			//Not Working currently, use public function "IsKeyDown()"
+			case InputTriggerState::Down:
+				if(IsKeyDown(currEvent.KeyboardButton))
+				{
+					currEvent.EventFunction();
 				}
 				break;
 			}
@@ -235,26 +229,69 @@ bool InputManager::IsRStick_InDeadZone(PlayerControllers playerID)
 	return true;
 }
 
-sf::Vector2f InputManager::RightStickPos(PlayerControllers playerID)
+const sf::Vector2f InputManager::RightStickPos(PlayerControllers playerID, bool alwaysOne)
 {
 	UINT pi = static_cast<UINT>(playerID);
 
 	short rX = m_CurrentGamepadStates[pi].Gamepad.sThumbRX;
 	short rY = m_CurrentGamepadStates[pi].Gamepad.sThumbRY;
 
-	return sf::Vector2f(static_cast<float>(rX)/32768.f,
-		static_cast<float>(rY)/32768.f);
+	auto scale = sf::Vector2f(static_cast<float>(rX) / 32768.f,
+		static_cast<float>(rY) / 32768.f);
+
+	if (alwaysOne)
+	{
+		if (scale.x > 0)
+			scale.x = std::ceilf(scale.x);
+		else
+			scale.x = std::floorf(scale.x);
+
+		if (scale.y > 0)
+			scale.y = std::ceilf(scale.y);
+		else
+			scale.y = std::floorf(scale.y);
+
+		return scale;
+	}
+
+	return scale;
 }
 
-sf::Vector2f InputManager::LeftStickPos(PlayerControllers playerID)
+const sf::Vector2f InputManager::LeftStickPos(PlayerControllers playerID, bool alwaysOne)
 {
 	UINT pi = static_cast<UINT>(playerID);
 
 	short lX = m_CurrentGamepadStates[pi].Gamepad.sThumbLX;
 	short lY = m_CurrentGamepadStates[pi].Gamepad.sThumbLY;
 
-	return sf::Vector2f(static_cast<float>(lX) / 32768.f, 
+	auto scale = sf::Vector2f(static_cast<float>(lX) / 32768.f,
 		static_cast<float>(lY) / 32768.f);
+
+	if (alwaysOne)
+	{
+		if (std::fabs(scale.x) > std::fabs(scale.y))
+		{
+			scale.y = 0;
+
+			if (std::signbit(scale.x))
+				scale.x = -1;
+			else
+				scale.x = 1;
+		}
+		else
+		{
+			scale.x = 0;
+
+			if (std::signbit(scale.y))
+				scale.y = -1;
+			else
+				scale.y = 1;
+		}
+
+		return scale;
+	}
+
+	return scale;
 }
 
 bool InputManager::IsGamePadButtonDown(WORD button, PlayerControllers playerID, bool isPrevFrame)
@@ -268,4 +305,9 @@ bool InputManager::IsGamePadButtonDown(WORD button, PlayerControllers playerID, 
 		return (m_OldGamepadStates[pi].Gamepad.wButtons & button) != 0;
 
 	return (m_CurrentGamepadStates[pi].Gamepad.wButtons & button) != 0;
+}
+
+bool InputManager::IsKeyDown(KeyboardButton key)
+{
+	return sf::Keyboard::isKeyPressed(key);
 }

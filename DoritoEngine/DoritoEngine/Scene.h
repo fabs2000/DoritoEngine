@@ -1,6 +1,7 @@
 #pragma once
 #include "SceneManager.h"
 #include "DoritoEngine.h"
+#include "Observer.h"
 #include <string>
 #include <list>
 
@@ -22,8 +23,9 @@ public:
 	void AddObject(GameObject* object);
 	void RemoveObject(GameObject* object);
 
-	const std::string& GetName() const { return m_Name; };
-	const GameInfo& GetGameInfo() const{ return m_GameInfo; };
+	const std::string& GetName() const { return m_Name; }
+	Subject* GetSubject() const { return m_pSubject; }
+	const GameInfo& GetGameInfo() const{ return m_GameInfo; }
 
 	void RootInit();
 	void RootUpdate(float dt);
@@ -40,6 +42,8 @@ private:
 
 	std::list<GameObject*> m_pBasicObjects;
 	std::list<ColliderComponent*> m_pPhysicsComponents;
+
+	Subject* m_pSubject;
 
 	GameInfo m_GameInfo;
 	bool m_IsInit;

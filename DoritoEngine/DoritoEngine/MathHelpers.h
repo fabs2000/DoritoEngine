@@ -2,7 +2,7 @@
 #include "DoritoPCH.h"
 
 #define DOR_PI 3.14159265359f
-#define DOR_EP 0.0001f
+#define DOR_EP 0.0000001f
 
 namespace DoritoMath
 {
@@ -20,9 +20,35 @@ namespace DoritoMath
 		return radians;
 	}
 
+	inline bool FEquals(float a, float b, float precision = DOR_EP)
+	{
+		if (fabs(a - b) < precision)
+			return true;
+
+		return false;
+	}
+
 	inline bool VecEquals(const sf::Vector2f& vec, const sf::Vector2f& other)
 	{
-		return (fabs(vec.x - other.x) < DOR_EP) && (fabs(vec.y - other.y) < DOR_EP);
+		return FEquals(vec.x, other.x) && FEquals(vec.y, other.y);
+	}
+
+	inline float Magnitude(const sf::Vector2f& vec)
+	{
+		return sqrtf((vec.x * vec.x) +  (vec.y * vec.y));
+	}
+
+	inline const sf::Vector2f& Normalize(sf::Vector2f& vec)
+	{
+		if (FEquals(Magnitude(vec), 0.f))
+			return vec; 
+
+		float m = Magnitude(vec);
+
+		vec.x /= m;
+		vec.y /= m;
+
+		return vec;
 	}
 
 	//LERP FUNCTION

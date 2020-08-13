@@ -30,6 +30,15 @@
     <ClCompile Include="PlayerStatsSystem.cpp">
       <Filter>GameElements</Filter>
     </ClCompile>
+    <ClCompile Include="FireBallComponent.cpp">
+      <Filter>GameElements</Filter>
+    </ClCompile>
+    <ClCompile Include="AIController.cpp">
+      <Filter>GameElements</Filter>
+    </ClCompile>
+    <ClCompile Include="DiggerComponent.cpp">
+      <Filter>GameElements</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -39,6 +48,18 @@
       <Filter>Scenes</Filter>
     </ClInclude>
     <ClInclude Include="PlayerStatsSystem.h">
+      <Filter>GameElements</Filter>
+    </ClInclude>
+    <ClInclude Include="AIController.h">
+      <Filter>GameElements</Filter>
+    </ClInclude>
+    <ClInclude Include="DoritoFactory.h">
+      <Filter>GameElements</Filter>
+    </ClInclude>
+    <ClInclude Include="FireBallComponent.h">
+      <Filter>GameElements</Filter>
+    </ClInclude>
+    <ClInclude Include="DiggerComponent.h">
       <Filter>GameElements</Filter>
     </ClInclude>
   </ItemGroup>

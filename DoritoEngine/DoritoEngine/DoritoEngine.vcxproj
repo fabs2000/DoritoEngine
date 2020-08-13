@@ -146,10 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AIController.cpp" />
     <ClCompile Include="BaseComponent.cpp" />
-    <ClCompile Include="BubbleComponent.cpp" />
-    <ClCompile Include="ControllerComponent.cpp" />
     <ClCompile Include="DoritoEngine.cpp" />
     <ClCompile Include="ColliderComponent.cpp" />
     <ClCompile Include="LifeTimeComponent.cpp" />
@@ -166,13 +163,9 @@
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AIController.h" />
     <ClInclude Include="BaseComponent.h" />
-    <ClInclude Include="BubbleComponent.h" />
     <ClInclude Include="Components.h" />
-    <ClInclude Include="ControllerComponent.h" />
     <ClInclude Include="DoritoEngine.h" />
-    <ClInclude Include="DoritoFactory.h" />
     <ClInclude Include="LifeTimeComponent.h" />
     <ClInclude Include="MathHelpers.h" />
     <ClInclude Include="ColliderComponent.h" />

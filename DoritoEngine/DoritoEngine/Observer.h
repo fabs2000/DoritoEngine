@@ -2,21 +2,11 @@
 #include "DoritoPCH.h"
 #include <list>
 
-enum class Event
-{
-	ENEMY_KILLED = 0,
-	EMERALD_COLLECTED = 1,
-	GOLD_COLLECTED = 2,
-
-	EXTRA_LIFE = 3,
-	LIFE_LOST = 4
-};
-
 class Observer
 {
 public:
 	virtual ~Observer() = default;
-	virtual void OnNotify(Event event) = 0;
+	virtual void OnNotify(uint32_t event) = 0;
 };
 
 class Subject 
@@ -25,13 +15,13 @@ public:
 	Subject() = default;
 	~Subject();
 
-	void AddObserver(Observer* pObsv);
-	void RemoveObserver(Observer* pObsv);
+	void AddObserver(const std::string& name, Observer* pObsv);
+	Observer* GetObserver(const std::string& name);
+	void RemoveObserver(const std::string& pObsv);
 
-protected:
-	void Notify(Event event);
+	void Notify(uint32_t event);
 
 private:
-	std::list<Observer*> m_pObservers;
+	std::map<std::string, Observer*> m_pObservers;
 	
 };

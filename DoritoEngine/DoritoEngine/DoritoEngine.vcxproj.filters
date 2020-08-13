@@ -16,9 +16,6 @@
     <Filter Include="Helpers">
       <UniqueIdentifier>{565dceda-78dd-4cd3-8c02-89eaee9798cf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="SceneContent\Components\BubbleBobble">
-      <UniqueIdentifier>{6a0384c7-1473-4b17-acb1-902c798e2f80}</UniqueIdentifier>
-    </Filter>
     <Filter Include="SceneContent\BaseFiles">
       <UniqueIdentifier>{4dcc8c7c-56a6-45e9-9a04-4cfcef3c7ea4}</UniqueIdentifier>
     </Filter>
@@ -51,20 +48,11 @@
     <ClCompile Include="DoritoPCH.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="ControllerComponent.cpp">
-      <Filter>SceneContent\Components</Filter>
-    </ClCompile>
     <ClCompile Include="InputManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
-    <ClCompile Include="AIController.cpp">
-      <Filter>SceneContent\Components</Filter>
-    </ClCompile>
     <ClCompile Include="ColliderComponent.cpp">
       <Filter>SceneContent\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="BubbleComponent.cpp">
-      <Filter>SceneContent\Components\BubbleBobble</Filter>
     </ClCompile>
     <ClCompile Include="BaseComponent.cpp">
       <Filter>SceneContent\BaseFiles</Filter>
@@ -116,29 +104,17 @@
     <ClInclude Include="DoritoPCH.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="ControllerComponent.h">
-      <Filter>SceneContent\Components</Filter>
-    </ClInclude>
     <ClInclude Include="InputManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
     <ClInclude Include="PracticalHelpers.h">
       <Filter>Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="DoritoFactory.h">
-      <Filter>Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="Components.h">
       <Filter>Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="AIController.h">
-      <Filter>SceneContent\Components</Filter>
-    </ClInclude>
     <ClInclude Include="ColliderComponent.h">
       <Filter>SceneContent\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="BubbleComponent.h">
-      <Filter>SceneContent\Components\BubbleBobble</Filter>
     </ClInclude>
     <ClInclude Include="BaseComponent.h">
       <Filter>SceneContent\BaseFiles</Filter>

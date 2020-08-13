@@ -1,41 +1,69 @@
 #include "PlayerStatsSystem.h"
 
-void PlayerStatsSystem::OnNotify(Event event)
+PlayerStatsSystem::PlayerStatsSystem()
+	: m_TotalScore()
+	, m_EmeraldStreak()
+	, m_ScoreForLife()
+	, m_Lives(1)
+	, m_IsGameOver(false)
 {
-	switch (event)
+	InitFunctions();
+}
+
+void PlayerStatsSystem::OnNotify(uint32_t event)
+{
+	auto it = m_Actions.find(event);
+	 
+	if (it != m_Actions.end())
 	{
-	case Event::EMERALD_COLLECTED:
+		(*it).second();
+	}
+
+	std::cout << "No event bound to message\n";
+}
+
+void PlayerStatsSystem::InitFunctions()
+{
+	auto emeraldCollected = [this]()->void
+	{
 		AddScore(25);
 		m_EmeraldStreak++;
-		break;
+	};
 
-	case Event::ENEMY_KILLED:
+	auto enemyKilled = [this]()->void
+	{
 		AddScore(250);
-		break;
+	};
 
-	case Event::GOLD_COLLECTED:
+	auto goldCollected = [this]()->void
+	{
 		AddScore(500);
-		break;
+	};
 
-	case Event::LIFE_LOST:
+	auto lifeLost = [this]()->void
+	{
 		m_Lives--;
-		break;
+		if (m_Lives < 0)
+			m_IsGameOver = true;
+	};
 
-	case Event::EXTRA_LIFE:
+	auto extraLife = [this]()->void
+	{
 		m_ScoreForLife = 0;
-
 		if (m_Lives < 3)
-			m_Lives++;
+		m_Lives++;
+	};
 
-		break;
-	}
+
+	m_Actions = std::map<uint32_t, std::function<void()>>{ {0, emeraldCollected}, {1, enemyKilled}, 
+		{2, goldCollected}, {3, lifeLost}, {4, extraLife} };
 }
 
 void PlayerStatsSystem::Update()
 {
 	if (m_ScoreForLife >= 20000)
 	{
-		OnNotify(Event::EXTRA_LIFE);
+		OnNotify(3);
 	}
 }
 

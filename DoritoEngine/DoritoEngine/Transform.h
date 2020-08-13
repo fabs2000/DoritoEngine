@@ -1,5 +1,6 @@
 #pragma once
 #include "BaseComponent.h"
+#include "MathHelpers.h"
 
 #include "SFML/Graphics/Transformable.hpp"
 
@@ -40,6 +41,7 @@ public:
 	const sf::Vector2f& GetScale() const { return m_Scale; };
 	const sf::Vector2f& GetOrigin() const { return m_Origin; };
 	const float GetRotationEuler() const { return m_Rotation; };
+	const float GetRotationRadians() const { return DoritoMath::DegreesToRadians(m_Rotation); }
 
 	const sf::Transform& GetBaseTransform() const { return m_BaseTransform.getTransform(); };
 

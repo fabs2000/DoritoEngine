@@ -4,30 +4,44 @@ Subject::~Subject()
 {
 	for (auto& obv : m_pObservers)
 	{
-		SafeDelete(obv);
+		SafeDelete(obv.second);
 	}
 }
 
-void Subject::AddObserver(Observer* pObsv)
+void Subject::AddObserver(const std::string& name, Observer* pObsv)
 {
-	m_pObservers.push_back(pObsv);
+	m_pObservers.emplace(name, pObsv);
 }
 
-void Subject::RemoveObserver(Observer* pObsv)
+Observer* Subject::GetObserver(const std::string& name)
 {
-	const auto it = std::find(m_pObservers.begin(), m_pObservers.end(), pObsv);
+	auto it = m_pObservers.find(name);
+
+	if (it != m_pObservers.end())
+	{
+		return (*it).second;
+	}
+
+	std::cout << "Observer doesn't exists\n";
+
+	return nullptr;
+}
+
+void Subject::RemoveObserver(const std::string& pObsv)
+{
+	auto it = m_pObservers.find(pObsv);
 
 	if (it != m_pObservers.end())
 	{
 		m_pObservers.erase(it);
-		SafeDelete(pObsv);
+		SafeDelete((*it).second);
 	}
 }
 
-void Subject::Notify(Event event)
+void Subject::Notify(uint32_t event)
 {
 	for (auto& obsv : m_pObservers)
 	{
-		obsv->OnNotify(event);
+		obsv.second->OnNotify(event);
 	}
 }

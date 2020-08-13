@@ -5,11 +5,12 @@
 
 #include "BaseComponent.h"
 #include "SpriteComponent.h"
-#include "ControllerComponent.h"
-#include "AIController.h"
+#include "../Digger/DiggerComponent.h"
+#include "../Digger/AIController.h"
 #include "TextComponent.h"
 #include "ColliderComponent.h"
-#include "BubbleComponent.h"
+#include "../Digger/FireBallComponent.h"
 #include "Transform.h"
+#include "LifeTimeComponent.h"
 
 #pragma endregion 

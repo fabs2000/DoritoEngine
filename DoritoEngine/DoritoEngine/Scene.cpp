@@ -9,6 +9,7 @@ Scene::Scene(const std::string& name, const GameInfo& gameInfo)
 	, m_pPhysicsComponents()
 	, m_GameInfo(gameInfo)
 	, m_IsInit(false)
+	, m_pSubject(new Subject())
 {}
 
 Scene::~Scene()
@@ -17,6 +18,8 @@ Scene::~Scene()
 	{
 		SafeDelete(pSceneObject);
 	}
+
+	SafeDelete(m_pSubject);
 }
 
 void Scene::AddObject(GameObject* object)

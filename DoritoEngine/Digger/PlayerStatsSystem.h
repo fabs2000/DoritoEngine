@@ -4,12 +4,7 @@
 class PlayerStatsSystem : public Observer
 {
 public:
-	PlayerStatsSystem() 
-		: m_TotalScore()
-		, m_EmeraldStreak()
-		, m_ScoreForLife()
-		, m_Lives(1) 
-	{}
+	PlayerStatsSystem();
 	~PlayerStatsSystem() = default;
 
 	PlayerStatsSystem(const PlayerStatsSystem& other) = delete;
@@ -17,20 +12,25 @@ public:
 	PlayerStatsSystem& operator=(const PlayerStatsSystem& other) = delete;
 	PlayerStatsSystem& operator=(PlayerStatsSystem&& other) noexcept = delete;
 
-	void OnNotify(Event event) override;
+	void OnNotify(uint32_t event) override;
 
-	unsigned int GetScore() const { return m_TotalScore; }
-	unsigned int GetLives() const { return m_Lives; }
-	unsigned int GetEmeraldStreak() const { return m_EmeraldStreak; }
+	uint32_t GetScore() const { return m_TotalScore; }
+	uint32_t GetLives() const { return m_Lives; }
+	uint32_t GetEmeraldStreak() const { return m_EmeraldStreak; }
 
+	void InitFunctions();
 	void Update();
 
 private:
-	unsigned int m_TotalScore;
-	unsigned int m_ScoreForLife;
+	uint32_t m_TotalScore;
+	uint32_t m_ScoreForLife;
 
-	unsigned int m_EmeraldStreak;
-	unsigned int m_Lives;
+	uint32_t m_EmeraldStreak;
+	uint32_t m_Lives;
+
+	bool m_IsGameOver;
+
+	std::map<uint32_t, std::function<void()>> m_Actions;
 
 	void AddScore(unsigned int value);
 };
