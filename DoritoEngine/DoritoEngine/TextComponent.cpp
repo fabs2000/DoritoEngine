@@ -10,7 +10,9 @@ TextComponent::TextComponent(const std::string& text, const std::string& file, u
 }
 
 void TextComponent::Initialize()
-{}
+{
+
+}
 
 void TextComponent::Update(float dt)
 {
@@ -30,6 +32,11 @@ void TextComponent::SetText(const std::string& textToDisplay)
 void TextComponent::SetSize(unsigned int size)
 {
 	m_pText->setCharacterSize(size);
+}
+
+void TextComponent::SetColor(const sf::Color& color)
+{
+	m_pText->setFillColor(color);
 }
 
 

@@ -29,7 +29,7 @@ namespace DoritoFactory
 		auto pCollider = new ColliderComponent(true);
 		pPlayer->AddComponent(pCollider);
 
-		pPlayer->SetTag("Player");
+		pPlayer->SetTag("Digger");
 
 		return pPlayer;
 	}
@@ -82,7 +82,7 @@ namespace DoritoFactory
 		auto pSprite = new SpriteComponent(fileName, false);
 		pEnemy->AddComponent(pSprite);
 
-		auto pController = new AIController();
+		auto pController = new EnemyComponent();
 		pEnemy->AddComponent(pController);
 
 		auto pCollider = new ColliderComponent(true);
@@ -125,5 +125,10 @@ namespace DoritoFactory
 		pShot->SetTag("Shot");
 
 		return pShot;
+	}
+
+	inline GameObject* MakeDirtBlock(Scene* pScene, )
+	{
+
 	}
 }

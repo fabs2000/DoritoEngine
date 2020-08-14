@@ -9,6 +9,7 @@ public:
 
 	void SetText(const std::string& textToDisplay);
 	void SetSize(unsigned int size);
+	void SetColor(const sf::Color& color);
 	void SetFont(const std::string& fontName);
 
 	TextComponent(const TextComponent&) = delete;

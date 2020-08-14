@@ -1,6 +1,5 @@
 #pragma once
 #include "BaseComponent.h"
-#include "InputManager.h"
 
 class ColliderComponent;
 
@@ -27,6 +26,6 @@ private:
 
 	float m_Speed;
 
-	void HandleInTrigger(GameObject*, GameObject*);
+	void HandleInTrigger();
 };
 

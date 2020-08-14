@@ -2,6 +2,7 @@
 #include "Scene.h"
 
 class TextComponent;
+class PlayerStatsSystem;
 
 class TestScene : public Scene
 {
@@ -21,13 +22,15 @@ public:
 
 private:
 
-	GameObject* m_pFPS;
-	GameObject* m_pCharacter;
+	GameObject* m_pFPS
+		,* m_pCharacter
+		,* m_pScore;
 
-	TextComponent* m_pTextComp;
+	TextComponent* m_pTextComp
+		,* m_pScoreComp;
+
+	PlayerStatsSystem* m_pGameStats;
 
 	int m_FPSNb;
-
-	void InitInput();
 };
 

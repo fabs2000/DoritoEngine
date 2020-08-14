@@ -13,6 +13,7 @@ TestScene::TestScene(const std::string& sceneName, const GameInfo& gameInfo)
 	: Scene(sceneName, gameInfo)
 	, m_pFPS(nullptr)
 	, m_pTextComp(nullptr)
+	, m_pScore(nullptr)
 	, m_pCharacter(nullptr)
 	, m_FPSNb()
 {
@@ -26,12 +27,26 @@ void TestScene::Initialize()
 	m_pFPS = DoritoFactory::MakeTextObject(this, "FPS: ", "Lingua.otf", 50);
 	AddObject(m_pFPS);
 
-	m_pCharacter = DoritoFactory::MakeCharacter(this, "digger.png", PlayerControllers::Player1);
+	//Score 
+	m_pScore = DoritoFactory::MakeTextObject(this, "Score: ", "Lingua.otf", 50);
+	m_pScore->GetTransform()->SetPosition(0.f,150.f);
+	AddObject(m_pScore);
+
+	m_pCharacter = DoritoFactory::MakeCharacter(this, "Digger/digger.png", PlayerControllers::Player1);
 	m_pCharacter->GetTransform()->SetPosition(650, 150);
 	m_pCharacter->GetTransform()->SetScale(0.2f, 0.2f);
 	AddObject(m_pCharacter);
 
+	auto pEnemy = DoritoFactory::MakeEnemy(this, "Digger/hobbin.png");
+	pEnemy->GetTransform()->SetPosition(780, 150);
+	pEnemy->GetTransform()->SetScale(0.2f, 0.2f);
+	AddObject(pEnemy);
+
 	m_pTextComp = m_pFPS->GetComponent<TextComponent>();
+	m_pScoreComp = m_pScore->GetComponent<TextComponent>();
+	m_pScoreComp->SetColor(sf::Color::Green);
+
+	m_pGameStats = static_cast<PlayerStatsSystem*>(GetSubject()->GetObserver("PlayerStats"));
 
 	Renderer::GetInstance()->SetDebugRendering(true);
 }
@@ -40,33 +55,11 @@ void TestScene::Update(float dt)
 {
 	m_FPSNb = int(1 / dt);
 	m_pTextComp->SetText("FPS: " + std::to_string(m_FPSNb));
+
+	m_pScoreComp->SetText("Score: " + std::to_string(m_pGameStats->GetScore()));
 }
 
 void TestScene::Render() const
 {
 }
 
-void TestScene::InitInput()
-{
-	auto leftTest = [this](const sf::Vector2f& scale)->void
-	{
-		std::cout << "Left Stick X: " << scale.x << ", Left Stick Y: " << scale.y << "\n";
-	};
-
-	auto rightTest = [this](const sf::Vector2f& scale)->void
-	{
-		std::cout << "Right Stick X: " << scale.x << ", Right Stick Y: " << scale.y << "\n";
-	};
-
-	auto buttonTest = [this]()->void
-	{
-		std::cout << "Pressed Button\n";
-	};
-
-	GetGameInfo().pInput->AddGamePadAxisEvent(GamePadAxisEvent("LeftTest", L_STICK, PlayerControllers::Player1, leftTest));
-	GetGameInfo().pInput->AddGamePadAxisEvent(GamePadAxisEvent("RightTest", R_STICK, PlayerControllers::Player1, rightTest));
-
-	GetGameInfo().pInput->AddGamePadActionEvent(GamePadActionEvent("X", A, PlayerControllers::Player1, buttonTest));
-	GetGameInfo().pInput->AddGamePadActionEvent(GamePadActionEvent("O", B, PlayerControllers::Player1, buttonTest, InputTriggerState::Pressed));
-	GetGameInfo().pInput->AddGamePadActionEvent(GamePadActionEvent("SQUARE", X, PlayerControllers::Player1, buttonTest, InputTriggerState::Released));
-}

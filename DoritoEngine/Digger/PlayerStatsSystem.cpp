@@ -15,11 +15,9 @@ void PlayerStatsSystem::OnNotify(uint32_t event)
 	auto it = m_Actions.find(event);
 	 
 	if (it != m_Actions.end())
-	{
 		(*it).second();
-	}
-
-	std::cout << "No event bound to message\n";
+	else
+		std::cout << "No event bound to message\n";
 }
 
 void PlayerStatsSystem::InitFunctions()

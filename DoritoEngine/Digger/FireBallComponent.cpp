@@ -4,7 +4,7 @@
 #include "GameObject.h"
 #include "ColliderComponent.h"
 #include "Scene.h"
-#include "AIController.h"
+#include "EnemyComponent.h"
 
 FireBallComponent::FireBallComponent(const sf::Vector2f& direction)
 	: m_Velocity(0.f, 0)
@@ -21,10 +21,7 @@ void FireBallComponent::Initialize()
 
 	if (m_pCollider->GetIsTrigger())
 	{
-		auto callback = std::bind(&FireBallComponent::HandleInTrigger,
-			this, std::placeholders::_1, std::placeholders::_2);
-
-		m_pCollider->SetTriggerCallback(callback);
+		HandleInTrigger();
 	}
 }
 
@@ -41,18 +38,21 @@ void FireBallComponent::Render()
 {
 }
 
-void FireBallComponent::HandleInTrigger(GameObject* , GameObject* other)
+void FireBallComponent::HandleInTrigger()
 {
-	if (other->GetTag() == "Enemy")
+	auto killEnemy = [this](GameObject*, GameObject* other)->void
 	{
-		//auto comp = other->GetComponent<AIController>();
-		//
-		//if (comp)
-		//{
-		//	comp->SetVelocity(sf::Vector2f(0, -50.f));
-		//	comp->SetState(EnemyState::INBUBBLE);
-		//	comp->SetFloatTime(m_FloatTime);
-		//	m_CaughtEnemy = true;
-		//}
-	}
+		if (other->GetTag() == "Enemy")
+		{
+			auto comp = other->GetComponent<EnemyComponent>();
+
+			if (comp)
+			{
+				other->Delete();
+				GetGameObject()->GetScene()->GetSubject()->Notify(1);
+			}
+		}
+	};
+
+	m_pCollider->SetTriggerCallback(killEnemy);
 }

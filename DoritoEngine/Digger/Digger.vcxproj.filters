@@ -16,6 +16,18 @@
     <Filter Include="GameElements">
       <UniqueIdentifier>{0fad58bc-5786-461c-8a16-9cb4808de602}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Helpers">
+      <UniqueIdentifier>{c1b03216-ef29-4e42-92b6-0ca454f6c5ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameElements\Player">
+      <UniqueIdentifier>{0854e96d-b95a-4ce3-b4e8-0e73b6ecc318}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameElements\Enemy">
+      <UniqueIdentifier>{6c417cd5-009d-4682-a346-616f42f29b8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameElements\Environment">
+      <UniqueIdentifier>{26379eb8-535e-434d-952d-8325fc2ee8ab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -30,14 +42,20 @@
     <ClCompile Include="PlayerStatsSystem.cpp">
       <Filter>GameElements</Filter>
     </ClCompile>
-    <ClCompile Include="FireBallComponent.cpp">
-      <Filter>GameElements</Filter>
+    <ClCompile Include="EnemyComponent.cpp">
+      <Filter>GameElements\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="AIController.cpp">
-      <Filter>GameElements</Filter>
+      <Filter>GameElements\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="DiggerComponent.cpp">
-      <Filter>GameElements</Filter>
+      <Filter>GameElements\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="FireBallComponent.cpp">
+      <Filter>GameElements\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="DirtBlockComponent.cpp">
+      <Filter>GameElements\Environment</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -50,17 +68,23 @@
     <ClInclude Include="PlayerStatsSystem.h">
       <Filter>GameElements</Filter>
     </ClInclude>
-    <ClInclude Include="AIController.h">
-      <Filter>GameElements</Filter>
-    </ClInclude>
     <ClInclude Include="DoritoFactory.h">
-      <Filter>GameElements</Filter>
+      <Filter>Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="FireBallComponent.h">
-      <Filter>GameElements</Filter>
+    <ClInclude Include="EnemyComponent.h">
+      <Filter>GameElements\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="AIController.h">
+      <Filter>GameElements\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="DiggerComponent.h">
-      <Filter>GameElements</Filter>
+      <Filter>GameElements\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="FireBallComponent.h">
+      <Filter>GameElements\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="DirtBlockComponent.h">
+      <Filter>GameElements\Environment</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

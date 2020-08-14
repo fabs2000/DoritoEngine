@@ -7,6 +7,7 @@
 #include "SpriteComponent.h"
 #include "../Digger/DiggerComponent.h"
 #include "../Digger/AIController.h"
+#include "../Digger/EnemyComponent.h"
 #include "TextComponent.h"
 #include "ColliderComponent.h"
 #include "../Digger/FireBallComponent.h"

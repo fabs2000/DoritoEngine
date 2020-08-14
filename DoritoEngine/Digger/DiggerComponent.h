@@ -29,17 +29,22 @@ protected:
 	void Render() override;
 
 private:
-	PlayerControllers m_PlayerID;
-
 	sf::Vector2f m_Velocity;
 	float m_MovementAcceleration;
 
+	PlayerControllers m_PlayerID;
 	PlayerStates m_PlayerState;
 	GameInfo m_GameInfoRef;
+
 	ColliderComponent* m_pCollider;
+
+	float m_FireTimer
+		, m_FireRate;
 
 	//Actions
 	void InitInput();
+	void ShootFireBall();
+
 	void HandleMovement(float dt);
 	void HandleCollisions();
 

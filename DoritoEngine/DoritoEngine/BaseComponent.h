@@ -30,9 +30,9 @@ protected:
 	virtual void Update(float dt) = 0;
 	virtual void Render() = 0;
 
-
 private:
 	TransformComponent* m_pTransform;
 	GameObject* m_pGameObject;
+
 };
 

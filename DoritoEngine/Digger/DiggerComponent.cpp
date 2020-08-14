@@ -17,10 +17,11 @@ DiggerComponent::DiggerComponent(PlayerControllers playerID)
 	, m_PlayerState{ PlayerStates::MOVING }
 	, m_pCollider(nullptr)
 	, m_GameInfoRef()
+	, m_FireTimer(1.f)
+	, m_FireRate(0.1f)
 {
 
 }
-
 
 void DiggerComponent::Initialize()
 {
@@ -39,6 +40,9 @@ void DiggerComponent::Initialize()
 
 void DiggerComponent::Update(float dt)
 {
+	if (m_FireTimer > 0.f)
+		m_FireTimer -= dt;
+
 	HandleMovement(dt);
 }
 
@@ -49,6 +53,9 @@ void DiggerComponent::InitInput()
 {
 	auto shoot = [this]()->void
 	{
+		if (m_FireTimer >= 0.f)
+			return;
+
 		auto transform = GetParentTransform();
 
 		auto direction = sf::Vector2f(cosf(transform->GetRotationRadians()), sinf(transform->GetRotationRadians()));
@@ -56,11 +63,14 @@ void DiggerComponent::InitInput()
 		if (std::signbit(transform->GetScale().x))
 			direction *= -1.f;
 
-		auto pBubble = DoritoFactory::MakeShot(GetGameObject()->GetScene(), "bubble.png", DoritoMath::Normalize(direction));
+		auto pBubble = DoritoFactory::MakeShot(GetGameObject()->GetScene(), "Digger/fireball.png", DoritoMath::Normalize(direction));
 		auto pos = transform->GetPosition();
-
+		pBubble->GetTransform()->SetScale(0.1f,0.1f);
 		pBubble->GetTransform()->SetPosition(pos);
+
 		GetGameObject()->GetScene()->AddObject(pBubble);
+
+		m_FireTimer += 1.0f / m_FireRate;
 	};
 
 	auto left = [this]()->void
@@ -144,6 +154,22 @@ void DiggerComponent::InitInput()
 		m_PlayerID, move, true));
 }
 
+void DiggerComponent::ShootFireBall()
+{
+	auto transform = GetParentTransform();
+
+	auto direction = sf::Vector2f(cosf(transform->GetRotationRadians()), sinf(transform->GetRotationRadians()));
+
+	if (std::signbit(transform->GetScale().x))
+		direction *= -1.f;
+
+	auto pBubble = DoritoFactory::MakeShot(GetGameObject()->GetScene(), "bubble.png", DoritoMath::Normalize(direction));
+	auto pos = transform->GetPosition();
+
+	pBubble->GetTransform()->SetPosition(pos);
+	GetGameObject()->GetScene()->AddObject(pBubble);
+}
+
 void DiggerComponent::HandleMovement(float dt)
 {
 	auto transform = GetParentTransform();
@@ -196,12 +222,8 @@ void DiggerComponent::HandleCollisions()
 	auto callback = [this](const SDL_Rect& intersect, ColliderComponent* other)->void
 	{
 		intersect;
+		other;
 
-		if (other->GetGameObject()->GetTag() == "Enemy")
-		{
-			auto pSubject = GetGameObject()->GetScene()->GetSubject();
-			pSubject->Notify(3);
-		}
 
 		//if (!other->GetIsTrigger())
 		//{
