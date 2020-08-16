@@ -29,6 +29,7 @@ public:
 	{ if(m_IsTrigger)m_TriggerCallback = callback; }
 
 	bool GetIsTrigger() { return m_IsTrigger; }
+	const SDL_Rect GetCollider() { return m_Collider; }
 
 protected:
 	virtual void Initialize();
@@ -49,6 +50,6 @@ private:
 
 	bool m_IsTrigger;
 
-	void UpdateColliderSettings();
+	void SetColliderSettings();
 };
 

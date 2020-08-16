@@ -23,7 +23,7 @@ void TransformComponent::SetPosition(float x, float y)
 	m_BaseTransform.setPosition(m_Position);
 }
 
-void TransformComponent::SetPosition(sf::Vector2f& pos)
+void TransformComponent::SetPosition(const sf::Vector2f& pos)
 {
 	SetPosition(pos.x, pos.y);
 }

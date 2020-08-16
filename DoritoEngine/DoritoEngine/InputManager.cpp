@@ -196,7 +196,7 @@ bool InputManager::IsLStick_InDeadZone(PlayerControllers playerID)
 	UINT pi = static_cast<UINT>(playerID);
 
 	if (!m_ConnectedGamepads[pi])
-		return false;
+		return true;
 
 	short lX = m_CurrentGamepadStates[pi].Gamepad.sThumbLX;
 	short lY = m_CurrentGamepadStates[pi].Gamepad.sThumbLY;
@@ -215,7 +215,7 @@ bool InputManager::IsRStick_InDeadZone(PlayerControllers playerID)
 	UINT pi = static_cast<UINT>(playerID);
 
 	if (!m_ConnectedGamepads[pi])
-		return false;
+		return true;
 
 	short rX = m_CurrentGamepadStates[pi].Gamepad.sThumbRX;
 	short rY = m_CurrentGamepadStates[pi].Gamepad.sThumbRY;

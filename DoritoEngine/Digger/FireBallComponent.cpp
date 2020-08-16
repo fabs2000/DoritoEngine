@@ -40,7 +40,7 @@ void FireBallComponent::Render()
 
 void FireBallComponent::HandleInTrigger()
 {
-	auto killEnemy = [this](GameObject*, GameObject* other)->void
+	auto killEnemy = [this](GameObject* first, GameObject* other)->void
 	{
 		if (other->GetTag() == "Enemy")
 		{
@@ -49,7 +49,8 @@ void FireBallComponent::HandleInTrigger()
 			if (comp)
 			{
 				other->Delete();
-				GetGameObject()->GetScene()->GetSubject()->Notify(1);
+				first->GetScene()->GetSubject()->Notify(1);
+				first->Delete();
 			}
 		}
 	};

@@ -11,10 +11,9 @@
 
 TestScene::TestScene(const std::string& sceneName, const GameInfo& gameInfo)
 	: Scene(sceneName, gameInfo)
-	, m_pFPS(nullptr)
 	, m_pTextComp(nullptr)
-	, m_pScore(nullptr)
-	, m_pCharacter(nullptr)
+	, m_pScoreComp(nullptr)
+	, m_pGameStats(nullptr)
 	, m_FPSNb()
 {
 }
@@ -24,31 +23,44 @@ void TestScene::Initialize()
 	GetSubject()->AddObserver( "PlayerStats", new PlayerStatsSystem() );
 
 	//FPS
-	m_pFPS = DoritoFactory::MakeTextObject(this, "FPS: ", "Lingua.otf", 50);
-	AddObject(m_pFPS);
+	auto pFPS = DoritoFactory::MakeTextObject(this, "FPS: ", "Lingua.otf", 50);
+	AddObject(pFPS);
 
 	//Score 
-	m_pScore = DoritoFactory::MakeTextObject(this, "Score: ", "Lingua.otf", 50);
-	m_pScore->GetTransform()->SetPosition(0.f,150.f);
-	AddObject(m_pScore);
+	auto pScore = DoritoFactory::MakeTextObject(this, "Score: ", "Lingua.otf", 50);
+	pScore->GetTransform()->SetPosition(0.f,150.f);
+	AddObject(pScore);
 
-	m_pCharacter = DoritoFactory::MakeCharacter(this, "Digger/digger.png", PlayerControllers::Player1);
-	m_pCharacter->GetTransform()->SetPosition(650, 150);
-	m_pCharacter->GetTransform()->SetScale(0.2f, 0.2f);
-	AddObject(m_pCharacter);
+	//Character
+	auto pCharacter = DoritoFactory::MakeCharacter(this, "Digger/digger.png", PlayerControllers::Player1);
+	pCharacter->GetTransform()->SetPosition(650, 150);
+	pCharacter->GetTransform()->SetScale(0.2f, 0.2f);
+	AddObject(pCharacter);
 
+	//Enemy
 	auto pEnemy = DoritoFactory::MakeEnemy(this, "Digger/hobbin.png");
 	pEnemy->GetTransform()->SetPosition(780, 150);
 	pEnemy->GetTransform()->SetScale(0.2f, 0.2f);
 	AddObject(pEnemy);
 
-	m_pTextComp = m_pFPS->GetComponent<TextComponent>();
-	m_pScoreComp = m_pScore->GetComponent<TextComponent>();
+	//Updating Text
+	m_pTextComp = pFPS->GetComponent<TextComponent>();
+	m_pScoreComp = pScore->GetComponent<TextComponent>();
 	m_pScoreComp->SetColor(sf::Color::Green);
 
+	//Read game stats
 	m_pGameStats = static_cast<PlayerStatsSystem*>(GetSubject()->GetObserver("PlayerStats"));
+	
+	DoritoFactory::MakeDirtChunk(this, sf::Vector2f(720.f, 450.f), "Digger/dirt_emerald.png", ChunkType::EMERALD);
 
-	Renderer::GetInstance()->SetDebugRendering(true);
+	Renderer::GetInstance()->SetDebugRendering(false);
+}
+
+void TestScene::PostInitialize()
+{
+	//Dirt Chunk
+
+
 }
 
 void TestScene::Update(float dt)

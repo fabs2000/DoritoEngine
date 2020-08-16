@@ -70,11 +70,16 @@ void ColliderComponent::Initialize()
 
 	if (m_UseSpriteCollisions) 
 		m_pRefToImage = GetGameObject()->GetComponent<SpriteComponent>();
+
+	SetColliderSettings();
 }
 
 void ColliderComponent::Update(float)
 {
-	UpdateColliderSettings();
+	//Needs to be called here in order to update dimensions in casef of a transformation
+	//Could be better with a boolean as to not set these every frame
+	//TODO: BOOLEAN
+	SetColliderSettings();
 }
 
 void ColliderComponent::Render()
@@ -82,7 +87,7 @@ void ColliderComponent::Render()
 	Renderer::GetInstance()->RenderShape(m_Shape);
 }
 
-void ColliderComponent::UpdateColliderSettings()
+void ColliderComponent::SetColliderSettings()
 {
 	if (m_pRefToImage)
 	{

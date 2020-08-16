@@ -17,15 +17,12 @@ public:
 	TestScene& operator=(TestScene&& other) = delete;
 
 	void Initialize() override;
+	void PostInitialize() override;
+
 	void Update(float dt) override;
 	void Render() const override;
 
 private:
-
-	GameObject* m_pFPS
-		,* m_pCharacter
-		,* m_pScore;
-
 	TextComponent* m_pTextComp
 		,* m_pScoreComp;
 

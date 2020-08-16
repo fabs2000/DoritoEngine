@@ -57,6 +57,9 @@
     <ClCompile Include="DirtBlockComponent.cpp">
       <Filter>GameElements\Environment</Filter>
     </ClCompile>
+    <ClCompile Include="ChunkCenterComponent.cpp">
+      <Filter>GameElements\Environment</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -84,6 +87,9 @@
       <Filter>GameElements\Player</Filter>
     </ClInclude>
     <ClInclude Include="DirtBlockComponent.h">
+      <Filter>GameElements\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="ChunkCenterComponent.h">
       <Filter>GameElements\Environment</Filter>
     </ClInclude>
   </ItemGroup>

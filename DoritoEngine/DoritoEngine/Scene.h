@@ -34,6 +34,7 @@ public:
 
 protected:
 	virtual void Initialize() = 0;
+	virtual void PostInitialize() = 0;
 	virtual void Update(float dt) = 0;
 	virtual void Render() const = 0;
 

@@ -29,7 +29,7 @@ struct AnimationInfo
 class SpriteComponent : public BaseComponent
 {
 public:
-	explicit SpriteComponent(const std::string& file, bool isCentered = true, AnimationInfo animInfo = AnimationInfo());
+	explicit SpriteComponent(const std::string& file, bool isCentered = true, bool isUsingRelativeTrans = false, AnimationInfo animInfo = AnimationInfo());
 	~SpriteComponent();
 
 	SpriteComponent(const SpriteComponent&) = delete;
@@ -52,6 +52,7 @@ private:
 	sf::FloatRect m_Bounds;
 
 	bool m_IsCentered;
+	bool m_UsingRelativeTrans;
 
 	AnimationInfo m_AnimationInfo;
 	sf::IntRect m_OriginalUV;

@@ -70,6 +70,7 @@ namespace DoritoFactory
 	inline GameObject* MakeCollider(Scene* pScene, const sf::Vector2f& size)
 	{
 		GameObject* ground = new GameObject(pScene);
+
 		auto pCollider = new ColliderComponent(false, sf::Vector2f(size.x, size.y));
 		ground->AddComponent(pCollider);
 		
@@ -117,8 +118,8 @@ namespace DoritoFactory
 		pCollider->SetIsTrigger(true);
 		pShot->AddComponent(pCollider);
 
-		auto pBubcomp = new FireBallComponent(direction);
-		pShot->AddComponent(pBubcomp);
+		auto pFirecomp = new FireBallComponent(direction);
+		pShot->AddComponent(pFirecomp);
 
 		pShot->GetTransform()->SetScale(2.5f,2.5f);
 
@@ -127,8 +128,116 @@ namespace DoritoFactory
 		return pShot;
 	}
 
-	inline GameObject* MakeDirtBlock(Scene* pScene, )
+	inline GameObject* MakeDirtBlock(Scene* pScene, const std::string& file)
 	{
+		GameObject* pDirtBlock = new GameObject(pScene);
 
+		auto pComp = new SpriteComponent(file);
+		pDirtBlock->AddComponent(pComp);
+
+		auto pCollider = new ColliderComponent(true);
+		pCollider->SetIsTrigger(true);
+		pDirtBlock->AddComponent(pCollider);
+
+		auto pCenter = new DirtBlockComponent();
+		pDirtBlock->AddComponent(pCenter);
+
+		pDirtBlock->SetTag("Dirt");
+
+		return pDirtBlock;
 	}
+
+	inline GameObject* MakeChunkCenter(Scene* pScene, const std::string& file, ChunkType type)
+	{
+		GameObject* pChunkCenter = new GameObject(pScene);
+
+		auto pComp = new SpriteComponent(file);
+		pChunkCenter->AddComponent(pComp);
+
+		auto pCollider = new ColliderComponent(true);
+		pCollider->SetIsTrigger(true);
+		pChunkCenter->AddComponent(pCollider);
+
+		auto pDirt = new ChunkCenterComponent(type);
+		pChunkCenter->AddComponent(pDirt);
+
+		pChunkCenter->SetTag("Center");
+
+		return pChunkCenter;
+	}
+
+	inline void MakeDirtChunk(Scene* pScene, const sf::Vector2f& center, const std::string& file, ChunkType type)
+	{
+		//Dirt chunk holds 9 blocks
+		// - 4 Corners of dirt, 2 hori blocks, 2 vert. blocks
+		// - 1 center which defines what type of pickup it up
+		auto generalScale = sf::Vector2f(0.2f, 0.2f);
+
+		//-- Create center --//
+		GameObject* pCenter = MakeChunkCenter(pScene, file, type);
+		pCenter->GetTransform()->SetPosition(center);
+		pCenter->GetTransform()->SetScale(generalScale);
+		pScene->AddObject(pCenter);
+		
+
+		auto relativeCenter = pCenter->GetTransform()->GetPosition();
+		auto centerBounds = pCenter->GetComponent<ColliderComponent>()->GetCollider();
+
+		//-- Create corners --//
+		std::vector<GameObject*> pCorners;
+		for (UINT i{}; i < 4; i++)
+		{
+			auto pCorner = MakeDirtBlock(pScene, "Digger/dirt_corner.png");
+			
+			pCorners.push_back(pCorner);
+			pCorner->GetTransform()->SetScale(generalScale);
+
+			pScene->AddObject(pCorner);
+		}
+
+		auto cornerBounds = pCorners[0]->GetComponent<ColliderComponent>()->GetCollider();
+
+		//TL
+		pCorners[0]->GetTransform()->SetPosition(relativeCenter.x - centerBounds.w/2 - cornerBounds.w/2,
+			relativeCenter.y - centerBounds.h/2 - cornerBounds.w / 2);
+		//TR
+		pCorners[1]->GetTransform()->SetPosition(relativeCenter.x + centerBounds.w / 2 + cornerBounds.w / 2,
+			relativeCenter.y - centerBounds.h/2 - cornerBounds.w / 2);
+		//BR
+		pCorners[2]->GetTransform()->SetPosition(relativeCenter.x + centerBounds.w / 2 + cornerBounds.w / 2,
+			relativeCenter.y + centerBounds.h/2 + cornerBounds.w / 2);
+		//BL
+		pCorners[3]->GetTransform()->SetPosition(relativeCenter.x - centerBounds.w / 2 - cornerBounds.w / 2,
+			relativeCenter.y + centerBounds.h/2 + cornerBounds.w / 2);
+
+		//-- Create Horizontals --//
+		std::vector<GameObject*> pHorizontals;
+		for (UINT i{}; i < 2; i++)
+		{
+			auto pSide = MakeDirtBlock(pScene, "Digger/dirt_horizontal.png");
+			pHorizontals.push_back(pSide);
+			pSide->GetTransform()->SetScale(generalScale);
+			pScene->AddObject(pSide);
+		}
+		//Top
+		pHorizontals[0]->GetTransform()->SetPosition(relativeCenter.x, relativeCenter.y - centerBounds.h/2 - cornerBounds.h/2);
+		//Bot
+		pHorizontals[1]->GetTransform()->SetPosition(relativeCenter.x, relativeCenter.y + centerBounds.h / 2 + cornerBounds.h / 2);
+	
+		//-- Create Verticals --//
+		std::vector<GameObject*> pVerticals;
+		for (UINT i{}; i < 2; i++)
+		{
+			auto pSide = MakeDirtBlock(pScene, "Digger/dirt_vertical.png");
+			pVerticals.push_back(pSide);
+			pSide->GetTransform()->SetScale(generalScale);
+			pScene->AddObject(pSide);
+		}
+
+		//Left
+		pVerticals[0]->GetTransform()->SetPosition(relativeCenter.x - centerBounds.w/2 - cornerBounds.w/2, relativeCenter.y);
+		//Right
+		pVerticals[1]->GetTransform()->SetPosition(relativeCenter.x + centerBounds.w / 2 + cornerBounds.w / 2, relativeCenter.y);
+	}
+	
 }

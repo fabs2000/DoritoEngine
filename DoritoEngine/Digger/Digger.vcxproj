@@ -197,6 +197,7 @@ xcopy "$(SolutionDir)3rdParty\SFML\SFML(x64)\bin\sfml-window-2.dll" "$(OutputPat
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AIController.cpp" />
+    <ClCompile Include="ChunkCenterComponent.cpp" />
     <ClCompile Include="DiggerComponent.cpp" />
     <ClCompile Include="DirtBlockComponent.cpp" />
     <ClCompile Include="EnemyComponent.cpp" />
@@ -208,6 +209,7 @@ xcopy "$(SolutionDir)3rdParty\SFML\SFML(x64)\bin\sfml-window-2.dll" "$(OutputPat
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AIController.h" />
+    <ClInclude Include="ChunkCenterComponent.h" />
     <ClInclude Include="DiggerComponent.h" />
     <ClInclude Include="DirtBlockComponent.h" />
     <ClInclude Include="DoritoFactory.h" />

@@ -3,15 +3,20 @@
 //Includes 
 #pragma region Includes
 
+//Engine Components
 #include "BaseComponent.h"
 #include "SpriteComponent.h"
+#include "TextComponent.h"
+#include "ColliderComponent.h"
+#include "Transform.h"
+#include "LifeTimeComponent.h"
+
+//Game Components
 #include "../Digger/DiggerComponent.h"
 #include "../Digger/AIController.h"
 #include "../Digger/EnemyComponent.h"
-#include "TextComponent.h"
-#include "ColliderComponent.h"
 #include "../Digger/FireBallComponent.h"
-#include "Transform.h"
-#include "LifeTimeComponent.h"
+#include "../Digger/DirtBlockComponent.h"
+#include "../Digger/ChunkCenterComponent.h"
 
 #pragma endregion 

@@ -18,7 +18,7 @@ public:
 
 	//Positions
 	void SetPosition(float x, float y);
-	void SetPosition(sf::Vector2f& pos);
+	void SetPosition(const sf::Vector2f& pos);
 
 	void Move(float offX, float offY);
 	void Move(sf::Vector2f& offset);
@@ -29,7 +29,7 @@ public:
 
 	//Scaling
 	void SetScale(float x, float y);
-	void SetScale(sf::Vector2f& scale);
+	void SetScale (sf::Vector2f& scale);
 
 	void Scale(float factorX, float factorY);
 	void Scale(sf::Vector2f& factor);

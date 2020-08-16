@@ -6,9 +6,10 @@
 #include "ResourceManager.h"
 #include "Renderer.h"
 
-SpriteComponent::SpriteComponent(const std::string& file, bool isCentered, AnimationInfo animInfo)
+SpriteComponent::SpriteComponent(const std::string& file, bool isCentered, bool isUsingRelativeTrans, AnimationInfo animInfo)
 	: m_pSprite(ResourceManager::GetInstance()->LoadSprite(file))
 	, m_IsCentered( isCentered )
+	, m_UsingRelativeTrans( isUsingRelativeTrans )
 	, m_AnimationInfo( animInfo )
 {
 }
@@ -43,6 +44,12 @@ void SpriteComponent::Initialize()
 
 		m_OriginalUV = sf::IntRect(m_AnimationInfo.UV);
 	}
+
+	//Set bounds for collider usage
+	if(m_UsingRelativeTrans)
+		m_Bounds = GetTransform()->GetBaseTransform().transformRect(m_pSprite->getGlobalBounds());
+	else
+		m_Bounds = GetParentTransform()->GetBaseTransform().transformRect(m_pSprite->getGlobalBounds());
 }
 
 void SpriteComponent::Update(float dt)
@@ -51,12 +58,20 @@ void SpriteComponent::Update(float dt)
 	if (m_AnimationInfo.IsAnimating)
 		PlayAnimation(dt);
 
-	m_Bounds = GetParentTransform()->GetBaseTransform().transformRect(m_pSprite->getGlobalBounds());
+	//Needs to do this again so it matches any update on transform
+	//TODO: BOOLEAN (to not have to set every frame, only when needed)
+	if (m_UsingRelativeTrans)
+		m_Bounds = GetTransform()->GetBaseTransform().transformRect(m_pSprite->getGlobalBounds());
+	else
+		m_Bounds = GetParentTransform()->GetBaseTransform().transformRect(m_pSprite->getGlobalBounds());
 }
 
 void SpriteComponent::Render()
-{
-	Renderer::GetInstance()->RenderTexture(m_pSprite, GetParentTransform());
+{	
+	if(m_UsingRelativeTrans)
+		Renderer::GetInstance()->RenderTexture(m_pSprite, GetTransform());
+	else
+		Renderer::GetInstance()->RenderTexture(m_pSprite, GetParentTransform());
 }
 
 void SpriteComponent::PlayAnimation(float dt)

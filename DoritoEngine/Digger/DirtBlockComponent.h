@@ -1,19 +1,13 @@
 #pragma once
 #include "BaseComponent.h"
-
-enum class DirtType
-{
-	DIRT = 0,
-	EMERALD = 1,
-	GOLD = 2
-};
+#include <vector>
 
 class ColliderComponent;
 
 class DirtBlockComponent : public BaseComponent
 {
 public:
-	explicit DirtBlockComponent();
+	DirtBlockComponent() = default;
 
 	DirtBlockComponent(const DirtBlockComponent&) = delete;
 	DirtBlockComponent(DirtBlockComponent&&) = delete;
@@ -22,11 +16,12 @@ public:
 
 protected:
 	void Initialize() override;
-	void Update(float dt) override;
-	void Render() override;
+	void Update(float) override {};
+	void Render() override {};
 
 private:
+	ColliderComponent* m_pCollider;
 
-
+	void HandleInTrigger();
 };
 

@@ -58,6 +58,8 @@ void Scene::RootInit()
 	{
 		pSceneObj->RootInit();
 	}
+
+	PostInitialize();
 }
 
 void Scene::RootUpdate(float dt)
