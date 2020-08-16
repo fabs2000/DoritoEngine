@@ -69,14 +69,8 @@ void Scene::RootUpdate(float dt)
 {
 	Update(dt);
 
-	for (auto& pSceneObject : m_pBasicObjects)
-	{
-		pSceneObject->RootUpdate(dt);
-	}
-
 	for (auto pObj = m_pBasicObjects.begin(); pObj != m_pBasicObjects.end();)
 	{
-
 		(*pObj)->RootUpdate(dt);
 
 		//https://stackoverflow.com/a/16269740
@@ -98,9 +92,9 @@ void Scene::RootCollisionUpdate()
 {
 	if (!m_pPhysicsComponents.empty())
 	{
-		for (auto physComp : m_pPhysicsComponents)
+		for (auto& physComp : m_pPhysicsComponents)
 		{
-			for (auto otherComp : m_pPhysicsComponents)
+			for (auto& otherComp : m_pPhysicsComponents)
 			{
 				if(physComp != otherComp)
 					physComp->CheckCollisions(otherComp);

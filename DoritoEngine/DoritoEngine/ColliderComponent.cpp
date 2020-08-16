@@ -18,10 +18,9 @@ void ColliderComponent::CheckCollisions(ColliderComponent* otherPhysComp)
 {
 	if (otherPhysComp != this && otherPhysComp != nullptr)
 	{
-		SDL_Rect otherCollider = otherPhysComp->GetCollider();
 		SDL_Rect intersect;
 
-		if (SDL_IntersectRect(&m_Collider, &otherCollider, &intersect))
+		if (SDL_IntersectRect(&m_Collider, &otherPhysComp->m_Collider, &intersect))
 		{
 			if (m_IsTrigger)
 			{
@@ -86,8 +85,11 @@ void ColliderComponent::SetColliderSettings()
 
 		m_Collider = { coll.left, coll.top, coll.width, coll.height };
 
-		m_Shape.setPosition(sf::Vector2f(static_cast<float>(m_Collider.x), static_cast<float>(m_Collider.y)));
-		m_Shape.setSize(sf::Vector2f(static_cast<float>(m_Collider.w), static_cast<float>(m_Collider.h)));
+		if (Renderer::GetInstance()->GetDebugRendering())
+		{
+			m_Shape.setPosition(sf::Vector2f(static_cast<float>(m_Collider.x), static_cast<float>(m_Collider.y)));
+			m_Shape.setSize(sf::Vector2f(static_cast<float>(m_Collider.w), static_cast<float>(m_Collider.h)));
+		}
 	}
 	else
 	{
@@ -96,6 +98,7 @@ void ColliderComponent::SetColliderSettings()
 		m_Collider.x = static_cast<int>(pos.x);
 		m_Collider.y = static_cast<int>(pos.y);
 
-		m_Shape.setPosition(pos);
+		if (Renderer::GetInstance()->GetDebugRendering())
+			m_Shape.setPosition(pos);
 	}
 }

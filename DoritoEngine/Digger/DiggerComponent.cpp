@@ -13,14 +13,13 @@
 DiggerComponent::DiggerComponent(PlayerControllers playerID)
 	: m_PlayerID(playerID)
 	, m_Velocity(0.f, 0.f)
-	, m_MovementAcceleration(200.f)
+	, m_MovementAcceleration(400.f)
 	, m_PlayerState{ PlayerStates::MOVING }
 	, m_pCollider(nullptr)
 	, m_GameInfoRef()
 	, m_FireTimer(1.f)
-	, m_FireRate(0.1f)
+	, m_FireRate(0.5f)
 {
-
 }
 
 void DiggerComponent::Initialize()
@@ -109,7 +108,6 @@ void DiggerComponent::InitInput()
 	auto move = [this](const sf::Vector2f& scale)->void
 	{
 		m_Velocity = scale * m_MovementAcceleration;
-		m_Velocity *= 2.f;
 		m_Velocity.y *= -1;
 
 		auto transform = GetParentTransform();

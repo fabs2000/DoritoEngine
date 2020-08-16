@@ -27,15 +27,15 @@ public:
 	~DoritoEngine() = default;
 
 	void Initialize(unsigned int width, unsigned int height, const std::string& title, bool vSyncOn = true, unsigned int frameCap = 0);
-	void Run();
+	void Run();  
 	void Cleanup();
 
 	const GameInfo& GetGameInfo() { return m_GameInfo; };
 
 private:
-	sf::Clock m_Clock;
 	GameInfo m_GameInfo;
 
-	const float dt = 1.f / 60.f;
+	//sf::Clock m_Clock;
+	//const float dt = 1.f / 60.f;
 };
 

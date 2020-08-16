@@ -44,19 +44,25 @@ void DoritoEngine::Run()
 	game.LoadGame(m_GameInfo);
 #endif 
 
-	sf::Clock clock;
+	//sf::Clock clock;
 
 	auto renderer = Renderer::GetInstance();
 
+	auto prevTime = std::chrono::high_resolution_clock::now();
+
 	while (renderer->GetRenderer().isOpen())
 	{
+		auto currTime = std::chrono::high_resolution_clock::now();
+		float dt = std::min(std::chrono::duration<float>(currTime - prevTime).count(), 0.1f);
+		prevTime = currTime;
+
 		m_GameInfo.pInput->ProcessInput(renderer->GetRenderer());
 		
-		sf::Time time = clock.getElapsedTime();
+		//sf::Time time = clock.getElapsedTime();
 
-		m_GameInfo.pSceneManager->Update(time.asSeconds());
+		m_GameInfo.pSceneManager->Update(dt);
 		
-		clock.restart().asSeconds();
+		//clock.restart().asSeconds();
 		renderer->Render();
 	}
 }

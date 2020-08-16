@@ -9,7 +9,7 @@
 FireBallComponent::FireBallComponent(const sf::Vector2f& direction)
 	: m_Velocity(0.f, 0)
 	, m_Direction(direction)
-	, m_Speed(450.f)
+	, m_Speed(650.f)
 
 	, m_pCollider(nullptr)
 {

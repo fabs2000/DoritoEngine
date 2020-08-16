@@ -26,6 +26,7 @@ public:
 	sf::RenderWindow& GetRenderer() { return m_pRenderer; };
 
 	void SetDebugRendering(bool isOn) { m_IsDebugRenderingOn = isOn; }
+	bool GetDebugRendering() { return m_IsDebugRenderingOn; }
 
 private:
 	sf::RenderWindow m_pRenderer;
