@@ -4,7 +4,7 @@
 class ColliderComponent;
 
 
-enum class ChunkType
+enum class ChunkType : int
 {
 	DIRT = 0,
 	EMERALD = 1,

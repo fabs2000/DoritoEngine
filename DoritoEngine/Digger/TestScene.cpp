@@ -33,7 +33,7 @@ void TestScene::Initialize()
 
 	//Character
 	auto pCharacter = DoritoFactory::MakeCharacter(this, "Digger/digger.png", PlayerControllers::Player1);
-	pCharacter->GetTransform()->SetPosition(650, 150);
+	pCharacter->GetTransform()->SetPosition(978, 773);
 	pCharacter->GetTransform()->SetScale(0.2f, 0.2f);
 	AddObject(pCharacter);
 
@@ -51,16 +51,9 @@ void TestScene::Initialize()
 	//Read game stats
 	m_pGameStats = static_cast<PlayerStatsSystem*>(GetSubject()->GetObserver("PlayerStats"));
 	
-	DoritoFactory::MakeDirtChunk(this, sf::Vector2f(720.f, 450.f), "Digger/dirt_emerald.png", ChunkType::EMERALD);
+	DoritoFactory::MakeLevel(this, "level-1.json");
 
 	Renderer::GetInstance()->SetDebugRendering(false);
-}
-
-void TestScene::PostInitialize()
-{
-	//Dirt Chunk
-
-
 }
 
 void TestScene::Update(float dt)

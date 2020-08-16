@@ -21,6 +21,11 @@ void DirtBlockComponent::HandleInTrigger()
 {
 	auto callback = [this](GameObject* first, GameObject* other)->void
 	{
+		if (first == other)
+			return; 
+
+		std::cout << "CollidesDirt\n";
+
 		if (other->GetTag() == "Digger")
 		{
 			first->Delete();

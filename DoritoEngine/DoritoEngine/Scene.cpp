@@ -32,7 +32,8 @@ void Scene::AddObject(GameObject* object)
 	{
 		for (auto& comp : physComp)
 		{
-			m_pPhysicsComponents.push_back(comp);
+			if (comp != nullptr)
+				m_pPhysicsComponents.push_back(comp);
 		}
 	}
 
@@ -41,13 +42,17 @@ void Scene::AddObject(GameObject* object)
 
 void Scene::RemoveObject(GameObject* object)
 {
-	const auto it = find(m_pBasicObjects.begin(), m_pBasicObjects.end(), object);
+	m_pBasicObjects.remove(object);
 
-	if (it != m_pBasicObjects.end())
+	auto physComp = object->GetComponents<ColliderComponent>();
+	if (!physComp.empty())
 	{
-		m_pBasicObjects.erase(it);
-		SafeDelete(object);
+		for (auto& comp : physComp)
+		{
+			m_pPhysicsComponents.remove(comp);
+		}
 	}
+	SafeDelete(object);
 }
 
 void Scene::RootInit()
@@ -58,8 +63,6 @@ void Scene::RootInit()
 	{
 		pSceneObj->RootInit();
 	}
-
-	PostInitialize();
 }
 
 void Scene::RootUpdate(float dt)
@@ -95,9 +98,13 @@ void Scene::RootCollisionUpdate()
 {
 	if (!m_pPhysicsComponents.empty())
 	{
-		for (auto& physComp : m_pPhysicsComponents)
+		for (auto physComp : m_pPhysicsComponents)
 		{
-			physComp->CheckCollisions(m_pPhysicsComponents);
+			for (auto otherComp : m_pPhysicsComponents)
+			{
+				if(physComp != otherComp)
+					physComp->CheckCollisions(otherComp);
+			}
 		}
 	}
 }

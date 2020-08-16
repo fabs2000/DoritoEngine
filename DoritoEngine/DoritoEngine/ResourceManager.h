@@ -1,5 +1,6 @@
 #pragma once
 #include "Singleton.h"
+#include <map>
 
 class ResourceManager
 {
@@ -16,7 +17,6 @@ public:
 	sf::Sprite* LoadSprite(const std::string& file);
 	sf::Text* LoadText(const std::string& text, const std::string& file, unsigned int size);
 
-	sf::Texture* LoadTexture(const std::string& file);
 
 	void Destroy();
 
@@ -25,9 +25,12 @@ private:
 	ResourceManager() = default;
 	std::string m_DataPath;
 
-	std::vector<sf::Texture*> m_pTextures;
-	std::vector<sf::Sprite*> m_pSprites;
+	std::map<std::string, sf::Texture*> m_pTextures;
+	std::map< sf::Texture*, sf::Sprite*> m_pSprites;
 
-	std::vector<sf::Font*> m_pFonts;
-	std::vector<sf::Text*> m_pText;
+	std::map<std::string, sf::Font*> m_pFonts;
+	std::map<std::string, sf::Text*> m_pTexts;
+
+	sf::Texture* LoadTexture(const std::string& file);
+	sf::Font* LoadFont(const std::string& file);
 };

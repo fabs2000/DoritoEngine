@@ -63,7 +63,7 @@ void DiggerComponent::InitInput()
 		if (std::signbit(transform->GetScale().x))
 			direction *= -1.f;
 
-		auto pBubble = DoritoFactory::MakeShot(GetGameObject()->GetScene(), "Digger/fireball.png", DoritoMath::Normalize(direction));
+		auto pBubble = DoritoFactory::MakeFireball(GetGameObject()->GetScene(), "Digger/fireball.png", DoritoMath::Normalize(direction));
 		auto pos = transform->GetPosition();
 		pBubble->GetTransform()->SetScale(0.1f,0.1f);
 		pBubble->GetTransform()->SetPosition(pos);
@@ -152,22 +152,6 @@ void DiggerComponent::InitInput()
 		m_PlayerID, shoot, InputTriggerState::Pressed));
 	m_GameInfoRef.pInput->AddGamePadAxisEvent(GamePadAxisEvent("Move", GamepadAxis::L_STICK,
 		m_PlayerID, move, true));
-}
-
-void DiggerComponent::ShootFireBall()
-{
-	auto transform = GetParentTransform();
-
-	auto direction = sf::Vector2f(cosf(transform->GetRotationRadians()), sinf(transform->GetRotationRadians()));
-
-	if (std::signbit(transform->GetScale().x))
-		direction *= -1.f;
-
-	auto pBubble = DoritoFactory::MakeShot(GetGameObject()->GetScene(), "bubble.png", DoritoMath::Normalize(direction));
-	auto pos = transform->GetPosition();
-
-	pBubble->GetTransform()->SetPosition(pos);
-	GetGameObject()->GetScene()->AddObject(pBubble);
 }
 
 void DiggerComponent::HandleMovement(float dt)

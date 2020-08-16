@@ -11,7 +11,7 @@ int main()
 	srand(static_cast<unsigned int>(time(NULL)));
 
 	DoritoEngine engine;
-	engine.Initialize(1280, 720, "DoritoEngine");
+	engine.Initialize(1600, 900, "DoritoEngine");
 	engine.Run();
 	engine.Cleanup();
 

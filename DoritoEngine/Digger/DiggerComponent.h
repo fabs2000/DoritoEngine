@@ -43,7 +43,6 @@ private:
 
 	//Actions
 	void InitInput();
-	void ShootFireBall();
 
 	void HandleMovement(float dt);
 	void HandleCollisions();

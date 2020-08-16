@@ -14,39 +14,30 @@ ColliderComponent::ColliderComponent(bool usingSprite, const sf::Vector2f& colli
 {
 }
 
-void ColliderComponent::CheckCollisions(std::list<ColliderComponent*>& other)
+void ColliderComponent::CheckCollisions(ColliderComponent* otherPhysComp)
 {
-	if (!other.empty())
+	if (otherPhysComp != this && otherPhysComp != nullptr)
 	{
-		for (auto& otherPhysComp : other)
-		{
-			if (otherPhysComp != this)
-			{
-				SDL_Rect intersect;
+		SDL_Rect otherCollider = otherPhysComp->GetCollider();
+		SDL_Rect intersect;
 
-				if (SDL_IntersectRect( &m_Collider, &otherPhysComp->m_Collider, &intersect))
+		if (SDL_IntersectRect(&m_Collider, &otherCollider, &intersect))
+		{
+			if (m_IsTrigger)
+			{
+				if (m_TriggerCallback)
 				{
-					if (m_IsTrigger)
-					{
-						if (m_TriggerCallback)
-						{
-							m_TriggerCallback(this->GetGameObject(), otherPhysComp->GetGameObject());
-						}
-					}
-					else
-					{
-						if (m_CollisionCallback)
-						{
-							m_CollisionCallback(intersect, otherPhysComp);
-						}
-					}
+					m_TriggerCallback(this->GetGameObject(), otherPhysComp->GetGameObject());
+				}
+			}
+			else
+			{
+				if (m_CollisionCallback)
+				{
+					m_CollisionCallback(intersect, otherPhysComp);
 				}
 			}
 		}
-	}
-	else
-	{
-		std::cout << "No Physics Components in Scene\n";
 	}
 }
 
@@ -62,13 +53,13 @@ void ColliderComponent::Initialize()
 {
 	//Debug Drawing
 	m_Shape.setFillColor(sf::Color(0, 0, 0, 127));
-	m_Shape.setOutlineThickness(1.f);
+	m_Shape.setOutlineThickness(0.1f);
 	m_Shape.setOutlineColor(sf::Color(255, 255, 0, 127));
 
 	m_Shape.setOrigin(GetTransform()->GetOrigin());
 	m_Shape.setSize(sf::Vector2f(static_cast<float>(m_Collider.w), static_cast<float>(m_Collider.h)));
 
-	if (m_UseSpriteCollisions) 
+	if (m_UseSpriteCollisions)
 		m_pRefToImage = GetGameObject()->GetComponent<SpriteComponent>();
 
 	SetColliderSettings();
@@ -92,8 +83,8 @@ void ColliderComponent::SetColliderSettings()
 	if (m_pRefToImage)
 	{
 		auto coll = sf::IntRect(m_pRefToImage->GetBounds());
-		
-		m_Collider = {coll.left, coll.top, coll.width, coll.height};
+
+		m_Collider = { coll.left, coll.top, coll.width, coll.height };
 
 		m_Shape.setPosition(sf::Vector2f(static_cast<float>(m_Collider.x), static_cast<float>(m_Collider.y)));
 		m_Shape.setSize(sf::Vector2f(static_cast<float>(m_Collider.w), static_cast<float>(m_Collider.h)));

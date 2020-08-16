@@ -25,16 +25,21 @@ void ChunkCenterComponent::Initialize()
 
 void ChunkCenterComponent::HandleInTrigger()
 {
-	auto callback = [this](GameObject*, GameObject* other)->void
+	auto callback = [this](GameObject* first, GameObject* other)->void
 	{
+		if (first == other)
+			return;
+
+		std::cout << "CollidesCenter\n";
+
 		if (other->GetTag() == "Digger")
 		{
-			GetGameObject()->Delete();
+			first->Delete();
 
 			switch (m_ChunkType)
 			{
 			case ChunkType::EMERALD:
-				GetGameObject()->GetScene()->GetSubject()->Notify(0);
+				first->GetScene()->GetSubject()->Notify(0);
 				break;
 
 			case ChunkType::GOLD:

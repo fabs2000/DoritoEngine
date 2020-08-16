@@ -44,28 +44,6 @@ namespace DoritoFactory
 		return textObj;
 	}
 
-	inline GameObject* MakeLevel(Scene* pScene, const std::string& spriteFile, const std::string& jsonFile)
-	{
-		GameObject* level = new GameObject(pScene);
-
-		//Level Visualization
-		auto pSprite = new SpriteComponent(spriteFile);
-		level->AddComponent(pSprite);
-
-		//Make level Colliders
-		auto colliders = DoritoHelpers::ReadJson(jsonFile);
-
-		for (auto& collider : colliders["Level"])
-		{
-			auto pCollider = new ColliderComponent(false, sf::Vector2f(collider["Width"], collider["Height"]));
-			level->AddComponent(pCollider);
-			pCollider->GetTransform()->SetPosition(collider["X"], collider["Y"]);
-		}
-
-		level->SetTag("Level");
-
-		return level;
-	}
 
 	inline GameObject* MakeCollider(Scene* pScene, const sf::Vector2f& size)
 	{
@@ -104,7 +82,7 @@ namespace DoritoFactory
 		return pSprite;
 	}
 
-	inline GameObject* MakeShot(Scene* pScene, const std::string& fileName, const sf::Vector2f& direction)
+	inline GameObject* MakeFireball(Scene* pScene, const std::string& fileName, const sf::Vector2f& direction)
 	{
 		auto pShot = new GameObject(pScene);
 
@@ -172,6 +150,7 @@ namespace DoritoFactory
 		// - 4 Corners of dirt, 2 hori blocks, 2 vert. blocks
 		// - 1 center which defines what type of pickup it up
 		auto generalScale = sf::Vector2f(0.2f, 0.2f);
+		float offset = 1.f;
 
 		//-- Create center --//
 		GameObject* pCenter = MakeChunkCenter(pScene, file, type);
@@ -198,17 +177,17 @@ namespace DoritoFactory
 		auto cornerBounds = pCorners[0]->GetComponent<ColliderComponent>()->GetCollider();
 
 		//TL
-		pCorners[0]->GetTransform()->SetPosition(relativeCenter.x - centerBounds.w/2 - cornerBounds.w/2,
-			relativeCenter.y - centerBounds.h/2 - cornerBounds.w / 2);
+		pCorners[0]->GetTransform()->SetPosition(relativeCenter.x - centerBounds.w/2 - cornerBounds.w/2 - offset,
+			relativeCenter.y - centerBounds.h/2 - cornerBounds.w / 2 - offset);
 		//TR
-		pCorners[1]->GetTransform()->SetPosition(relativeCenter.x + centerBounds.w / 2 + cornerBounds.w / 2,
-			relativeCenter.y - centerBounds.h/2 - cornerBounds.w / 2);
+		pCorners[1]->GetTransform()->SetPosition(relativeCenter.x + centerBounds.w / 2 + cornerBounds.w / 2 + offset,
+			relativeCenter.y - centerBounds.h/2 - cornerBounds.w / 2 - offset);
 		//BR
-		pCorners[2]->GetTransform()->SetPosition(relativeCenter.x + centerBounds.w / 2 + cornerBounds.w / 2,
-			relativeCenter.y + centerBounds.h/2 + cornerBounds.w / 2);
+		pCorners[2]->GetTransform()->SetPosition(relativeCenter.x + centerBounds.w / 2 + cornerBounds.w / 2 + offset,
+			relativeCenter.y + centerBounds.h/2 + cornerBounds.w / 2 + offset);
 		//BL
-		pCorners[3]->GetTransform()->SetPosition(relativeCenter.x - centerBounds.w / 2 - cornerBounds.w / 2,
-			relativeCenter.y + centerBounds.h/2 + cornerBounds.w / 2);
+		pCorners[3]->GetTransform()->SetPosition(relativeCenter.x - centerBounds.w / 2 - cornerBounds.w / 2 - offset,
+			relativeCenter.y + centerBounds.h/2 + cornerBounds.w / 2 + offset);
 
 		//-- Create Horizontals --//
 		std::vector<GameObject*> pHorizontals;
@@ -220,9 +199,9 @@ namespace DoritoFactory
 			pScene->AddObject(pSide);
 		}
 		//Top
-		pHorizontals[0]->GetTransform()->SetPosition(relativeCenter.x, relativeCenter.y - centerBounds.h/2 - cornerBounds.h/2);
+		pHorizontals[0]->GetTransform()->SetPosition(relativeCenter.x, relativeCenter.y - centerBounds.h/2 - cornerBounds.h/2 - offset);
 		//Bot
-		pHorizontals[1]->GetTransform()->SetPosition(relativeCenter.x, relativeCenter.y + centerBounds.h / 2 + cornerBounds.h / 2);
+		pHorizontals[1]->GetTransform()->SetPosition(relativeCenter.x, relativeCenter.y + centerBounds.h / 2 + cornerBounds.h / 2 + offset);
 	
 		//-- Create Verticals --//
 		std::vector<GameObject*> pVerticals;
@@ -235,9 +214,21 @@ namespace DoritoFactory
 		}
 
 		//Left
-		pVerticals[0]->GetTransform()->SetPosition(relativeCenter.x - centerBounds.w/2 - cornerBounds.w/2, relativeCenter.y);
+		pVerticals[0]->GetTransform()->SetPosition(relativeCenter.x - centerBounds.w/2 - cornerBounds.w/2 - offset, relativeCenter.y);
 		//Right
-		pVerticals[1]->GetTransform()->SetPosition(relativeCenter.x + centerBounds.w / 2 + cornerBounds.w / 2, relativeCenter.y);
+		pVerticals[1]->GetTransform()->SetPosition(relativeCenter.x + centerBounds.w / 2 + cornerBounds.w / 2 + offset, relativeCenter.y);
 	}
 	
+	inline void MakeLevel(Scene* pScene, const std::string& jsonFile)
+	{
+		//Make level Colliders
+		auto chunks = DoritoHelpers::ReadJson(jsonFile);
+
+		for (auto& chunk : chunks["Level"])
+		{
+			auto pos = sf::Vector2f(chunk["X"], chunk["Y"]);
+
+			MakeDirtChunk(pScene, pos, chunk["Texture"], chunk["Type"]);
+		}
+	}
 }

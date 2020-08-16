@@ -16,7 +16,7 @@ public:
 	ColliderComponent& operator=(ColliderComponent&& other) noexcept = delete;
 
 	//Collision Call
-	void CheckCollisions(std::list<ColliderComponent*>& other);
+	void CheckCollisions(ColliderComponent* other);
 
 	void SetSize(const sf::Vector2f& size);
 	void SetIsTrigger(bool isTrigger) { m_IsTrigger = isTrigger; }
@@ -37,8 +37,8 @@ protected:
 	virtual void Render();
 
 private:
-	std::function<void(const SDL_Rect&, ColliderComponent*)> m_CollisionCallback;
-	std::function<void(GameObject*, GameObject*)> m_TriggerCallback;
+	std::function<void(const SDL_Rect&, ColliderComponent*)> m_CollisionCallback = nullptr;
+	std::function<void(GameObject*, GameObject*)> m_TriggerCallback = nullptr;
 
 	sf::RectangleShape m_Shape;
 	SDL_Rect m_Collider;

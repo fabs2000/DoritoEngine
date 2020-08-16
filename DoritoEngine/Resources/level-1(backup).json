@@ -1,0 +1,173 @@
+{
+	"Level":
+	[
+		{
+			"X": 51,
+			"Y": 155,
+			"Texture": "Digger/dirt_center.png",
+			"Type" : 0
+		},
+		
+		{
+			"X": 51,
+			"Y": 257.5,
+			"Texture": "Digger/dirt_center.png",
+			"Type" : 0
+		},
+		
+		{
+			"X": 51,
+			"Y": 359.5,
+			"Texture": "Digger/dirt_center.png",
+			"Type" : 0
+		},
+		
+		{
+			"X": 51,
+			"Y": 461.5,
+			"Texture": "Digger/dirt_center.png",
+			"Type" : 0
+		},
+		
+		{
+			"X": 51,
+			"Y": 563.5,
+			"Texture": "Digger/dirt_center.png",
+			"Type" : 0
+		},
+		
+		{
+			"X": 51,
+			"Y": 665.5,
+			"Texture": "Digger/dirt_center.png",
+			"Type" : 0
+		},
+		
+		{
+			"X": 51,
+			"Y": 869.5,
+			"Texture": "Digger/dirt_center.png",
+			"Type" : 0
+		},
+		
+		{
+			"X": 153.5,
+			"Y": 869.5,
+			"Texture": "Digger/dirt_center.png",
+			"Type" : 0
+		},
+		
+		{
+			"X": 255.5,
+			"Y": 869.5,
+			"Texture": "Digger/dirt_center.png",
+			"Type" : 0
+		},
+		
+		{
+			"X": 357.5,
+			"Y": 869.5,
+			"Texture": "Digger/dirt_center.png",
+			"Type" : 0
+		},
+		
+		{
+			"X": 459.5,
+			"Y": 869.5,
+			"Texture": "Digger/dirt_center.png",
+			"Type" : 0
+		},
+			
+		{
+			"X": 561.5,
+			"Y": 869.5,
+			"Texture": "Digger/dirt_center.png",
+			"Type" : 0
+		},
+		
+		{
+			"X": 663.5,
+			"Y": 869.5,
+			"Texture": "Digger/dirt_center.png",
+			"Type" : 0
+		},
+		
+		{
+			"X": 765.5,
+			"Y": 869.5,
+			"Texture": "Digger/dirt_center.png",
+			"Type" : 0
+		},
+		
+		{
+			"X": 867.5,
+			"Y": 869.5,
+			"Texture": "Digger/dirt_center.png",
+			"Type" : 0
+		},
+		
+		{
+			"X": 969.5,
+			"Y": 869.5,
+			"Texture": "Digger/dirt_center.png",
+			"Type" : 0
+		},
+		
+		{
+			"X": 1071.5,
+			"Y": 869.5,
+			"Texture": "Digger/dirt_center.png",
+			"Type" : 0
+		},
+		
+		{
+			"X": 1173.5,
+			"Y": 869.5,
+			"Texture": "Digger/dirt_center.png",
+			"Type" : 0
+		},
+		
+		{
+			"X": 1275.5,
+			"Y": 869.5,
+			"Texture": "Digger/dirt_center.png",
+			"Type" : 0
+		},
+		
+		{
+			"X": 1377.5,
+			"Y": 869.5,
+			"Texture": "Digger/dirt_center.png",
+			"Type" : 0
+		},
+		
+		{
+			"X": 1477.5,
+			"Y": 869.5,
+			"Texture": "Digger/dirt_center.png",
+			"Type" : 0
+		},
+		
+		{
+			"X": 1579.5,
+			"Y": 869.5,
+			"Texture": "Digger/dirt_center.png",
+			"Type" : 0
+		},
+		
+		{
+			"X": 51,
+			"Y": 767.5,
+			"Texture": "Digger/dirt_emerald.png",
+			"Type" : 1
+		},
+		
+		{
+
+			"X": 153.5,
+			"Y": 155.5,
+			"Texture": "Digger/dirt_gold.png",
+			"Type" : 2
+		}
+	]
+}

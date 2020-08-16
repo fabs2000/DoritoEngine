@@ -17,8 +17,6 @@ public:
 	TestScene& operator=(TestScene&& other) = delete;
 
 	void Initialize() override;
-	void PostInitialize() override;
-
 	void Update(float dt) override;
 	void Render() const override;
 

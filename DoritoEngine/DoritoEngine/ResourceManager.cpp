@@ -10,79 +10,116 @@ void ResourceManager::Init(const std::string& dataPath)
 
 sf::Sprite* ResourceManager::LoadSprite(const std::string& file)
 {
-	sf::Texture* pTexture = new sf::Texture();
+	sf::Texture* pTexture = LoadTexture(file);
+	sf::Sprite* pSprite = nullptr;
 
-	m_pTextures.push_back(pTexture);
+	auto it = m_pSprites.find(pTexture);
 
-	const auto& fullPath = m_DataPath + file;
-
-	if (!pTexture->loadFromFile(fullPath))
+	//Same logic for sprites as with textures, just textures are the keys for the sprites
+	if (it != m_pSprites.end())
 	{
-		throw  std::runtime_error(std::string("Failed to load texture: " + fullPath));
+		pSprite = (*it).second;
 	}
-
-	sf::Sprite* pSprite = new sf::Sprite(*pTexture);
-
-	m_pSprites.push_back(pSprite);
-
+	else
+	{
+		pSprite = new sf::Sprite(*pTexture);
+		m_pSprites.emplace(pTexture, pSprite);
+	}
 	return pSprite;
 }
 
 sf::Text* ResourceManager::LoadText(const std::string& text, const std::string& file, unsigned int size)
 {
-	sf::Font* font = new sf::Font();
+	sf::Font* font = LoadFont(file);
+	sf::Text* pText = nullptr;
 
-	m_pFonts.push_back(font);
+	auto it = m_pTexts.find(text);
 
-	const auto& fullPath = m_DataPath + file;
-
-	if (!font->loadFromFile(m_DataPath + file))
+	if (it != m_pTexts.end())
 	{
-		throw std::runtime_error(std::string("Failed to load font" + fullPath));
+		pText = (*it).second;
 	}
-
-	sf::Text* pText = new sf::Text(text, *font, size);
-
-	m_pText.push_back(pText);
-
+	else
+	{
+		pText = new sf::Text(text, *font, size);
+		m_pTexts.emplace(text, pText);
+	}
 	return pText;
 }
 
 sf::Texture* ResourceManager::LoadTexture(const std::string& file)
 {
-	sf::Texture* pTexture = new sf::Texture();
+	sf::Texture* pTexture = nullptr;
+	auto it = m_pTextures.find(file);
 
-	m_pTextures.push_back(pTexture);
-
-	const auto& fullPath = m_DataPath + file;
-
-	if (!pTexture->loadFromFile(fullPath))
+	//If Texture has been loaded pointed to return is assigned
+	if (it != m_pTextures.end())
 	{
-		throw  std::runtime_error(std::string("Failed to load texture: " + fullPath));
+		pTexture = (*it).second;
+	}
+	//Else create new texture
+	else
+	{
+		pTexture = new sf::Texture();
+		m_pTextures.emplace(file, pTexture);
+
+		const auto& fullPath = m_DataPath + file;
+
+		if (!pTexture->loadFromFile(fullPath))
+		{
+			throw  std::runtime_error(std::string("Failed to load texture: " + fullPath));
+		}
 	}
 
 	return pTexture;
+}
+
+sf::Font* ResourceManager::LoadFont(const std::string& file)
+{
+	sf::Font* pFont = nullptr;
+	auto it = m_pFonts.find(file);
+
+	//If Texture has been loaded pointed to return is assigned
+	if (it != m_pFonts.end())
+	{
+		pFont = (*it).second;
+	}
+	//Else create new texture
+	else
+	{
+		pFont = new sf::Font();
+		m_pFonts.emplace(file, pFont);
+
+		const auto& fullPath = m_DataPath + file;
+
+		if (!pFont->loadFromFile(fullPath))
+		{
+			throw  std::runtime_error(std::string("Failed to load font: " + fullPath));
+		}
+	}
+
+	return pFont;
 }
 
 void ResourceManager::Destroy()
 {
 	for (auto& sprite : m_pSprites)
 	{
-		SafeDelete(sprite);
+		SafeDelete(sprite.second);
 	}
 
-	for (auto& text : m_pText)
+	for (auto& text : m_pTexts)
 	{
-		SafeDelete(text);
+		SafeDelete(text.second);
 	}
 
 	for (auto& texture : m_pTextures)
 	{
-		SafeDelete(texture);
+		SafeDelete(texture.second);
 	}
 
 	for (auto& font : m_pFonts)
 	{
-		SafeDelete(font);
+		SafeDelete(font.second);
 	}
 }
