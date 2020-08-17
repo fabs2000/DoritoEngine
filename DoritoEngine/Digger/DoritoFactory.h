@@ -44,7 +44,6 @@ namespace DoritoFactory
 		return textObj;
 	}
 
-
 	inline GameObject* MakeCollider(Scene* pScene, const sf::Vector2f& size)
 	{
 		GameObject* ground = new GameObject(pScene);
@@ -219,16 +218,20 @@ namespace DoritoFactory
 		pVerticals[1]->GetTransform()->SetPosition(relativeCenter.x + centerBounds.w / 2 + cornerBounds.w / 2 + offset, relativeCenter.y);
 	}
 	
-	inline void MakeLevel(Scene* pScene, const std::string& jsonFile)
+	inline void MakeLevel(Scene* pScene, const std::string& dirtFile)
 	{
 		//Make level Colliders
-		auto chunks = DoritoHelpers::ReadJson(jsonFile);
-
-		for (auto& chunk : chunks["Level"])
+		auto chunks = DoritoHelpers::ReadJson(dirtFile);
+		for (auto& chunk : chunks["Dirt"])
 		{
+			auto type = chunk["Type"];
+
+			if (type == ChunkType::NOTHING)
+				continue;
+
 			auto pos = sf::Vector2f(chunk["X"], chunk["Y"]);
 
-			MakeDirtChunk(pScene, pos, chunk["Texture"], chunk["Type"]);
+			MakeDirtChunk(pScene, pos, chunk["Texture"], type);
 		}
 	}
 }

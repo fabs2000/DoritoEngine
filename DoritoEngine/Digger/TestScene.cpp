@@ -28,7 +28,7 @@ void TestScene::Initialize()
 
 	//Score 
 	auto pScore = DoritoFactory::MakeTextObject(this, "Score: ", "Lingua.otf", 50);
-	pScore->GetTransform()->SetPosition(0.f,150.f);
+	pScore->GetTransform()->SetPosition(300.f,0.f);
 	AddObject(pScore);
 
 	//Character
@@ -37,11 +37,11 @@ void TestScene::Initialize()
 	pCharacter->GetTransform()->SetScale(0.2f, 0.2f);
 	AddObject(pCharacter);
 
-	//Enemy
-	auto pEnemy = DoritoFactory::MakeEnemy(this, "Digger/hobbin.png");
-	pEnemy->GetTransform()->SetPosition(780, 150);
-	pEnemy->GetTransform()->SetScale(0.2f, 0.2f);
-	AddObject(pEnemy);
+	////Enemy
+	//auto pEnemy = DoritoFactory::MakeEnemy(this, "Digger/hobbin.png");
+	//pEnemy->GetTransform()->SetPosition(780, 150);
+	//pEnemy->GetTransform()->SetScale(0.2f, 0.2f);
+	//AddObject(pEnemy);
 
 	//Updating Text
 	m_pTextComp = pFPS->GetComponent<TextComponent>();
@@ -51,7 +51,7 @@ void TestScene::Initialize()
 	//Read game stats
 	m_pGameStats = static_cast<PlayerStatsSystem*>(GetSubject()->GetObserver("PlayerStats"));
 	
-	DoritoFactory::MakeLevel(this, "level-1.json");
+	DoritoFactory::MakeLevel(this, "Levels/level-1.json");
 
 	Renderer::GetInstance()->SetDebugRendering(false);
 }

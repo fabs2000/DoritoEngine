@@ -40,7 +40,7 @@ private:
 	std::function<void(const SDL_Rect&, ColliderComponent*)> m_CollisionCallback = nullptr;
 	std::function<void(GameObject*, GameObject*)> m_TriggerCallback = nullptr;
 
-	sf::RectangleShape m_Shape;
+	sf::RectangleShape m_DebugShape;
 	SDL_Rect m_Collider;
 
 	// SFML creates a bounding box around images/text, to use this as my collisions, I need a reference to the 

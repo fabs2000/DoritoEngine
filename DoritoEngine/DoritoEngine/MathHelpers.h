@@ -35,13 +35,13 @@ namespace DoritoMath
 
 	inline float Magnitude(const sf::Vector2f& vec)
 	{
-		return sqrtf((vec.x * vec.x) +  (vec.y * vec.y));
+		return sqrtf((vec.x * vec.x) + (vec.y * vec.y));
 	}
 
 	inline const sf::Vector2f& Normalize(sf::Vector2f& vec)
 	{
 		if (FEquals(Magnitude(vec), 0.f))
-			return vec; 
+			return vec;
 
 		float m = Magnitude(vec);
 
@@ -73,4 +73,15 @@ namespace DoritoMath
 
 		return num;
 	}
+
+	inline float Square(float val)
+	{
+		return val * val;
+	}
+
+	inline float SquareDistance(const sf::Vector2f& v1, const sf::Vector2f& v2)
+	{
+		return Square(v2.x - v1.x) + Square(v2.y - v1.y);
+	}
+
 }

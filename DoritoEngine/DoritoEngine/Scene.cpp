@@ -28,13 +28,10 @@ void Scene::AddObject(GameObject* object)
 
 	auto physComp = object->GetComponents<ColliderComponent>();
 
-	if (!physComp.empty())
+	for (auto& comp : physComp)
 	{
-		for (auto& comp : physComp)
-		{
-			if (comp != nullptr)
-				m_pPhysicsComponents.push_back(comp);
-		}
+		if (comp != nullptr)
+			m_pPhysicsComponents.push_back(comp);
 	}
 
 	m_pBasicObjects.push_back(object);
@@ -45,13 +42,24 @@ void Scene::RemoveObject(GameObject* object)
 	m_pBasicObjects.remove(object);
 
 	auto physComp = object->GetComponents<ColliderComponent>();
-	if (!physComp.empty())
+
+	//for (auto it = physComp.begin(); it != physComp.end(); it++)
+	//{
+	//	if (object->GetMarkedForDelete())
+	//	{
+	//		m_pPhysicsComponents.erase(it);
+	//	}
+	//	else
+	//	{
+	//		it++;
+	//	}
+	//}
+
+	for (auto& comp : physComp)
 	{
-		for (auto& comp : physComp)
-		{
-			m_pPhysicsComponents.remove(comp);
-		}
+		m_pPhysCompDel.push_back(comp);
 	}
+
 	SafeDelete(object);
 }
 
@@ -84,22 +92,61 @@ void Scene::RootUpdate(float dt)
 		{
 			++pObj;
 		}
-
 	}
+
+	RemovePhysicsComponents();
 }
 
 void Scene::RootCollisionUpdate()
 {
-	if (!m_pPhysicsComponents.empty())
+	//for (auto& physComp : m_pPhysicsComponents)
+	//{
+	//	for (auto& otherComp : m_pPhysicsComponents)
+	//	{
+	//		if (physComp != otherComp)
+	//		{
+	//			//auto pos1 = physComp->GetParentTransform()->GetPosition();
+	//			//auto pos2 = otherComp->GetParentTransform()->GetPosition();
+	//			//if (DoritoMath::SquareDistance(pos1, pos2) < DoritoMath::Square(5.f))
+	//			physComp->CheckCollisions(otherComp);
+	//		}
+	//	}
+	//}
+
+	uint32_t maxThreads = std::thread::hardware_concurrency();
+	std::deque<std::future<void>> futures;
+	uint32_t threadCounter = 0;
+
+	for (auto& physComp : m_pPhysicsComponents)
 	{
-		for (auto& physComp : m_pPhysicsComponents)
+		if (threadCounter >= maxThreads)
 		{
-			for (auto& otherComp : m_pPhysicsComponents)
-			{
-				if(physComp != otherComp)
-					physComp->CheckCollisions(otherComp);
-			}
+			futures.front().get();
+			futures.pop_front();
+			threadCounter--;
 		}
+
+		futures.emplace_back(std::async(std::launch::async, [&]()
+			{
+				for (auto& otherComp : m_pPhysicsComponents)
+				{
+					if (physComp != otherComp)
+					{
+						//auto pos1 = physComp->GetParentTransform()->GetPosition();
+						//auto pos2 = otherComp->GetParentTransform()->GetPosition();
+						//if (DoritoMath::SquareDistance(pos1, pos2) < DoritoMath::Square(5.f))
+
+						physComp->CheckCollisions(otherComp);
+					}
+				}
+			}));
+
+		threadCounter++;
+	}
+
+	for (auto& future : futures)
+	{
+		future.get();
 	}
 }
 
@@ -113,3 +160,17 @@ void Scene::RootRender() const
 	}
 }
 
+void Scene::RemovePhysicsComponents()
+{
+	for (auto it = m_pPhysCompDel.begin(); it != m_pPhysCompDel.end(); it++)
+	{
+		auto pCompIt = std::find(m_pPhysicsComponents.begin(), m_pPhysicsComponents.end(), *it);
+
+		if (pCompIt != m_pPhysicsComponents.end())
+		{
+			m_pPhysicsComponents.erase(pCompIt);
+		}
+	}
+
+	std::cout << "Physics: " << m_pPhysicsComponents.size() << "\n";
+}

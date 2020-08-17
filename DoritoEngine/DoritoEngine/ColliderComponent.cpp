@@ -6,7 +6,7 @@
 #include "Renderer.h"
 
 ColliderComponent::ColliderComponent(bool usingSprite, const sf::Vector2f& colliderSize)
-	: m_Shape()
+	: m_DebugShape()
 	, m_Collider{ 0, 0, static_cast<int>(colliderSize.x), static_cast<int>(colliderSize.y) }
 	, m_UseSpriteCollisions(usingSprite)
 	, m_pRefToImage(nullptr)
@@ -42,7 +42,7 @@ void ColliderComponent::CheckCollisions(ColliderComponent* otherPhysComp)
 
 void ColliderComponent::SetSize(const sf::Vector2f& size)
 {
-	m_Shape.setSize(size);
+	m_DebugShape.setSize(size);
 
 	m_Collider.w = static_cast<int>(size.x);
 	m_Collider.h = static_cast<int>(size.y);
@@ -51,12 +51,12 @@ void ColliderComponent::SetSize(const sf::Vector2f& size)
 void ColliderComponent::Initialize()
 {
 	//Debug Drawing
-	m_Shape.setFillColor(sf::Color(0, 0, 0, 127));
-	m_Shape.setOutlineThickness(0.1f);
-	m_Shape.setOutlineColor(sf::Color(255, 255, 0, 127));
+	m_DebugShape.setFillColor(sf::Color(0, 0, 0, 127));
+	m_DebugShape.setOutlineThickness(0.1f);
+	m_DebugShape.setOutlineColor(sf::Color(255, 255, 0, 127));
 
-	m_Shape.setOrigin(GetTransform()->GetOrigin());
-	m_Shape.setSize(sf::Vector2f(static_cast<float>(m_Collider.w), static_cast<float>(m_Collider.h)));
+	m_DebugShape.setOrigin(GetTransform()->GetOrigin());
+	m_DebugShape.setSize(sf::Vector2f(static_cast<float>(m_Collider.w), static_cast<float>(m_Collider.h)));
 
 	if (m_UseSpriteCollisions)
 		m_pRefToImage = GetGameObject()->GetComponent<SpriteComponent>();
@@ -74,7 +74,7 @@ void ColliderComponent::Update(float)
 
 void ColliderComponent::Render()
 {
-	Renderer::GetInstance()->RenderShape(m_Shape);
+	Renderer::GetInstance()->RenderShape(m_DebugShape);
 }
 
 void ColliderComponent::SetColliderSettings()
@@ -87,8 +87,8 @@ void ColliderComponent::SetColliderSettings()
 
 		if (Renderer::GetInstance()->GetDebugRendering())
 		{
-			m_Shape.setPosition(sf::Vector2f(static_cast<float>(m_Collider.x), static_cast<float>(m_Collider.y)));
-			m_Shape.setSize(sf::Vector2f(static_cast<float>(m_Collider.w), static_cast<float>(m_Collider.h)));
+			m_DebugShape.setPosition(sf::Vector2f(static_cast<float>(m_Collider.x), static_cast<float>(m_Collider.y)));
+			m_DebugShape.setSize(sf::Vector2f(static_cast<float>(m_Collider.w), static_cast<float>(m_Collider.h)));
 		}
 	}
 	else
@@ -99,6 +99,6 @@ void ColliderComponent::SetColliderSettings()
 		m_Collider.y = static_cast<int>(pos.y);
 
 		if (Renderer::GetInstance()->GetDebugRendering())
-			m_Shape.setPosition(pos);
+			m_DebugShape.setPosition(pos);
 	}
 }

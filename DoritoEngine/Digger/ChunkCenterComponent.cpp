@@ -30,7 +30,7 @@ void ChunkCenterComponent::HandleInTrigger()
 		if (first == other)
 			return;
 
-		std::cout << "CollidesCenter\n";
+		//std::cout << first->GetTransform()->GetPosition().x << ", " << first->GetTransform()->GetPosition().y << "\n";
 
 		if (other->GetTag() == "Digger")
 		{

@@ -8,7 +8,8 @@ enum class ChunkType : int
 {
 	DIRT = 0,
 	EMERALD = 1,
-	GOLD = 2
+	GOLD = 2,
+	NOTHING = 3
 };
 
 

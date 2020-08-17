@@ -1,9 +1,11 @@
 #pragma once
+#pragma once
 #include "SceneManager.h"
 #include "DoritoEngine.h"
 #include "Observer.h"
 #include <string>
 #include <list>
+#include <deque>
 
 class GameObject;
 class ColliderComponent;
@@ -41,11 +43,14 @@ private:
 	std::string m_Name;
 
 	std::list<GameObject*> m_pBasicObjects;
-	std::list<ColliderComponent*> m_pPhysicsComponents;
+	std::vector<ColliderComponent*> m_pPhysicsComponents;
+	std::vector<ColliderComponent*> m_pPhysCompDel;
 
 	Subject* m_pSubject;
 
 	GameInfo m_GameInfo;
 	bool m_IsInit;
+
+	void RemovePhysicsComponents();
 };
 
