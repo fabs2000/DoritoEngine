@@ -5,14 +5,16 @@
 #include "Scene.h"
 #include "Renderer.h"
 
-ColliderComponent::ColliderComponent(bool usingSprite, const sf::Vector2f& colliderSize)
-	: m_DebugShape()
+#include "Cell.h"
+
+ColliderComponent::ColliderComponent(Grid* pGrid, bool usingSprite, const sf::Vector2f& colliderSize)
+	: m_pParentGrid(pGrid)
+	, m_DebugShape()
 	, m_Collider{ 0, 0, static_cast<int>(colliderSize.x), static_cast<int>(colliderSize.y) }
 	, m_UseSpriteCollisions(usingSprite)
 	, m_pRefToImage(nullptr)
 	, m_IsTrigger(false)
-{
-}
+{}
 
 void ColliderComponent::CheckCollisions(ColliderComponent* otherPhysComp)
 {

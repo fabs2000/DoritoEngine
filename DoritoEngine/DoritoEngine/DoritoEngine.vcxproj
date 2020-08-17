@@ -147,8 +147,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BaseComponent.cpp" />
+    <ClCompile Include="Cell.cpp" />
     <ClCompile Include="DoritoEngine.cpp" />
     <ClCompile Include="ColliderComponent.cpp" />
+    <ClCompile Include="Grid.cpp" />
     <ClCompile Include="LifeTimeComponent.cpp" />
     <ClCompile Include="Observer.cpp" />
     <ClCompile Include="TextComponent.cpp" />
@@ -164,8 +166,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseComponent.h" />
+    <ClInclude Include="Cell.h" />
     <ClInclude Include="Components.h" />
     <ClInclude Include="DoritoEngine.h" />
+    <ClInclude Include="Grid.h" />
     <ClInclude Include="LifeTimeComponent.h" />
     <ClInclude Include="MathHelpers.h" />
     <ClInclude Include="ColliderComponent.h" />

@@ -99,54 +99,18 @@ void Scene::RootUpdate(float dt)
 
 void Scene::RootCollisionUpdate()
 {
-	//for (auto& physComp : m_pPhysicsComponents)
-	//{
-	//	for (auto& otherComp : m_pPhysicsComponents)
-	//	{
-	//		if (physComp != otherComp)
-	//		{
-	//			//auto pos1 = physComp->GetParentTransform()->GetPosition();
-	//			//auto pos2 = otherComp->GetParentTransform()->GetPosition();
-	//			//if (DoritoMath::SquareDistance(pos1, pos2) < DoritoMath::Square(5.f))
-	//			physComp->CheckCollisions(otherComp);
-	//		}
-	//	}
-	//}
-
-	uint32_t maxThreads = std::thread::hardware_concurrency();
-	std::deque<std::future<void>> futures;
-	uint32_t threadCounter = 0;
-
 	for (auto& physComp : m_pPhysicsComponents)
 	{
-		if (threadCounter >= maxThreads)
+		for (auto& otherComp : m_pPhysicsComponents)
 		{
-			futures.front().get();
-			futures.pop_front();
-			threadCounter--;
-		}
-
-		futures.emplace_back(std::async(std::launch::async, [&]()
+			if (physComp != otherComp)
 			{
-				for (auto& otherComp : m_pPhysicsComponents)
-				{
-					if (physComp != otherComp)
-					{
-						//auto pos1 = physComp->GetParentTransform()->GetPosition();
-						//auto pos2 = otherComp->GetParentTransform()->GetPosition();
-						//if (DoritoMath::SquareDistance(pos1, pos2) < DoritoMath::Square(5.f))
-
-						physComp->CheckCollisions(otherComp);
-					}
-				}
-			}));
-
-		threadCounter++;
-	}
-
-	for (auto& future : futures)
-	{
-		future.get();
+				//auto pos1 = physComp->GetParentTransform()->GetPosition();
+				//auto pos2 = otherComp->GetParentTransform()->GetPosition();
+				//if (DoritoMath::SquareDistance(pos1, pos2) < DoritoMath::Square(5.f))
+				physComp->CheckCollisions(otherComp);
+			}
+		}
 	}
 }
 

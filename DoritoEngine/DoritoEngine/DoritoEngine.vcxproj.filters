@@ -66,6 +66,8 @@
     <ClCompile Include="Observer.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
+    <ClCompile Include="Grid.cpp" />
+    <ClCompile Include="Cell.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ResourceManager.h">
@@ -128,5 +130,7 @@
     <ClInclude Include="Observer.h">
       <Filter>Managers</Filter>
     </ClInclude>
+    <ClInclude Include="Grid.h" />
+    <ClInclude Include="Cell.h" />
   </ItemGroup>
 </Project>
