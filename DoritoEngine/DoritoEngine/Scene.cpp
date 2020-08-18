@@ -10,6 +10,7 @@ Scene::Scene(const std::string& name, const GameInfo& gameInfo)
 	, m_GameInfo(gameInfo)
 	, m_IsInit(false)
 	, m_pSubject(new Subject())
+	, m_pGrid(new CollisionGrid())
 {}
 
 Scene::~Scene()
@@ -20,6 +21,7 @@ Scene::~Scene()
 	}
 
 	SafeDelete(m_pSubject);
+	SafeDelete(m_pGrid);
 }
 
 void Scene::AddObject(GameObject* object)
@@ -35,6 +37,12 @@ void Scene::AddObject(GameObject* object)
 	}
 
 	m_pBasicObjects.push_back(object);
+}
+
+void Scene::AddPhysicsObject(ColliderComponent* pColl)
+{
+	if (pColl != nullptr)
+		m_pPhysicsComponents.push_back(pColl);
 }
 
 void Scene::RemoveObject(GameObject* object)
@@ -99,12 +107,19 @@ void Scene::RootUpdate(float dt)
 
 void Scene::RootCollisionUpdate()
 {
+	m_pGrid->HandleCollisions();
+
 	for (auto& physComp : m_pPhysicsComponents)
 	{
 		for (auto& otherComp : m_pPhysicsComponents)
 		{
 			if (physComp != otherComp)
 			{
+				if (physComp->GetType() == ColliderType::STATIC &&
+					otherComp->GetType() == ColliderType::STATIC)
+				{
+					continue;
+				}
 				//auto pos1 = physComp->GetParentTransform()->GetPosition();
 				//auto pos2 = otherComp->GetParentTransform()->GetPosition();
 				//if (DoritoMath::SquareDistance(pos1, pos2) < DoritoMath::Square(5.f))

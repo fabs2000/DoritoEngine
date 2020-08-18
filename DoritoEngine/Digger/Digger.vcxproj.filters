@@ -36,9 +36,6 @@
     <ClCompile Include="Game.cpp">
       <Filter>MainFiles</Filter>
     </ClCompile>
-    <ClCompile Include="TestScene.cpp">
-      <Filter>Scenes</Filter>
-    </ClCompile>
     <ClCompile Include="PlayerStatsSystem.cpp">
       <Filter>GameElements</Filter>
     </ClCompile>
@@ -60,13 +57,16 @@
     <ClCompile Include="ChunkCenterComponent.cpp">
       <Filter>GameElements\Environment</Filter>
     </ClCompile>
+    <ClCompile Include="Level1_Scene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="TestScene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
       <Filter>MainFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="TestScene.h">
-      <Filter>Scenes</Filter>
     </ClInclude>
     <ClInclude Include="PlayerStatsSystem.h">
       <Filter>GameElements</Filter>
@@ -91,6 +91,12 @@
     </ClInclude>
     <ClInclude Include="ChunkCenterComponent.h">
       <Filter>GameElements\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="Level1_Scene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="TestScene.h">
+      <Filter>Scenes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -6,11 +6,11 @@
 #include "PracticalHelpers.h"
 
 //---------------------------------------\\
-//⁣ 🔻🔺🔻🔺🔻🔺🔻🔻🔻🔻🔺🔺🔻🔺🔺  \\
-// 🔻🔻🔺🔻🔻🔺🔻🔺🔻🔺🔻🔺🔻🔺🔺   \\
-// 🔻🔻🔺🔻🔺🔻🔺🔻🔺🔻🔻🔺🔻🔺🔻    \\
-// 🔻🔺🔻🔺🔻🔺⁣🔻🔺🔺🔺🔻🔺🔻🔻🔺    //
-// 🔺🔺🔻🔺🔺🔺🔻🔺🔻🔺🔻🔺🔻🔻🔺   //
+//⁣ 🔻🔺🔻🔺🔻🔺🔻🔻🔻🔻🔺🔺🔻🔺🔺   \\
+// 🔻🔻🔺🔻🔻🔺🔻🔺🔻🔺🔻🔺🔻🔺🔺    \\
+// 🔻🔻🔺🔻🔺🔻🔺🔻🔺🔻🔻🔺🔻🔺🔻     \\
+// 🔻🔺🔻🔺🔻🔺⁣🔻🔺🔺🔺🔻🔺🔻🔻🔺     //
+// 🔺🔺🔻🔺🔺🔺🔻🔺🔻🔺🔻🔺🔻🔻🔺    //
 // Dammit I spilled my Doritos 😑         //
 //---------------------------------------//
 
@@ -26,7 +26,7 @@ namespace DoritoFactory
 		auto pDigger = new DiggerComponent(player);
 		pPlayer->AddComponent(pDigger);
 
-		auto pCollider = new ColliderComponent(true);
+		auto pCollider = new ColliderComponent(pScene->GetGrid(), ColliderType::DYNAMIC, true);
 		pPlayer->AddComponent(pCollider);
 
 		pPlayer->SetTag("Digger");
@@ -48,7 +48,7 @@ namespace DoritoFactory
 	{
 		GameObject* ground = new GameObject(pScene);
 
-		auto pCollider = new ColliderComponent(false, sf::Vector2f(size.x, size.y));
+		auto pCollider = new ColliderComponent(pScene->GetGrid(), ColliderType::STATIC, false, sf::Vector2f(size.x, size.y));
 		ground->AddComponent(pCollider);
 		
 		return ground;
@@ -63,7 +63,7 @@ namespace DoritoFactory
 		auto pController = new EnemyComponent();
 		pEnemy->AddComponent(pController);
 
-		auto pCollider = new ColliderComponent(true);
+		auto pCollider = new ColliderComponent(pScene->GetGrid(), ColliderType::DYNAMIC, true);
 		pEnemy->AddComponent(pCollider);
 
 		pEnemy->SetTag("Enemy");
@@ -91,7 +91,7 @@ namespace DoritoFactory
 		auto pComp = new SpriteComponent(fileName);
 		pShot->AddComponent(pComp);
 
-		auto pCollider = new ColliderComponent(true);
+		auto pCollider = new ColliderComponent(pScene->GetGrid(), ColliderType::DYNAMIC, true);
 		pCollider->SetIsTrigger(true);
 		pShot->AddComponent(pCollider);
 
@@ -112,7 +112,7 @@ namespace DoritoFactory
 		auto pComp = new SpriteComponent(file);
 		pDirtBlock->AddComponent(pComp);
 
-		auto pCollider = new ColliderComponent(true);
+		auto pCollider = new ColliderComponent(pScene->GetGrid(), ColliderType::STATIC, true);
 		pCollider->SetIsTrigger(true);
 		pDirtBlock->AddComponent(pCollider);
 
@@ -131,7 +131,7 @@ namespace DoritoFactory
 		auto pComp = new SpriteComponent(file);
 		pChunkCenter->AddComponent(pComp);
 
-		auto pCollider = new ColliderComponent(true);
+		auto pCollider = new ColliderComponent(pScene->GetGrid(), ColliderType::STATIC, true);
 		pCollider->SetIsTrigger(true);
 		pChunkCenter->AddComponent(pCollider);
 

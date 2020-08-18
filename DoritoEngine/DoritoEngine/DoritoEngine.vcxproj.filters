@@ -19,6 +19,9 @@
     <Filter Include="SceneContent\BaseFiles">
       <UniqueIdentifier>{4dcc8c7c-56a6-45e9-9a04-4cfcef3c7ea4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Managers\SpatialPartitioning">
+      <UniqueIdentifier>{368d2c50-5059-4682-b257-93c9811d30bc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ResourceManager.cpp">
@@ -66,8 +69,12 @@
     <ClCompile Include="Observer.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
-    <ClCompile Include="Grid.cpp" />
-    <ClCompile Include="Cell.cpp" />
+    <ClCompile Include="Cell.cpp">
+      <Filter>Managers\SpatialPartitioning</Filter>
+    </ClCompile>
+    <ClCompile Include="Grid.cpp">
+      <Filter>Managers\SpatialPartitioning</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ResourceManager.h">
@@ -130,7 +137,11 @@
     <ClInclude Include="Observer.h">
       <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="Grid.h" />
-    <ClInclude Include="Cell.h" />
+    <ClInclude Include="Grid.h">
+      <Filter>Managers\SpatialPartitioning</Filter>
+    </ClInclude>
+    <ClInclude Include="Cell.h">
+      <Filter>Managers\SpatialPartitioning</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

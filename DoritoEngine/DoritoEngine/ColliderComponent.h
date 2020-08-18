@@ -1,8 +1,14 @@
 #pragma once
 #include "BaseComponent.h"
 
+enum class ColliderType
+{
+	STATIC = 0,
+	DYNAMIC = 1
+};
+
 class SpriteComponent;
-class Grid;
+class CollisionGrid;
 
 class ColliderComponent : public BaseComponent
 {
@@ -11,7 +17,7 @@ public:
 	typedef std::function<void(const SDL_Rect&, ColliderComponent*)> CollisionCallback;
 	typedef std::function<void(GameObject*, GameObject*)> TriggerCallback;
 	
-	ColliderComponent(Grid* pGrid, bool usingSprite = false, const sf::Vector2f& colliderSize = sf::Vector2f(10.f, 10.f));
+	ColliderComponent(CollisionGrid* pGrid, ColliderType type, bool usingSprite = false, const sf::Vector2f& colliderSize = sf::Vector2f(10.f, 10.f));
 
 	//Collision Call
 	void CheckCollisions(ColliderComponent* other);
@@ -31,8 +37,7 @@ public:
 
 	bool GetIsTrigger() { return m_IsTrigger; }
 	const SDL_Rect GetCollider() { return m_Collider; }
-
-	//Spatial Partitioning
+	ColliderType GetType() { return m_Type; }
 
 protected:
 	virtual void Initialize();
@@ -40,6 +45,10 @@ protected:
 	virtual void Render();
 
 private:
+	CollisionGrid* m_pParentGrid;
+	ColliderType m_Type;
+	
+
 	CollisionCallback m_CollisionCallback = nullptr;
 	TriggerCallback m_TriggerCallback = nullptr;
 
@@ -51,13 +60,6 @@ private:
 	// I need a reference to the Sprite (if it has one, else it uses predetermined sizes)
 	bool m_UseSpriteCollisions;
 	SpriteComponent* m_pRefToImage;
-
-	//Spatial Partitioning
-	//std::vector<Cell*> m_pCurrentCells;
-	Grid* m_pParentGrid;
-
-	ColliderComponent* m_pPrevColl;
-	ColliderComponent* m_pNextColl;
 
 	void SetColliderSettings();
 };

@@ -2,28 +2,23 @@
 #include "DoritoPCH.h"
 #include "ColliderComponent.h"
 
-class Grid
+class Cell;
+
+class CollisionGrid
 {
 public:
 
-	Grid(uint32_t numberOfCells, uint32_t cellSize)
-		: m_NumberOfCells(numberOfCells)
-		, m_CellSize(cellSize)
-	{
-		m_pCells.resize(m_NumberOfCells);
+	CollisionGrid();
+	~CollisionGrid();
 
-		for (int x = 0; x < m_NumberOfCells; x++)
-		{
-			for (int y = 0; y < m_NumberOfCells; y++)
-			{
-				m_pCells[x][y] = nullptr;
-			}
-		}
-	}
+	void HandleCellCollisions(Cell* pCell);
+	void HandleCollisions();
+
+	void AddCollider(ColliderComponent* pColl);
+
+	static const uint32_t m_NumberOfCells = 10, m_CellSize = 100;
 
 private:
-	std::vector<std::vector<ColliderComponent*>> m_pCells;
-
-	uint32_t m_NumberOfCells, m_CellSize;
+	Cell* m_pCells[m_NumberOfCells][m_NumberOfCells];
 };
 

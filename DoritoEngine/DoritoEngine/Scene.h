@@ -3,6 +3,7 @@
 #include "SceneManager.h"
 #include "DoritoEngine.h"
 #include "Observer.h"
+#include "Grid.h"
 #include <string>
 #include <list>
 #include <deque>
@@ -23,10 +24,12 @@ public:
 	Scene& operator=(Scene&& other) = delete;
 
 	void AddObject(GameObject* object);
+	void AddPhysicsObject(ColliderComponent* pColl);
 	void RemoveObject(GameObject* object);
 
 	const std::string& GetName() const { return m_Name; }
 	Subject* GetSubject() const { return m_pSubject; }
+	CollisionGrid* GetGrid() const { return m_pGrid; }
 	const GameInfo& GetGameInfo() const{ return m_GameInfo; }
 
 	void RootInit();
@@ -47,6 +50,7 @@ private:
 	std::vector<ColliderComponent*> m_pPhysCompDel;
 
 	Subject* m_pSubject;
+	CollisionGrid* m_pGrid;
 
 	GameInfo m_GameInfo;
 	bool m_IsInit;
