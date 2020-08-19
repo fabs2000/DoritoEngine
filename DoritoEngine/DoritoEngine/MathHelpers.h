@@ -84,4 +84,10 @@ namespace DoritoMath
 		return Square(v2.x - v1.x) + Square(v2.y - v1.y);
 	}
 
+
+	inline float Distance(const sf::Vector2f& v1, const sf::Vector2f& v2)
+	{
+		return sqrtf(Square(v2.x - v1.x) + Square(v2.y - v1.y));
+	}
+
 }

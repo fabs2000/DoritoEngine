@@ -1,18 +1,12 @@
 #pragma once
 #include "BaseComponent.h"
-#include <vector>
 
 class ColliderComponent;
 
 class DirtBlockComponent : public BaseComponent
 {
 public:
-	DirtBlockComponent() = default;
-
-	DirtBlockComponent(const DirtBlockComponent&) = delete;
-	DirtBlockComponent(DirtBlockComponent&&) = delete;
-	DirtBlockComponent& operator= (const DirtBlockComponent&) = delete;
-	DirtBlockComponent& operator= (const DirtBlockComponent&&) = delete;
+	DirtBlockComponent();
 
 protected:
 	void Initialize() override;

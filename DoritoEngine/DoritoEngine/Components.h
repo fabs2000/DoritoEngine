@@ -18,5 +18,6 @@
 #include "../Digger/FireBallComponent.h"
 #include "../Digger/DirtBlockComponent.h"
 #include "../Digger/ChunkCenterComponent.h"
+#include "../Digger/GoldComponent.h"
 
 #pragma endregion 

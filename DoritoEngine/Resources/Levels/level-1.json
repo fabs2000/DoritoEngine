@@ -460,7 +460,7 @@
 			"X": 867,
 			"Y": 257 ,
 			"Texture": "Digger/dirt_gold.png",
-			"Type" : 0
+			"Type" : 2
 		},
 		
 		{

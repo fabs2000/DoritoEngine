@@ -17,8 +17,6 @@ DoritoEngine::DoritoEngine()
 	m_GameInfo.pSceneManager = SceneManager::GetInstance();
 }
 
-
-// frameCap = 0 for uncapped frame rate
 void DoritoEngine::Initialize(unsigned int width, unsigned int height, const std::string& title, bool vSyncOn, unsigned int frameCap)
 {
 	m_GameInfo.windowSettings.width = width;
@@ -44,8 +42,6 @@ void DoritoEngine::Run()
 	game.LoadGame(m_GameInfo);
 #endif 
 
-	//sf::Clock clock;
-
 	auto renderer = Renderer::GetInstance();
 
 	auto prevTime = std::chrono::high_resolution_clock::now();
@@ -58,11 +54,8 @@ void DoritoEngine::Run()
 
 		m_GameInfo.pInput->ProcessInput(renderer->GetRenderer());
 		
-		//sf::Time time = clock.getElapsedTime();
-
 		m_GameInfo.pSceneManager->Update(dt);
-		
-		//clock.restart().asSeconds();
+
 		renderer->Render();
 	}
 }

@@ -107,7 +107,7 @@ void Scene::RootUpdate(float dt)
 
 void Scene::RootCollisionUpdate()
 {
-	m_pGrid->HandleCollisions();
+	//m_pGrid->HandleCollisions();
 
 	for (auto& physComp : m_pPhysicsComponents)
 	{
@@ -115,14 +115,11 @@ void Scene::RootCollisionUpdate()
 		{
 			if (physComp != otherComp)
 			{
-				if (physComp->GetType() == ColliderType::STATIC &&
-					otherComp->GetType() == ColliderType::STATIC)
+				if (physComp->GetType() == ColliderType::STATIC 
+					&& otherComp->GetType() == ColliderType::STATIC)
 				{
 					continue;
 				}
-				//auto pos1 = physComp->GetParentTransform()->GetPosition();
-				//auto pos2 = otherComp->GetParentTransform()->GetPosition();
-				//if (DoritoMath::SquareDistance(pos1, pos2) < DoritoMath::Square(5.f))
 				physComp->CheckCollisions(otherComp);
 			}
 		}
@@ -151,5 +148,5 @@ void Scene::RemovePhysicsComponents()
 		}
 	}
 
-	std::cout << "Physics: " << m_pPhysicsComponents.size() << "\n";
+	//std::cout << "Physics: " << m_pPhysicsComponents.size() << "\n";
 }

@@ -18,6 +18,11 @@ SpriteComponent::~SpriteComponent()
 {
 }
 
+void SpriteComponent::SetTexture(const std::string& file)
+{
+	m_pSprite = ResourceManager::GetInstance()->LoadSprite(file);
+}
+
 void SpriteComponent::Initialize()
 {
 	if (m_IsCentered)

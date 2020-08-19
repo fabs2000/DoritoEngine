@@ -85,7 +85,7 @@ namespace DoritoFactory
 	{
 		auto pShot = new GameObject(pScene);
 
-		auto pLifeTime = new LifeTimeComponent(4.f);
+		auto pLifeTime = new LifeTimeComponent(1.25f);
 		pShot->AddComponent(pLifeTime);
 
 		auto pComp = new SpriteComponent(fileName);
@@ -138,9 +138,31 @@ namespace DoritoFactory
 		auto pDirt = new ChunkCenterComponent(type);
 		pChunkCenter->AddComponent(pDirt);
 
-		pChunkCenter->SetTag("Center");
+		pChunkCenter->SetTag("Dirt");
 
 		return pChunkCenter;
+	}
+
+	inline GameObject* MakeGoldBag(Scene* pScene, const std::string& file)
+	{
+		auto pGold = new GameObject(pScene);
+
+		auto pSprite = new SpriteComponent(file);
+		pGold->AddComponent(pSprite);
+
+		auto pGoldComp = new GoldComponent();
+		pGold->AddComponent(pGoldComp);
+
+		auto pCollider = new ColliderComponent(pScene->GetGrid(), ColliderType::DYNAMIC, true);
+		pGold->AddComponent(pCollider);
+
+		auto pTrigger = new ColliderComponent(pScene->GetGrid(), ColliderType::DYNAMIC, true);
+		pTrigger->SetIsTrigger(true);
+		pGold->AddComponent(pTrigger);
+
+		pGold->SetTag("Gold");
+
+		return pGold;
 	}
 
 	inline void MakeDirtChunk(Scene* pScene, const sf::Vector2f& center, const std::string& file, ChunkType type)

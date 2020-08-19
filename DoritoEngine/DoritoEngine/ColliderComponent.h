@@ -14,7 +14,7 @@ class ColliderComponent : public BaseComponent
 {
 
 public:
-	typedef std::function<void(const SDL_Rect&, ColliderComponent*)> CollisionCallback;
+	typedef std::function<void(const SDL_Rect&, GameObject*, GameObject*)> CollisionCallback;
 	typedef std::function<void(GameObject*, GameObject*)> TriggerCallback;
 	
 	ColliderComponent(CollisionGrid* pGrid, ColliderType type, bool usingSprite = false, const sf::Vector2f& colliderSize = sf::Vector2f(10.f, 10.f));
@@ -47,7 +47,6 @@ protected:
 private:
 	CollisionGrid* m_pParentGrid;
 	ColliderType m_Type;
-	
 
 	CollisionCallback m_CollisionCallback = nullptr;
 	TriggerCallback m_TriggerCallback = nullptr;
@@ -58,8 +57,8 @@ private:
 
 	// SFML creates a bounding box around images/text, to use this as my collisions, 
 	// I need a reference to the Sprite (if it has one, else it uses predetermined sizes)
-	bool m_UseSpriteCollisions;
 	SpriteComponent* m_pRefToImage;
+	bool m_UseSpriteCollisions;
 
 	void SetColliderSettings();
 };

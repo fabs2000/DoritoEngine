@@ -39,6 +39,7 @@ public:
 
 	const sf::FloatRect& GetBounds() const { return m_Bounds; }
 
+	void SetTexture(const std::string& file);
 	void SetIsAnimating(bool isAnimating) { m_AnimationInfo.IsAnimating = isAnimating; }
 	void SetAnimRow(unsigned int row) { m_AnimationInfo.Row = row; }
 

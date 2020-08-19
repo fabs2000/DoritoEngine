@@ -42,6 +42,9 @@ void FireBallComponent::HandleInTrigger()
 {
 	auto killEnemy = [this](GameObject* first, GameObject* other)->void
 	{
+		if (other->GetTag() == "Digger")
+			return;
+
 		if (other->GetTag() == "Enemy")
 		{
 			auto comp = other->GetComponent<EnemyComponent>();
@@ -49,8 +52,8 @@ void FireBallComponent::HandleInTrigger()
 			if (comp)
 			{
 				other->Delete();
-				first->GetScene()->GetSubject()->Notify(1);
 				first->Delete();
+				first->GetScene()->GetSubject()->Notify(1);
 			}
 		}
 	};

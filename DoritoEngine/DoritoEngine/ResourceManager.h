@@ -16,7 +16,8 @@ public:
 	
 	sf::Sprite* LoadSprite(const std::string& file);
 	sf::Text* LoadText(const std::string& text, const std::string& file, unsigned int size);
-
+	sf::Texture* LoadTexture(const std::string& file);
+	sf::Font* LoadFont(const std::string& file);
 
 	void Destroy();
 
@@ -31,6 +32,4 @@ private:
 	std::map<std::string, sf::Font*> m_pFonts;
 	std::map<std::string, sf::Text*> m_pTexts;
 
-	sf::Texture* LoadTexture(const std::string& file);
-	sf::Font* LoadFont(const std::string& file);
 };

@@ -7,6 +7,10 @@
 
 #include "MathHelpers.h"
 
+DirtBlockComponent::DirtBlockComponent()
+	: m_pCollider(nullptr)
+{}
+
 void DirtBlockComponent::Initialize()
 {
 	m_pCollider = GetGameObject()->GetComponent<ColliderComponent>();
@@ -24,7 +28,7 @@ void DirtBlockComponent::HandleInTrigger()
 		if (first == other)
 			return; 
 
-		std::cout << "CollidesDirt\n";
+		//std::cout << "CollidesDirt\n";
 
 		if (other->GetTag() == "Digger")
 		{

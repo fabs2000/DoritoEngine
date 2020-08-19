@@ -63,6 +63,9 @@
     <ClCompile Include="TestScene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="GoldComponent.cpp">
+      <Filter>GameElements\Environment</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -97,6 +100,9 @@
     </ClInclude>
     <ClInclude Include="TestScene.h">
       <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="GoldComponent.h">
+      <Filter>GameElements\Environment</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

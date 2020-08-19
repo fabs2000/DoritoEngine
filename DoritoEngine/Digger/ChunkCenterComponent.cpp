@@ -6,6 +6,7 @@
 #include "Scene.h"
 
 #include "MathHelpers.h"
+#include "DoritoFactory.h"
 
 ChunkCenterComponent::ChunkCenterComponent(ChunkType type)
 	: m_pCollider(nullptr)
@@ -34,6 +35,7 @@ void ChunkCenterComponent::HandleInTrigger()
 
 		if (other->GetTag() == "Digger")
 		{
+			GameObject* pGold = nullptr;
 			first->Delete();
 
 			switch (m_ChunkType)
@@ -43,7 +45,11 @@ void ChunkCenterComponent::HandleInTrigger()
 				break;
 
 			case ChunkType::GOLD:
-				//Add Gold Bag to scene
+
+				pGold = DoritoFactory::MakeGoldBag(GetGameObject()->GetScene(), "Digger/gold.png");
+				pGold->GetTransform()->SetScale(0.2f, 0.2f);
+				pGold->GetTransform()->SetPosition(GetParentTransform()->GetPosition());
+				GetGameObject()->GetScene()->AddObject(pGold);
 				break;
 
 			case ChunkType::DIRT:

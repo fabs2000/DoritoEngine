@@ -3,12 +3,10 @@
 #include "InputManager.h"
 #include "DoritoEngine.h"
 
-enum class PlayerStates
+enum class DiggerState
 {
-	MOVING,
-	JUMPING,
-	GROUNDED,
-	FALLING
+	MOVING = 0,
+	STOPPED = 1
 };
 
 class ColliderComponent;
@@ -33,7 +31,6 @@ private:
 	float m_MovementAcceleration;
 
 	PlayerControllers m_PlayerID;
-	PlayerStates m_PlayerState;
 	GameInfo m_GameInfoRef;
 
 	ColliderComponent* m_pCollider;
@@ -41,11 +38,12 @@ private:
 	float m_FireTimer
 		, m_FireRate;
 
+
+
 	//Actions
 	void InitInput();
 
 	void HandleMovement(float dt);
 	void HandleCollisions();
-
 
 };

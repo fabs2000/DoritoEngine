@@ -29,9 +29,8 @@ void EnemyComponent::Render()
 
 }
 
-void EnemyComponent::HandleMovement(float dt)
+void EnemyComponent::HandleMovement(float)
 {
-	dt;
 }
 
 void EnemyComponent::HandleCollisions()

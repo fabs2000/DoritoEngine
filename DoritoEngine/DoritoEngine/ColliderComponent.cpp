@@ -16,30 +16,36 @@ ColliderComponent::ColliderComponent(CollisionGrid* pGrid, ColliderType type, bo
 	, m_pRefToImage(nullptr)
 	, m_IsTrigger(false)
 {
-	if(m_Type == ColliderType::STATIC)
-		m_pParentGrid->AddCollider(this);
+	//if(m_Type == ColliderType::STATIC)
+	//	m_pParentGrid->AddCollider(this);
 }
 
 void ColliderComponent::CheckCollisions(ColliderComponent* otherPhysComp)
 {
 	if (otherPhysComp != this && otherPhysComp != nullptr)
 	{
-		SDL_Rect intersect;
+		GameObject* first = this->GetGameObject()
+			,* other = otherPhysComp->GetGameObject();
 
-		if (SDL_IntersectRect(&m_Collider, &otherPhysComp->m_Collider, &intersect))
+		if (first != other)
 		{
-			if (m_IsTrigger)
+			SDL_Rect intersect;
+
+			if (SDL_IntersectRect(&m_Collider, &otherPhysComp->m_Collider, &intersect))
 			{
-				if (m_TriggerCallback)
+				if (m_IsTrigger)
 				{
-					m_TriggerCallback(this->GetGameObject(), otherPhysComp->GetGameObject());
+					if (m_TriggerCallback)
+					{
+  						m_TriggerCallback(first, other);
+					}
 				}
-			}
-			else
-			{
-				if (m_CollisionCallback)
+				else
 				{
-					m_CollisionCallback(intersect, otherPhysComp);
+					if (m_CollisionCallback)
+					{
+  						m_CollisionCallback(intersect, first, other);
+					}
 				}
 			}
 		}
@@ -58,7 +64,7 @@ void ColliderComponent::Initialize()
 {
 	//Debug Drawing
 	m_DebugShape.setFillColor(sf::Color(0, 0, 0, 127));
-	m_DebugShape.setOutlineThickness(0.1f);
+	m_DebugShape.setOutlineThickness(1.f);
 	m_DebugShape.setOutlineColor(sf::Color(255, 255, 0, 127));
 
 	m_DebugShape.setOrigin(GetTransform()->GetOrigin());

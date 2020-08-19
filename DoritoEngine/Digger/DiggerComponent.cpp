@@ -13,12 +13,11 @@
 DiggerComponent::DiggerComponent(PlayerControllers playerID)
 	: m_PlayerID(playerID)
 	, m_Velocity(0.f, 0.f)
-	, m_MovementAcceleration(400.f)
-	, m_PlayerState{ PlayerStates::MOVING }
+	, m_MovementAcceleration(250.f)
 	, m_pCollider(nullptr)
 	, m_GameInfoRef()
 	, m_FireTimer(1.f)
-	, m_FireRate(0.5f)
+	, m_FireRate(0.25f)
 {
 }
 
@@ -30,7 +29,7 @@ void DiggerComponent::Initialize()
 
 	if (m_pCollider)
 	{
-		//Only handles collisions with enemies
+		//Only handles collisions with gold
 		HandleCollisions();
 	}
 
@@ -64,7 +63,7 @@ void DiggerComponent::InitInput()
 
 		auto pBubble = DoritoFactory::MakeFireball(GetGameObject()->GetScene(), "Digger/fireball.png", DoritoMath::Normalize(direction));
 		auto pos = transform->GetPosition();
-		pBubble->GetTransform()->SetScale(0.1f,0.1f);
+		pBubble->GetTransform()->SetScale(0.1f, 0.1f);
 		pBubble->GetTransform()->SetPosition(pos);
 
 		GetGameObject()->GetScene()->AddObject(pBubble);
@@ -113,23 +112,23 @@ void DiggerComponent::InitInput()
 		auto transform = GetParentTransform();
 		auto charScale = transform->GetScale();
 
-			if (scale.x > 0)
-			{
-				if(std::signbit(charScale.x))
-					charScale.x *= -1.f;
+		if (scale.x > 0)
+		{
+			if (std::signbit(charScale.x))
+				charScale.x *= -1.f;
 
-				transform->SetScale(charScale);
-				transform->SetRotation(0);
-			}
+			transform->SetScale(charScale);
+			transform->SetRotation(0);
+		}
 
-			else if (scale.x < 0)
-			{
-				if (!std::signbit(charScale.x))
-					charScale.x *= -1.f;
+		else if (scale.x < 0)
+		{
+			if (!std::signbit(charScale.x))
+				charScale.x *= -1.f;
 
-				transform->SetScale(charScale);
-				transform->SetRotation(0);
-			}
+			transform->SetScale(charScale);
+			transform->SetRotation(0);
+		}
 
 		sf::Vector2f rot = sf::Vector2f(90.f, -90.f);
 
@@ -201,30 +200,38 @@ void DiggerComponent::HandleMovement(float dt)
 
 void DiggerComponent::HandleCollisions()
 {
-	auto callback = [this](const SDL_Rect& intersect, ColliderComponent* other)->void
+	auto callback = [this](const SDL_Rect& inter, GameObject* first, GameObject* other)
 	{
-		intersect;
-		other;
+		if (other->GetTag() == "Gold")
+		{
+			auto firstPos = first->GetTransform()->GetPosition();
 
+			auto vector = firstPos - other->GetTransform()->GetPosition();
+			float angle = DoritoMath::RadiansToDegrees(std::atan2f(vector.x, vector.y));
 
-		//if (!other->GetIsTrigger())
-		//{
-		//	auto pos = GetParentTransform()->GetPosition();
-		//	if (intersect.h < intersect.w)
-		//	{
-		//		if (m_Velocity.y > 0)
-		//		{
-		//			m_Velocity.y = 0;
-		//			GetParentTransform()->SetPosition(pos.x, pos.y - intersect.h - 0.01f);
-		//			m_PlayerState = PlayerStates::GROUNDED;
-		//		}
-		//	}
-		//	else
-		//	{
-		//		m_Velocity.x = 0;
-		//		GetParentTransform()->SetPosition(pos.x + (-m_MovementAcceleration * intersect.w), pos.y);
-		//	}
-		//}
+			auto goldComp = other->GetComponent<GoldComponent>();
+
+			if (goldComp)
+			{
+				sf::Vector2f vel;
+
+				if (angle > 60.f && angle < 120.f)
+					vel = sf::Vector2f(-400.f, 0.f);
+				else if (angle < -60.f && angle > -120.f)
+					vel = sf::Vector2f(400.f, 0.f);
+				
+				if(angle < 60.f && angle > -60.f)
+				{
+					first->GetTransform()->SetPosition(firstPos.x, firstPos.y + static_cast<float>(inter.h));
+				}
+				else if (angle > 120.f && angle > -120.f)
+				{
+					first->GetTransform()->SetPosition(firstPos.x, firstPos.y - static_cast<float>(inter.h));
+				}
+
+				goldComp->SetVeloctiy(vel);
+			}
+		}
 	};
 
 	m_pCollider->SetCollisionCallback(callback);
