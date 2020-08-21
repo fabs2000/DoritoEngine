@@ -16,7 +16,7 @@
 
 namespace DoritoFactory
 {
-	inline GameObject* MakeCharacter(Scene* pScene, const std::string& fileName, PlayerControllers player)
+	inline GameObject* MakeDigger(Scene* pScene, const std::string& fileName, PlayerControllers player)
 	{
 		GameObject* pPlayer = new GameObject(pScene);
 
@@ -72,11 +72,11 @@ namespace DoritoFactory
 		return pEnemy;
 	}
 
-	inline GameObject* MakeSprite(Scene* pScene, const std::string& fileName)
+	inline GameObject* MakeSprite(Scene* pScene, const std::string& fileName, bool makeCentered = true)
 	{
 		auto pSprite = new GameObject(pScene);
 
-		auto pComp = new SpriteComponent(fileName);
+		auto pComp = new SpriteComponent(fileName, makeCentered);
 		pSprite->AddComponent(pComp);
 
 		return pSprite;
@@ -166,7 +166,7 @@ namespace DoritoFactory
 		return pGold;
 	}
 
-	inline void MakeHUD(Scene* pScene)
+	inline GameObject* MakeHUD(Scene* pScene)
 	{
 		auto pHUD = new GameObject(pScene);
 
@@ -178,7 +178,7 @@ namespace DoritoFactory
 
 		pHUD->SetTag("HUD");
 
-		pScene->AddObject(pHUD);
+		return pHUD;
 	}
 
 	inline void MakeEnemy(Scene* pScene, const std::string& fileName, const sf::Vector2f& pos)

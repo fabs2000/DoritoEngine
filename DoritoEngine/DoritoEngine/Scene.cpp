@@ -75,10 +75,10 @@ void Scene::RootInit()
 {
 	Initialize();
 
-	for (auto& pSceneObj : m_pBasicObjects)
-	{
-		pSceneObj->RootInit();
-	}
+	//for (auto& pSceneObj : m_pBasicObjects)
+	//{
+	//	pSceneObj->RootInit();
+	//}
 }
 
 void Scene::RootUpdate(float dt)

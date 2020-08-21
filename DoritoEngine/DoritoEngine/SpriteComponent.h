@@ -43,6 +43,8 @@ public:
 	void SetIsAnimating(bool isAnimating) { m_AnimationInfo.IsAnimating = isAnimating; }
 	void SetAnimRow(unsigned int row) { m_AnimationInfo.Row = row; }
 
+	void SetCanRender(bool canRender) { m_CanRender = canRender; }
+
 protected:
 	void Initialize() override;
 	void Update(float dt) override;
@@ -54,6 +56,7 @@ private:
 
 	bool m_IsCentered;
 	bool m_UsingRelativeTrans;
+	bool m_CanRender;
 
 	AnimationInfo m_AnimationInfo;
 	sf::IntRect m_OriginalUV;

@@ -25,12 +25,17 @@ void Level_1::Initialize()
 	AddObject(pFPS);
 
 	//Score 
-	auto pScore = DoritoFactory::MakeTextObject(this, "Score: ", "Lingua.otf", 50);
-	pScore->GetTransform()->SetPosition(300.f,0.f);
-	AddObject(pScore);
+	//auto pScore = DoritoFactory::MakeTextObject(this, "Score: ", "Lingua.otf", 50);
+	//pScore->GetTransform()->SetPosition(300.f,0.f);
+	//AddObject(pScore);
+
+	//HUD
+	auto pHUD = DoritoFactory::MakeHUD(this);
+	pHUD->GetTransform()->SetPosition(300.f, 0.f);
+	AddObject(pHUD);
 
 	//Character
-	auto pCharacter = DoritoFactory::MakeCharacter(this, "Digger/digger.png", PlayerControllers::Player1);
+	auto pCharacter = DoritoFactory::MakeDigger(this, "Digger/digger.png", PlayerControllers::Player1);
 	pCharacter->GetTransform()->SetPosition(978, 773);
 	pCharacter->GetTransform()->SetScale(0.2f, 0.2f);
 	AddObject(pCharacter);
@@ -43,12 +48,7 @@ void Level_1::Initialize()
 
 	//Updating Text
 	m_pTextComp = pFPS->GetComponent<TextComponent>();
-	m_pScoreComp = pScore->GetComponent<TextComponent>();
-	m_pScoreComp->SetColor(sf::Color::Green);
 
-	//Read game stats
-	m_pGameStats = static_cast<PlayerStatsSystem*>(GetSubject()->GetObserver("PlayerStats"));
-	
 	DoritoFactory::MakeLevel(this, "Levels/level-1.json");
 
 	Renderer::GetInstance()->SetDebugRendering(false);
@@ -58,8 +58,6 @@ void Level_1::Update(float dt)
 {
 	m_FPSNb = int(1 / dt);
 	m_pTextComp->SetText("FPS: " + std::to_string(m_FPSNb));
-
-	m_pScoreComp->SetText("Score: " + std::to_string(m_pGameStats->GetScore()));
 }
 
 void Level_1::Render() const

@@ -13,11 +13,13 @@
 DiggerComponent::DiggerComponent(PlayerControllers playerID)
 	: m_PlayerID(playerID)
 	, m_Velocity(0.f, 0.f)
-	, m_MovementAcceleration(250.f)
+	, m_MovementAcceleration(200.f)
 	, m_pCollider(nullptr)
 	, m_GameInfoRef()
 	, m_FireTimer(1.f)
 	, m_FireRate(0.25f)
+	, m_DeathTime(2.f)
+	, m_State(DiggerState::MOVING)
 {
 }
 
@@ -26,6 +28,7 @@ void DiggerComponent::Initialize()
 	m_GameInfoRef = GetGameObject()->GetScene()->GetGameInfo();
 
 	m_pCollider = GetGameObject()->GetComponent<ColliderComponent>();
+	m_pSprite = GetGameObject()->GetComponent<SpriteComponent>();
 
 	if (m_pCollider)
 	{
@@ -41,7 +44,28 @@ void DiggerComponent::Update(float dt)
 	if (m_FireTimer > 0.f)
 		m_FireTimer -= dt;
 
-	HandleMovement(dt);
+	switch (m_State)
+	{
+	case DiggerState::MOVING:
+
+		HandleMovement(dt);
+		break;
+
+	case DiggerState::DEAD:
+		//Reset position and texture
+		m_DeathTime -= dt;
+
+		if (m_DeathTime <= 0.f)
+		{
+			GetParentTransform()->SetPosition(978, 773);
+			m_DeathTime = 2.f;
+			m_State = DiggerState::MOVING;
+			m_pSprite->SetTexture("Digger/digger.png");
+
+		}
+
+		break;
+	}
 }
 
 void DiggerComponent::Render()
@@ -206,21 +230,21 @@ void DiggerComponent::HandleCollisions()
 		{
 			auto goldComp = other->GetComponent<GoldComponent>();
 
-			if (goldComp->GetState() == GoldState::IN_BAG)
+			if (goldComp->GetVelocity().y <= 0.f)
 			{
 				auto firstPos = first->GetTransform()->GetPosition();
 
 				auto vector = firstPos - other->GetTransform()->GetPosition();
 				float angle = DoritoMath::RadiansToDegrees(std::atan2f(vector.x, vector.y));
-				
+
 				sf::Vector2f vel;
 
 				if (angle > 60.f && angle < 120.f)
 					vel = sf::Vector2f(-400.f, 0.f);
 				else if (angle < -60.f && angle > -120.f)
 					vel = sf::Vector2f(400.f, 0.f);
-				
-				if(angle < 60.f && angle > -60.f)
+
+				if (angle < 60.f && angle > -60.f)
 				{
 					first->GetTransform()->SetPosition(firstPos.x, firstPos.y + static_cast<float>(inter.h));
 				}

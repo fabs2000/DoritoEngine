@@ -33,6 +33,5 @@ protected:
 private:
 	TransformComponent* m_pTransform;
 	GameObject* m_pGameObject;
-
 };
 

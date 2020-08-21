@@ -13,12 +13,11 @@ public:
 	PlayerStatsSystem& operator=(PlayerStatsSystem&& other) noexcept = delete;
 
 	void OnNotify(uint32_t event) override;
+	void Update();
 
 	uint32_t GetScore() const { return m_TotalScore; }
 	uint32_t GetLives() const { return m_Lives; }
 	uint32_t GetEmeraldStreak() const { return m_EmeraldStreak; }
-
-	void Update();
 
 private:
 	uint32_t m_TotalScore;

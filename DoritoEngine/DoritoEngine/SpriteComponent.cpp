@@ -11,6 +11,7 @@ SpriteComponent::SpriteComponent(const std::string& file, bool isCentered, bool 
 	, m_IsCentered( isCentered )
 	, m_UsingRelativeTrans( isUsingRelativeTrans )
 	, m_AnimationInfo( animInfo )
+	, m_CanRender(true)
 {
 }
 
@@ -72,12 +73,16 @@ void SpriteComponent::Update(float dt)
 }
 
 void SpriteComponent::Render()
-{	
-	if(m_UsingRelativeTrans)
-		Renderer::GetInstance()->RenderTexture(m_pSprite, GetTransform());
-	else
-		Renderer::GetInstance()->RenderTexture(m_pSprite, GetParentTransform());
+{
+	if (m_CanRender)
+	{
+		if (m_UsingRelativeTrans)
+			Renderer::GetInstance()->RenderSprite(m_pSprite, GetTransform());
+		else
+			Renderer::GetInstance()->RenderSprite(m_pSprite, GetParentTransform());
+	}
 }
+
 
 void SpriteComponent::PlayAnimation(float dt)
 {

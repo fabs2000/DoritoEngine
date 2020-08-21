@@ -1,5 +1,7 @@
 #include "PlayerStatsSystem.h"
 
+#include "Scene.h"
+
 PlayerStatsSystem::PlayerStatsSystem()
 	: m_TotalScore()
 	, m_EmeraldStreak()
@@ -35,6 +37,7 @@ void PlayerStatsSystem::InitFunctions()
 
 	auto goldCollected = [this]()->void
 	{
+		std::cout << "Gold Collected\n";
 		AddScore(500);
 	};
 
@@ -42,6 +45,7 @@ void PlayerStatsSystem::InitFunctions()
 	{
 		m_Lives--;
 		m_EmeraldStreak = 0;
+		std::cout << "Lost Life\n";
 
 		if (m_Lives < 0)
 			m_IsGameOver = true;
@@ -55,9 +59,24 @@ void PlayerStatsSystem::InitFunctions()
 			m_Lives++;
 	};
 
+	auto emeraldStreak = [this]()->void
+	{
+		m_EmeraldStreak = 0;
+		AddScore(250);
 
-	m_Actions = std::map<uint32_t, std::function<void()>>{ {0, emeraldCollected}, {1, enemyKilled}, 
-		{2, goldCollected}, {3, lifeLost}, {4, extraLife} };
+		std::cout << "EMERALD STREAK\n";
+	};
+
+
+	m_Actions = std::map<uint32_t, std::function<void()>>
+	{ 
+		{0, emeraldCollected},
+		{1, enemyKilled}, 
+		{2, goldCollected},
+		{3, lifeLost}, 
+		{4, extraLife}, 
+		{5, emeraldStreak} 
+	};
 }
 
 void PlayerStatsSystem::Update()
@@ -65,6 +84,11 @@ void PlayerStatsSystem::Update()
 	if (m_ScoreForLife >= 20000)
 	{
 		OnNotify(4);
+	}
+
+	if (m_EmeraldStreak == 8)
+	{
+		OnNotify(5);
 	}
 }
 

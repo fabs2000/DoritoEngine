@@ -19,7 +19,7 @@ public:
 	void Init(const GameInfo::WindowSettings& windowSettings);
 	void Render();
 
-	void RenderTexture(sf::Sprite* texture, TransformComponent* transform);
+	void RenderSprite(sf::Sprite* texture, TransformComponent* transform);
 	void RenderText(sf::Text* pText, TransformComponent* transform);
 	void RenderShape(const sf::Shape& shapeToDraw);
 

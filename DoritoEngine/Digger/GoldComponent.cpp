@@ -15,12 +15,12 @@ GoldComponent::GoldComponent()
 	, m_pTrigger(nullptr)
 	, m_pSprite(nullptr)
 	, m_Velocity()
-	, m_Gravity(0.f, 600.f)
+	, m_Gravity(0.f, 0.f)
 	, m_State(GoldState::IN_BAG)
 	, m_BreakingSpeed(800.f)
 	, m_BreakingDistance(205.f)
 	, m_IsColliding(false)
-	, m_FallTimer(0.7f)
+	, m_FallTimer(0.6f)
 {
 }
 
@@ -57,18 +57,18 @@ void GoldComponent::Update(float dt)
 	{
 		if (!m_IsColliding)
 			m_Gravity.y = 600.f;
-
-		sf::Vector2f offset{};
-
-		m_Velocity = m_Velocity + m_Gravity * dt;
-
-		offset = m_Velocity * dt;
-
-		GetParentTransform()->Move(offset);
-
-		m_Velocity.x = 0.f;
-		m_IsColliding = false;
 	}
+
+	sf::Vector2f offset{};
+
+	m_Velocity = m_Velocity + m_Gravity * dt;
+
+	offset = m_Velocity * dt;
+
+	GetParentTransform()->Move(offset);
+
+	m_Velocity.x = 0.f;
+	m_IsColliding = false;
 }
 
 void GoldComponent::HandleCollisions()
@@ -80,12 +80,23 @@ void GoldComponent::HandleCollisions()
 		switch (m_State)
 		{
 		case GoldState::IN_BAG:
-			if (m_Velocity.y > 1.f)
+			if (m_Velocity.y > 250.f)
 			{
 				if (otherTag == "Enemy")
 					other->Delete();
+
 				else if (otherTag == "Digger")
-					first->GetScene()->GetSubject()->Notify(3);
+				{
+					auto digger = other->GetComponent<DiggerComponent>();
+					auto sprite = other->GetComponent<SpriteComponent>();
+
+					if (digger->GetState() == DiggerState::MOVING)
+					{
+						digger->SetState(DiggerState::DEAD);
+						first->GetScene()->GetSubject()->Notify(3);
+						sprite->SetTexture("Digger/grave.png");
+					}
+				}
 			}
 			break;
 

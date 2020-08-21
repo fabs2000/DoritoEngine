@@ -110,11 +110,11 @@
     <ClInclude Include="GoldComponent.h">
       <Filter>GameElements\Environment</Filter>
     </ClInclude>
-    <ClInclude Include="MenuScene.h">
-      <Filter>MainFiles</Filter>
-    </ClInclude>
     <ClInclude Include="HUDComponent.h">
       <Filter>GameElements</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuScene.h">
+      <Filter>Scenes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

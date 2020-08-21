@@ -3,11 +3,13 @@
 
 #include "Scene.h"
 
-#define LEVEL_1
+#define GAME
 //#define TEST_SCENE
 
-#ifdef LEVEL_1
+#ifdef GAME
 #include "Level1_Scene.h"
+#include "MenuScene.h"
+
 #endif
 
 #ifdef TEST_SCENE
@@ -23,8 +25,9 @@ void Game::LoadGame(const GameInfo& gameInfo)
 #endif // TEST_SCENE
 
 
-#ifdef LEVEL_1
+#ifdef GAME
+	gameInfo.pSceneManager->CreateScene(new MenuScene("Menu", gameInfo));
 	gameInfo.pSceneManager->CreateScene(new Level_1("Level1", gameInfo));
-	gameInfo.pSceneManager->SetActiveGameScene("Level1");
+	gameInfo.pSceneManager->SetActiveGameScene("Menu");
 #endif
 }

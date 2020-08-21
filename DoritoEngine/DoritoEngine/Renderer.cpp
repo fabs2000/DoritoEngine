@@ -30,7 +30,7 @@ void Renderer::Render()
 	m_pRenderer.display();
 }
 
-void Renderer::RenderTexture(sf::Sprite* pSprite, TransformComponent* transform)
+void Renderer::RenderSprite(sf::Sprite* pSprite, TransformComponent* transform)
 {
 	m_pRenderer.draw(*pSprite, transform->GetBaseTransform());
 }

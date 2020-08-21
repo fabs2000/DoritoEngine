@@ -19,13 +19,10 @@ protected:
 
 private:
 
-	uint32_t m_Score
-		, m_Lives;
-
 	TextComponent* m_pTextComp
 		, * m_pScoreComp;
 
-	SpriteComponent* m_pLivesSprite;
+	std::vector<SpriteComponent*> m_pLivesSprite;
 
 	Scene* m_pSceneRef;
 

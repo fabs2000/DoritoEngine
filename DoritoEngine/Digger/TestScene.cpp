@@ -26,34 +26,34 @@ void TestScene::Initialize()
 
 
 	//Enemy
-	DoritoFactory::MakeEnemy(this, "Digger/hobbin.png", sf::Vector2f(700, 250));
+	//DoritoFactory::MakeEnemy(this, "Digger/hobbin.png", sf::Vector2f(700, 250));
 
 
 	//Character
-	auto pCharacter = DoritoFactory::MakeCharacter(this, "Digger/digger.png", PlayerControllers::Player1);
-	pCharacter->GetTransform()->SetPosition(978, 773);
-	pCharacter->GetTransform()->SetScale(0.2f, 0.2f);
-	AddObject(pCharacter);
+	//auto pCharacter = DoritoFactory::MakeDigger(this, "Digger/digger.png", PlayerControllers::Player1);
+	//pCharacter->GetTransform()->SetPosition(978, 773);
+	//pCharacter->GetTransform()->SetScale(0.2f, 0.2f);
+	//AddObject(pCharacter);
 
 	//Test Chunks
 	DoritoFactory::MakeDirtChunk(this, sf::Vector2f(300, 400), "Digger/dirt_center.png", ChunkType::DIRT);
-	DoritoFactory::MakeDirtChunk(this, sf::Vector2f(300, 810), "Digger/dirt_center.png", ChunkType::DIRT);
-	DoritoFactory::MakeDirtChunk(this, sf::Vector2f(402, 810), "Digger/dirt_center.png", ChunkType::DIRT);
-	DoritoFactory::MakeDirtChunk(this, sf::Vector2f(504, 810), "Digger/dirt_center.png", ChunkType::DIRT);
-	DoritoFactory::MakeDirtChunk(this, sf::Vector2f(606, 810), "Digger/dirt_center.png", ChunkType::DIRT);
-	DoritoFactory::MakeDirtChunk(this, sf::Vector2f(708, 708), "Digger/dirt_center.png", ChunkType::DIRT);
-	DoritoFactory::MakeDirtChunk(this, sf::Vector2f(606, 708), "Digger/dirt_center.png", ChunkType::DIRT);
+	//DoritoFactory::MakeDirtChunk(this, sf::Vector2f(300, 810), "Digger/dirt_center.png", ChunkType::DIRT);
+	//DoritoFactory::MakeDirtChunk(this, sf::Vector2f(402, 810), "Digger/dirt_center.png", ChunkType::DIRT);
+	//DoritoFactory::MakeDirtChunk(this, sf::Vector2f(504, 810), "Digger/dirt_center.png", ChunkType::DIRT);
+	//DoritoFactory::MakeDirtChunk(this, sf::Vector2f(606, 810), "Digger/dirt_center.png", ChunkType::DIRT);
+	//DoritoFactory::MakeDirtChunk(this, sf::Vector2f(708, 708), "Digger/dirt_center.png", ChunkType::DIRT);
+	//DoritoFactory::MakeDirtChunk(this, sf::Vector2f(606, 708), "Digger/dirt_center.png", ChunkType::DIRT);
 
 	//Gold Bag
-	auto pGold = DoritoFactory::MakeGoldBag(this, "Digger/gold.png");
-	pGold->GetTransform()->SetScale(0.2f,0.2f);
-	pGold->GetTransform()->SetPosition(300, 300);
-	AddObject(pGold);
+	//auto pGold = DoritoFactory::MakeGoldBag(this, "Digger/gold.png");
+	//pGold->GetTransform()->SetScale(0.2f,0.2f);
+	//pGold->GetTransform()->SetPosition(300, 300);
+	//AddObject(pGold);
 
-	pGold = DoritoFactory::MakeGoldBag(this, "Digger/gold.png");
-	pGold->GetTransform()->SetScale(0.2f, 0.2f);
-	pGold->GetTransform()->SetPosition(504, 100);
-	AddObject(pGold);
+	//pGold = DoritoFactory::MakeGoldBag(this, "Digger/gold.png");
+	//pGold->GetTransform()->SetScale(0.2f, 0.2f);
+	//pGold->GetTransform()->SetPosition(504, 100);
+	//AddObject(pGold);
 
 	m_pTextComp = pFPS->GetComponent<TextComponent>();
 
