@@ -4,7 +4,7 @@ PlayerStatsSystem::PlayerStatsSystem()
 	: m_TotalScore()
 	, m_EmeraldStreak()
 	, m_ScoreForLife()
-	, m_Lives(1)
+	, m_Lives(3)
 	, m_IsGameOver(false)
 {
 	InitFunctions();
@@ -24,8 +24,8 @@ void PlayerStatsSystem::InitFunctions()
 {
 	auto emeraldCollected = [this]()->void
 	{
-		AddScore(25);
 		m_EmeraldStreak++;
+		AddScore(25);
 	};
 
 	auto enemyKilled = [this]()->void
@@ -41,6 +41,8 @@ void PlayerStatsSystem::InitFunctions()
 	auto lifeLost = [this]()->void
 	{
 		m_Lives--;
+		m_EmeraldStreak = 0;
+
 		if (m_Lives < 0)
 			m_IsGameOver = true;
 	};
@@ -48,8 +50,9 @@ void PlayerStatsSystem::InitFunctions()
 	auto extraLife = [this]()->void
 	{
 		m_ScoreForLife = 0;
+
 		if (m_Lives < 3)
-		m_Lives++;
+			m_Lives++;
 	};
 
 
@@ -61,7 +64,7 @@ void PlayerStatsSystem::Update()
 {
 	if (m_ScoreForLife >= 20000)
 	{
-		OnNotify(3);
+		OnNotify(4);
 	}
 }
 

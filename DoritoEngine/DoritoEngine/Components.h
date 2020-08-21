@@ -19,5 +19,6 @@
 #include "../Digger/DirtBlockComponent.h"
 #include "../Digger/ChunkCenterComponent.h"
 #include "../Digger/GoldComponent.h"
+#include "../Digger/HUDComponent.h"
 
 #pragma endregion 

@@ -18,7 +18,6 @@ public:
 	uint32_t GetLives() const { return m_Lives; }
 	uint32_t GetEmeraldStreak() const { return m_EmeraldStreak; }
 
-	void InitFunctions();
 	void Update();
 
 private:
@@ -32,6 +31,9 @@ private:
 
 	std::map<uint32_t, std::function<void()>> m_Actions;
 
+	std::map<std::string, uint32_t> m_HighScores;
+
+	void InitFunctions();
 	void AddScore(unsigned int value);
 };
 

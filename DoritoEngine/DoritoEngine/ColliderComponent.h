@@ -17,7 +17,7 @@ public:
 	typedef std::function<void(const SDL_Rect&, GameObject*, GameObject*)> CollisionCallback;
 	typedef std::function<void(GameObject*, GameObject*)> TriggerCallback;
 	
-	ColliderComponent(CollisionGrid* pGrid, ColliderType type, bool usingSprite = false, const sf::Vector2f& colliderSize = sf::Vector2f(10.f, 10.f));
+	ColliderComponent(ColliderType type, bool usingSprite = false, const sf::Vector2f& colliderSize = sf::Vector2f(10.f, 10.f), CollisionGrid* pGrid = nullptr );
 
 	//Collision Call
 	void CheckCollisions(ColliderComponent* other);

@@ -204,7 +204,9 @@ xcopy "$(SolutionDir)3rdParty\SFML\SFML(x64)\bin\sfml-window-2.dll" "$(OutputPat
     <ClCompile Include="FireBallComponent.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GoldComponent.cpp" />
+    <ClCompile Include="HUDComponent.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MenuScene.cpp" />
     <ClCompile Include="PlayerStatsSystem.cpp" />
     <ClCompile Include="Level1_Scene.cpp" />
     <ClCompile Include="TestScene.cpp" />
@@ -219,6 +221,8 @@ xcopy "$(SolutionDir)3rdParty\SFML\SFML(x64)\bin\sfml-window-2.dll" "$(OutputPat
     <ClInclude Include="FireBallComponent.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GoldComponent.h" />
+    <ClInclude Include="HUDComponent.h" />
+    <ClInclude Include="MenuScene.h" />
     <ClInclude Include="PlayerStatsSystem.h" />
     <ClInclude Include="Level1_Scene.h" />
     <ClInclude Include="TestScene.h" />

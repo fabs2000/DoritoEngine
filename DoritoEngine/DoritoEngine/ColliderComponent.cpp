@@ -1,5 +1,6 @@
 #include "DoritoPCH.h"
-#include "Components.h"
+#include "ColliderComponent.h"
+#include "SpriteComponent.h"
 
 #include "GameObject.h"
 #include "Scene.h"
@@ -7,7 +8,7 @@
 
 #include "Cell.h"
 
-ColliderComponent::ColliderComponent(CollisionGrid* pGrid, ColliderType type, bool usingSprite, const sf::Vector2f& colliderSize)
+ColliderComponent::ColliderComponent(ColliderType type, bool usingSprite, const sf::Vector2f& colliderSize, CollisionGrid* pGrid)
 	: m_pParentGrid(pGrid)
 	, m_Type(type)
 	, m_DebugShape()
@@ -78,7 +79,7 @@ void ColliderComponent::Initialize()
 
 void ColliderComponent::Update(float)
 {
-	//Needs to be called here in order to update dimensions in casef of a transformation
+	//Needs to be called here in order to update dimensions in case of a transformation
 	//Could be better with a boolean as to not set these every frame
 	//TODO: BOOLEAN
 	SetColliderSettings();

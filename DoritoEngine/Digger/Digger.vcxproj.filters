@@ -66,6 +66,12 @@
     <ClCompile Include="GoldComponent.cpp">
       <Filter>GameElements\Environment</Filter>
     </ClCompile>
+    <ClCompile Include="MenuScene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="HUDComponent.cpp">
+      <Filter>GameElements</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -103,6 +109,12 @@
     </ClInclude>
     <ClInclude Include="GoldComponent.h">
       <Filter>GameElements\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuScene.h">
+      <Filter>MainFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="HUDComponent.h">
+      <Filter>GameElements</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

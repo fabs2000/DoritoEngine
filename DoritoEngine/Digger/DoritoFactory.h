@@ -26,7 +26,7 @@ namespace DoritoFactory
 		auto pDigger = new DiggerComponent(player);
 		pPlayer->AddComponent(pDigger);
 
-		auto pCollider = new ColliderComponent(pScene->GetGrid(), ColliderType::DYNAMIC, true);
+		auto pCollider = new ColliderComponent(ColliderType::DYNAMIC, true);
 		pPlayer->AddComponent(pCollider);
 
 		pPlayer->SetTag("Digger");
@@ -48,22 +48,23 @@ namespace DoritoFactory
 	{
 		GameObject* ground = new GameObject(pScene);
 
-		auto pCollider = new ColliderComponent(pScene->GetGrid(), ColliderType::STATIC, false, sf::Vector2f(size.x, size.y));
+		auto pCollider = new ColliderComponent(ColliderType::STATIC, false, sf::Vector2f(size.x, size.y));
 		ground->AddComponent(pCollider);
 		
 		return ground;
 	}
 
-	inline GameObject* MakeEnemy(Scene* pScene, const std::string& fileName)
+	inline GameObject* MakeEnemyBase(Scene* pScene, const std::string& fileName)
 	{
 		GameObject* pEnemy = new GameObject(pScene);
-		auto pSprite = new SpriteComponent(fileName, false);
+		auto pSprite = new SpriteComponent(fileName, true);
 		pEnemy->AddComponent(pSprite);
 
 		auto pController = new EnemyComponent();
 		pEnemy->AddComponent(pController);
 
-		auto pCollider = new ColliderComponent(pScene->GetGrid(), ColliderType::DYNAMIC, true);
+		//Main Collider
+		auto pCollider = new ColliderComponent(ColliderType::DYNAMIC, true);
 		pEnemy->AddComponent(pCollider);
 
 		pEnemy->SetTag("Enemy");
@@ -91,7 +92,7 @@ namespace DoritoFactory
 		auto pComp = new SpriteComponent(fileName);
 		pShot->AddComponent(pComp);
 
-		auto pCollider = new ColliderComponent(pScene->GetGrid(), ColliderType::DYNAMIC, true);
+		auto pCollider = new ColliderComponent(ColliderType::DYNAMIC, true);
 		pCollider->SetIsTrigger(true);
 		pShot->AddComponent(pCollider);
 
@@ -112,7 +113,7 @@ namespace DoritoFactory
 		auto pComp = new SpriteComponent(file);
 		pDirtBlock->AddComponent(pComp);
 
-		auto pCollider = new ColliderComponent(pScene->GetGrid(), ColliderType::STATIC, true);
+		auto pCollider = new ColliderComponent(ColliderType::STATIC, true);
 		pCollider->SetIsTrigger(true);
 		pDirtBlock->AddComponent(pCollider);
 
@@ -131,7 +132,7 @@ namespace DoritoFactory
 		auto pComp = new SpriteComponent(file);
 		pChunkCenter->AddComponent(pComp);
 
-		auto pCollider = new ColliderComponent(pScene->GetGrid(), ColliderType::STATIC, true);
+		auto pCollider = new ColliderComponent(ColliderType::STATIC, true);
 		pCollider->SetIsTrigger(true);
 		pChunkCenter->AddComponent(pCollider);
 
@@ -153,16 +154,68 @@ namespace DoritoFactory
 		auto pGoldComp = new GoldComponent();
 		pGold->AddComponent(pGoldComp);
 
-		auto pCollider = new ColliderComponent(pScene->GetGrid(), ColliderType::DYNAMIC, true);
+		auto pCollider = new ColliderComponent(ColliderType::DYNAMIC, true);
 		pGold->AddComponent(pCollider);
 
-		auto pTrigger = new ColliderComponent(pScene->GetGrid(), ColliderType::DYNAMIC, true);
+		auto pTrigger = new ColliderComponent(ColliderType::DYNAMIC, true);
 		pTrigger->SetIsTrigger(true);
 		pGold->AddComponent(pTrigger);
 
 		pGold->SetTag("Gold");
 
 		return pGold;
+	}
+
+	inline void MakeHUD(Scene* pScene)
+	{
+		auto pHUD = new GameObject(pScene);
+
+		auto pText = new TextComponent("Score: ", "Lingua.otf", 50);
+		pHUD->AddComponent(pText);
+
+		auto pHUDComp = new HUDComponent();
+		pHUD->AddComponent(pHUDComp);
+
+		pHUD->SetTag("HUD");
+
+		pScene->AddObject(pHUD);
+	}
+
+	inline void MakeEnemy(Scene* pScene, const std::string& fileName, const sf::Vector2f& pos)
+	{
+		//Enemy has 4 colliders
+		// ^ Up
+		// > Right 
+		// < Left
+		// Down
+
+		auto pBaseEnemy = MakeEnemyBase(pScene,fileName);
+		pBaseEnemy->GetTransform()->SetPosition(pos);
+		pBaseEnemy->GetTransform()->SetScale(0.2f,0.2f);
+		pScene->AddObject(pBaseEnemy);
+
+		auto enemyPos = pBaseEnemy->GetTransform()->GetPosition();
+		auto enemyBounds = pBaseEnemy->GetComponent<ColliderComponent>()->GetCollider();
+
+		//Right facing
+		auto pWallDetector = new ColliderComponent(ColliderType::STATIC, false, sf::Vector2f(static_cast<float>(enemyBounds.w / 2), 1.f));
+		pWallDetector->GetTransform()->SetPosition(enemyPos.x + static_cast<float>(enemyBounds.w / 2), enemyPos.y);
+		pBaseEnemy->AddComponent(pWallDetector);
+
+		//Left facing
+		pWallDetector = new ColliderComponent(ColliderType::STATIC, false, sf::Vector2f(-static_cast<float>(enemyBounds.w / 2), 1.f));
+		pWallDetector->GetTransform()->SetPosition(enemyPos.x - static_cast<float>(enemyBounds.w / 2), enemyPos.y);
+		pBaseEnemy->AddComponent(pWallDetector);
+
+		//Up facing
+		pWallDetector = new ColliderComponent(ColliderType::STATIC, false, sf::Vector2f(1.f, static_cast<float>(enemyBounds.h / 2)));
+		pWallDetector->GetTransform()->SetPosition(enemyPos.x, enemyPos.y + static_cast<float>(enemyBounds.h / 2));
+		pBaseEnemy->AddComponent(pWallDetector);
+
+		//Down facing
+		pWallDetector = new ColliderComponent(ColliderType::STATIC, false, sf::Vector2f(1.f, -static_cast<float>(enemyBounds.h / 2)));
+		pWallDetector->GetTransform()->SetPosition(enemyPos.x , enemyPos.y - static_cast<float>(enemyBounds.h / 2));
+		pBaseEnemy->AddComponent(pWallDetector);
 	}
 
 	inline void MakeDirtChunk(Scene* pScene, const sf::Vector2f& center, const std::string& file, ChunkType type)

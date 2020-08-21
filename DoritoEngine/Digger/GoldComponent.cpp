@@ -15,11 +15,12 @@ GoldComponent::GoldComponent()
 	, m_pTrigger(nullptr)
 	, m_pSprite(nullptr)
 	, m_Velocity()
-	, m_Gravity(0.f, 800.f)
+	, m_Gravity(0.f, 600.f)
 	, m_State(GoldState::IN_BAG)
 	, m_BreakingSpeed(800.f)
-	, m_BreakingDistance(350.f)
-	, m_pCollidingObj(nullptr)
+	, m_BreakingDistance(205.f)
+	, m_IsColliding(false)
+	, m_FallTimer(0.7f)
 {
 }
 
@@ -50,19 +51,24 @@ void GoldComponent::Initialize()
 
 void GoldComponent::Update(float dt)
 {
-	if (!m_IsColliding)
-		m_Gravity.y = 800.f;
+	m_FallTimer -= dt;
 
-	sf::Vector2f offset{};
+	if (m_FallTimer < 0.f)
+	{
+		if (!m_IsColliding)
+			m_Gravity.y = 600.f;
 
-	m_Velocity = m_Velocity + m_Gravity * dt;
+		sf::Vector2f offset{};
 
-	offset = m_Velocity * dt;
+		m_Velocity = m_Velocity + m_Gravity * dt;
 
-	GetParentTransform()->Move(offset);
+		offset = m_Velocity * dt;
 
-	m_Velocity.x = 0.f;
-	m_IsColliding = false;
+		GetParentTransform()->Move(offset);
+
+		m_Velocity.x = 0.f;
+		m_IsColliding = false;
+	}
 }
 
 void GoldComponent::HandleCollisions()

@@ -204,15 +204,15 @@ void DiggerComponent::HandleCollisions()
 	{
 		if (other->GetTag() == "Gold")
 		{
-			auto firstPos = first->GetTransform()->GetPosition();
-
-			auto vector = firstPos - other->GetTransform()->GetPosition();
-			float angle = DoritoMath::RadiansToDegrees(std::atan2f(vector.x, vector.y));
-
 			auto goldComp = other->GetComponent<GoldComponent>();
 
-			if (goldComp)
+			if (goldComp->GetState() == GoldState::IN_BAG)
 			{
+				auto firstPos = first->GetTransform()->GetPosition();
+
+				auto vector = firstPos - other->GetTransform()->GetPosition();
+				float angle = DoritoMath::RadiansToDegrees(std::atan2f(vector.x, vector.y));
+				
 				sf::Vector2f vel;
 
 				if (angle > 60.f && angle < 120.f)

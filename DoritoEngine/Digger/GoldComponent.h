@@ -18,6 +18,7 @@ public:
 
 	void SetVeloctiy(const sf::Vector2f& vel) { m_Velocity = vel; }
 	const sf::Vector2f& GetVelocity() const { return m_Velocity; };
+	GoldState GetState() { return m_State; }
 
 protected:
 	void Initialize() override;
@@ -36,7 +37,8 @@ private:
 	GoldState m_State;
 
 	float m_BreakingSpeed
-		, m_BreakingDistance;
+		, m_BreakingDistance
+		, m_FallTimer;
 
 	bool m_IsColliding;
 

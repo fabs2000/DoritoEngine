@@ -19,18 +19,21 @@ void TestScene::Initialize()
 	auto pFPS = DoritoFactory::MakeTextObject(this, "FPS: ", "Lingua.otf", 50);
 	AddObject(pFPS);
 	 
+	//auto pEnemy = DoritoFactory::MakeEnemyBase(this, "Digger/hobbin.png");
+	//pEnemy->GetTransform()->SetPosition(300, 250);
+	//pEnemy->GetTransform()->SetScale(0.2f, 0.2f);
+	//AddObject(pEnemy);
+
+
 	//Enemy
-	auto pEnemy = DoritoFactory::MakeEnemy(this, "Digger/hobbin.png");
-	pEnemy->GetTransform()->SetPosition(300, 250);
-	pEnemy->GetTransform()->SetScale(0.2f, 0.2f);
-	AddObject(pEnemy);
+	DoritoFactory::MakeEnemy(this, "Digger/hobbin.png", sf::Vector2f(700, 250));
+
 
 	//Character
 	auto pCharacter = DoritoFactory::MakeCharacter(this, "Digger/digger.png", PlayerControllers::Player1);
 	pCharacter->GetTransform()->SetPosition(978, 773);
 	pCharacter->GetTransform()->SetScale(0.2f, 0.2f);
 	AddObject(pCharacter);
-
 
 	//Test Chunks
 	DoritoFactory::MakeDirtChunk(this, sf::Vector2f(300, 400), "Digger/dirt_center.png", ChunkType::DIRT);

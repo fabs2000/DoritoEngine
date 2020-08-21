@@ -27,8 +27,9 @@ GameObject::~GameObject()
 
 void GameObject::AddComponent(BaseComponent* pComp)
 {
-	m_pComponents.push_back(pComp);
 	pComp->SetGameObject(this);
+	pComp->RootInitialize();
+	m_pComponents.push_back(pComp);
 }
 
 void GameObject::RemoveComponent(BaseComponent* pComp)
