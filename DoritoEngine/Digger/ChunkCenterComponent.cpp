@@ -20,6 +20,11 @@ void ChunkCenterComponent::Initialize()
 
 	if (m_pCollider->GetIsTrigger())
 	{
+		if (m_ChunkType == ChunkType::GOLD)
+		{
+			m_pCollider->SetType(ColliderType::DYNAMIC);
+		}
+
 		HandleInTrigger();
 	}
 }
@@ -50,6 +55,8 @@ void ChunkCenterComponent::HandleInTrigger()
 				pGold->GetTransform()->SetScale(0.2f, 0.2f);
 				pGold->GetTransform()->SetPosition(GetParentTransform()->GetPosition());
 				GetGameObject()->GetScene()->AddObject(pGold);
+
+				//std::cout << "Spawned Gold\n";
 				break;
 
 			case ChunkType::DIRT:

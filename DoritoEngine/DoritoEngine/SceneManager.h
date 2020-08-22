@@ -2,6 +2,7 @@
 #include "Singleton.h"
 #include <vector>
 #include <string>
+#include <list>
 
 	class Scene;
 
@@ -18,6 +19,7 @@
 
 		Scene* GetScene(const std::string& sceneName);
 		Scene* GetActiveScene() const { return m_pActiveScene; }
+		void RemoveScene(const std::string& sceneName);
 
 		void Update(float dt);
 		void Render();
@@ -27,7 +29,7 @@
 	private:
 		SceneManager();
 
-		std::vector<Scene*> m_pScenes;
+		std::list<Scene*> m_pScenes;
 		Scene* m_pActiveScene;
 		Scene* m_pNewActiveScene;
 

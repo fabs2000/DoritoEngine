@@ -13,7 +13,7 @@ class GameObject final
 {
 public:
 	GameObject(Scene* pParentScene);
-	virtual ~GameObject();
+	~GameObject();
 
 	GameObject(const GameObject& other) = delete;
 	GameObject(GameObject&& other) = delete;

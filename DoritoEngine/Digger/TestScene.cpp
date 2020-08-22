@@ -36,7 +36,7 @@ void TestScene::Initialize()
 	//AddObject(pCharacter);
 
 	//Test Chunks
-	DoritoFactory::MakeDirtChunk(this, sf::Vector2f(300, 400), "Digger/dirt_center.png", ChunkType::DIRT);
+	//DoritoFactory::MakeDirtChunk(this, sf::Vector2f(300, 400), "Digger/dirt_center.png", ChunkType::DIRT);
 	//DoritoFactory::MakeDirtChunk(this, sf::Vector2f(300, 810), "Digger/dirt_center.png", ChunkType::DIRT);
 	//DoritoFactory::MakeDirtChunk(this, sf::Vector2f(402, 810), "Digger/dirt_center.png", ChunkType::DIRT);
 	//DoritoFactory::MakeDirtChunk(this, sf::Vector2f(504, 810), "Digger/dirt_center.png", ChunkType::DIRT);

@@ -1,5 +1,6 @@
 #include "DoritoPCH.h"
 #include "MenuScene.h"
+#include "Level1_Scene.h"
 
 #include "DoritoFactory.h"
 
@@ -20,6 +21,10 @@ void MenuScene::Initialize()
 
 	auto startGame = [this]()
 	{
+		GetGameInfo().pSceneManager->RemoveScene("Level1");
+		
+		GetGameInfo().pSceneManager->CreateScene(new Level_1("Level1", GetGameInfo()));
+
 		GetGameInfo().pSceneManager->SetActiveGameScene("Level1");
 	};
 

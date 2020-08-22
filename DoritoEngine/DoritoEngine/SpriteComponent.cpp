@@ -15,10 +15,6 @@ SpriteComponent::SpriteComponent(const std::string& file, bool isCentered, bool 
 {
 }
 
-SpriteComponent::~SpriteComponent()
-{
-}
-
 void SpriteComponent::SetTexture(const std::string& file)
 {
 	m_pSprite = ResourceManager::GetInstance()->LoadSprite(file);

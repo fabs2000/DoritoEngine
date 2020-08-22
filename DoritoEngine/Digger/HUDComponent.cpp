@@ -30,7 +30,7 @@ void HUDComponent::Initialize()
 
 	float xPos = 650.f, offset = 80.f;
 
-	for (uint32_t i{}; i < m_pGameStats->GetLives(); i++)
+	for (int32_t i{}; i < m_pGameStats->GetLives(); i++)
 	{
 		auto sprite = DoritoFactory::MakeSprite(m_pSceneRef, "Digger/digger.png");
 		m_pLivesSprite.push_back(sprite->GetComponent<SpriteComponent>());
@@ -41,8 +41,6 @@ void HUDComponent::Initialize()
 
 		m_pSceneRef->AddObject(sprite);
 	}
-
-	m_pLivesSprite;
 }
 
 void HUDComponent::Update(float)
@@ -55,10 +53,21 @@ void HUDComponent::Update(float)
 void HUDComponent::Render()
 {
 	//Draw as many diggers as lives each frame, losing lives auto decreases them.
-	if (m_pGameStats->GetLives() < 3)
+	if (m_pGameStats->GetLives() >= 0)
 	{
-		m_pLivesSprite[m_pGameStats->GetLives()]->SetCanRender(false);
-	}
+		auto id = m_pGameStats->GetLives();
 
-	std::cout << m_pGameStats->GetLives() << "\n";
+		//std::cout << "Lives: " << id << "\n";
+
+		if (m_pGameStats->GetLostLife())
+		{
+			m_pLivesSprite[id]->SetCanRender(false);
+		}
+		else if (m_pGameStats->GetGainedLife())
+		{
+			//Why this needs to be done --->>>
+			//https://docs.microsoft.com/es-es/cpp/code-quality/c26451?view=vs-2019
+			m_pLivesSprite[id - static_cast<__int64>(1)]->SetCanRender(true);
+		}
+	}
 }

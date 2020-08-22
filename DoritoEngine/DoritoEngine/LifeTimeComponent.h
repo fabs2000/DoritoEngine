@@ -5,7 +5,6 @@ class LifeTimeComponent : public BaseComponent
 {
 public:
 	explicit LifeTimeComponent(float lifeTime);
-	~LifeTimeComponent() = default;
 
 	LifeTimeComponent(const LifeTimeComponent&) = delete;
 	LifeTimeComponent(LifeTimeComponent&&) = delete;

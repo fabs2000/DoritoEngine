@@ -37,6 +37,7 @@ public:
 
 	bool GetIsTrigger() { return m_IsTrigger; }
 	const SDL_Rect GetCollider() { return m_Collider; }
+	void SetType(ColliderType type) { m_Type = type; }
 	ColliderType GetType() { return m_Type; }
 
 protected:

@@ -5,23 +5,40 @@
 
 Scene::Scene(const std::string& name, const GameInfo& gameInfo)
 	: m_Name(name)
-	, m_pBasicObjects()
-	, m_pPhysicsComponents()
-	, m_GameInfo(gameInfo)
-	, m_IsInit(false)
+	, m_pBasicObjects(std::list<GameObject*>())
+
+	, m_pDynamicColliders(std::vector<ColliderComponent*>())
+	, m_pStaticColliders(std::vector<ColliderComponent*>())
+
+	, m_pDynamicCollDel(std::vector<ColliderComponent*>())
+	, m_pStaticCollDel(std::vector<ColliderComponent*>())
+
 	, m_pSubject(new Subject())
 	, m_pGrid(new CollisionGrid())
+	, m_GameInfo(gameInfo)
+	, m_IsInit(false)
 {}
 
 Scene::~Scene()
 {
+	SafeDelete(m_pSubject);
+	SafeDelete(m_pGrid);
+
 	for (auto& pSceneObject : m_pBasicObjects)
 	{
+		//if (pSceneObject->GetTag() == "Digger")
+		//	std::cout << "dig\n";
+
 		SafeDelete(pSceneObject);
 	}
 
-	SafeDelete(m_pSubject);
-	SafeDelete(m_pGrid);
+	m_pBasicObjects.clear();
+	
+	m_pDynamicColliders.clear();
+	m_pStaticColliders.clear();
+
+	m_pDynamicCollDel.clear();
+	m_pStaticCollDel.clear();
 }
 
 void Scene::AddObject(GameObject* object)
@@ -33,16 +50,21 @@ void Scene::AddObject(GameObject* object)
 	for (auto& comp : physComp)
 	{
 		if (comp != nullptr)
-			m_pPhysicsComponents.push_back(comp);
+		{
+			switch (comp->GetType())
+			{
+			case ColliderType::DYNAMIC:
+				m_pDynamicColliders.push_back(comp);
+				break;
+
+			case ColliderType::STATIC:
+				m_pStaticColliders.push_back(comp);
+				break;
+			}
+		}
 	}
 
 	m_pBasicObjects.push_back(object);
-}
-
-void Scene::AddPhysicsObject(ColliderComponent* pColl)
-{
-	if (pColl != nullptr)
-		m_pPhysicsComponents.push_back(pColl);
 }
 
 void Scene::RemoveObject(GameObject* object)
@@ -51,34 +73,46 @@ void Scene::RemoveObject(GameObject* object)
 
 	auto physComp = object->GetComponents<ColliderComponent>();
 
-	//for (auto it = physComp.begin(); it != physComp.end(); it++)
-	//{
-	//	if (object->GetMarkedForDelete())
-	//	{
-	//		m_pPhysicsComponents.erase(it);
-	//	}
-	//	else
-	//	{
-	//		it++;
-	//	}
-	//}
-
 	for (auto& comp : physComp)
 	{
-		m_pPhysCompDel.push_back(comp);
+		if (comp != nullptr)
+		{
+			switch (comp->GetType())
+			{
+			case ColliderType::DYNAMIC:
+				m_pDynamicCollDel.push_back(comp);		
+				break;
+
+			case ColliderType::STATIC:
+				m_pStaticCollDel.push_back(comp);
+				break;
+			}
+		}
 	}
 
 	SafeDelete(object);
 }
 
+void Scene::ClearObjectsWithTag(const std::string& tag)
+{
+	for (auto& obj : m_pBasicObjects)
+	{
+		if(obj->GetTag() == tag)
+			obj->Delete();
+	}
+}
+
+void Scene::ClearAllObjects()
+{
+	for (auto& obj : m_pBasicObjects)
+	{
+		obj->Delete();
+	}
+}
+
 void Scene::RootInit()
 {
 	Initialize();
-
-	//for (auto& pSceneObj : m_pBasicObjects)
-	//{
-	//	pSceneObj->RootInit();
-	//}
 }
 
 void Scene::RootUpdate(float dt)
@@ -102,26 +136,35 @@ void Scene::RootUpdate(float dt)
 		}
 	}
 
-	RemovePhysicsComponents();
+	RemoveStaticColliders();
+	RemoveDynamicColliders();
 }
 
 void Scene::RootCollisionUpdate()
 {
 	//m_pGrid->HandleCollisions();
 
-	for (auto& physComp : m_pPhysicsComponents)
+	for (auto& dynamicColl : m_pDynamicColliders)
 	{
-		for (auto& otherComp : m_pPhysicsComponents)
+		for (auto& otherDynamic : m_pDynamicColliders)
 		{
-			if (physComp != otherComp)
+			if (dynamicColl != otherDynamic)
 			{
-				if (physComp->GetType() == ColliderType::STATIC 
-					&& otherComp->GetType() == ColliderType::STATIC)
-				{
-					continue;
-				}
-				physComp->CheckCollisions(otherComp);
+				dynamicColl->CheckCollisions(otherDynamic);
 			}
+		}
+
+		for (auto& staticColl : m_pStaticColliders)
+		{
+			dynamicColl->CheckCollisions(staticColl);
+		}
+	}
+
+	for (auto& staticColl : m_pStaticColliders)
+	{
+		for (auto& otherDynamic : m_pDynamicColliders)
+		{
+			staticColl->CheckCollisions(otherDynamic);
 		}
 	}
 }
@@ -136,17 +179,35 @@ void Scene::RootRender() const
 	}
 }
 
-void Scene::RemovePhysicsComponents()
+void Scene::RemoveDynamicColliders()
 {
-	for (auto it = m_pPhysCompDel.begin(); it != m_pPhysCompDel.end(); it++)
+	for (auto it = m_pDynamicCollDel.begin(); it != m_pDynamicCollDel.end(); it++)
 	{
-		auto pCompIt = std::find(m_pPhysicsComponents.begin(), m_pPhysicsComponents.end(), *it);
+		auto pCompItDyn = std::find(m_pDynamicColliders.begin(), m_pDynamicColliders.end(), *it);
 
-		if (pCompIt != m_pPhysicsComponents.end())
+		if (pCompItDyn != m_pDynamicColliders.end())
 		{
-			m_pPhysicsComponents.erase(pCompIt);
+			m_pDynamicColliders.erase(pCompItDyn);
 		}
 	}
 
-	//std::cout << "Physics: " << m_pPhysicsComponents.size() << "\n";
+	m_pDynamicCollDel.clear();
+	//std::cout << "Dynanmic Colliders: " << m_pDynamicColliders.size() << "\n";
+}
+
+void Scene::RemoveStaticColliders()
+{
+	for (auto it = m_pStaticCollDel.begin(); it != m_pStaticCollDel.end(); it++)
+	{
+		auto pCompItStat = std::find(m_pStaticColliders.begin(), m_pStaticColliders.end(), *it);
+
+		if (pCompItStat != m_pStaticColliders.end())
+		{
+			m_pStaticColliders.erase(pCompItStat);
+		}
+	}
+
+	m_pStaticCollDel.clear();
+
+	//std::cout << "Static Colliders: " << m_pStaticColliders.size() << "\n";
 }

@@ -19,5 +19,4 @@ public:
 
 private:
 	TextComponent* m_pNameScore;
-
 };

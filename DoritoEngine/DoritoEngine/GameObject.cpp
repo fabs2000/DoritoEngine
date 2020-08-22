@@ -17,12 +17,13 @@ GameObject::GameObject(Scene* pParentScene)
 
 GameObject::~GameObject()
 {
-	SafeDelete(m_pTransform);
-
 	for (auto& component : m_pComponents)
 	{
 		SafeDelete(component);
 	}
+	m_pComponents.clear();
+
+	SafeDelete(m_pTransform);
 }
 
 void GameObject::AddComponent(BaseComponent* pComp)

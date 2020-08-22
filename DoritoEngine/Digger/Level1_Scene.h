@@ -1,6 +1,13 @@
 #pragma once
 #include "Scene.h"
 
+enum class LevelState
+{
+	LEVEL_1 = 0,
+	LEVEL_2 = 1,
+	LEVEL_3 = 2
+};
+
 class TextComponent;
 class PlayerStatsSystem;
 
@@ -20,11 +27,14 @@ public:
 	void Render() const override;
 
 private:
-	TextComponent* m_pTextComp
-		,* m_pScoreComp;
+	TextComponent* m_pTextComp;
 
 	PlayerStatsSystem* m_pGameStats;
 
+	GameObject* m_pDigger;
+	
 	int m_FPSNb;
+
+	LevelState m_LevelState;
 };
 

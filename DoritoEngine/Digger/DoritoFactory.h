@@ -19,6 +19,7 @@ namespace DoritoFactory
 	inline GameObject* MakeDigger(Scene* pScene, const std::string& fileName, PlayerControllers player)
 	{
 		GameObject* pPlayer = new GameObject(pScene);
+		pPlayer->SetTag("Digger");
 
 		auto pSprite = new SpriteComponent(fileName, true);
 		pPlayer->AddComponent(pSprite);
@@ -29,7 +30,6 @@ namespace DoritoFactory
 		auto pCollider = new ColliderComponent(ColliderType::DYNAMIC, true);
 		pPlayer->AddComponent(pCollider);
 
-		pPlayer->SetTag("Digger");
 
 		return pPlayer;
 	}
@@ -57,6 +57,8 @@ namespace DoritoFactory
 	inline GameObject* MakeEnemyBase(Scene* pScene, const std::string& fileName)
 	{
 		GameObject* pEnemy = new GameObject(pScene);
+		pEnemy->SetTag("Enemy");
+
 		auto pSprite = new SpriteComponent(fileName, true);
 		pEnemy->AddComponent(pSprite);
 
@@ -66,8 +68,6 @@ namespace DoritoFactory
 		//Main Collider
 		auto pCollider = new ColliderComponent(ColliderType::DYNAMIC, true);
 		pEnemy->AddComponent(pCollider);
-
-		pEnemy->SetTag("Enemy");
 
 		return pEnemy;
 	}
@@ -85,8 +85,9 @@ namespace DoritoFactory
 	inline GameObject* MakeFireball(Scene* pScene, const std::string& fileName, const sf::Vector2f& direction)
 	{
 		auto pShot = new GameObject(pScene);
+		pShot->SetTag("Shot");
 
-		auto pLifeTime = new LifeTimeComponent(1.25f);
+		auto pLifeTime = new LifeTimeComponent(0.5f);
 		pShot->AddComponent(pLifeTime);
 
 		auto pComp = new SpriteComponent(fileName);
@@ -99,16 +100,13 @@ namespace DoritoFactory
 		auto pFirecomp = new FireBallComponent(direction);
 		pShot->AddComponent(pFirecomp);
 
-		pShot->GetTransform()->SetScale(2.5f,2.5f);
-
-		pShot->SetTag("Shot");
-
 		return pShot;
 	}
 
 	inline GameObject* MakeDirtBlock(Scene* pScene, const std::string& file)
 	{
 		GameObject* pDirtBlock = new GameObject(pScene);
+		pDirtBlock->SetTag("Dirt");
 
 		auto pComp = new SpriteComponent(file);
 		pDirtBlock->AddComponent(pComp);
@@ -120,14 +118,13 @@ namespace DoritoFactory
 		auto pCenter = new DirtBlockComponent();
 		pDirtBlock->AddComponent(pCenter);
 
-		pDirtBlock->SetTag("Dirt");
-
 		return pDirtBlock;
 	}
 
 	inline GameObject* MakeChunkCenter(Scene* pScene, const std::string& file, ChunkType type)
 	{
 		GameObject* pChunkCenter = new GameObject(pScene);
+		pChunkCenter->SetTag("Dirt");
 
 		auto pComp = new SpriteComponent(file);
 		pChunkCenter->AddComponent(pComp);
@@ -139,29 +136,26 @@ namespace DoritoFactory
 		auto pDirt = new ChunkCenterComponent(type);
 		pChunkCenter->AddComponent(pDirt);
 
-		pChunkCenter->SetTag("Dirt");
-
 		return pChunkCenter;
 	}
 
 	inline GameObject* MakeGoldBag(Scene* pScene, const std::string& file)
 	{
 		auto pGold = new GameObject(pScene);
+		pGold->SetTag("Gold");
 
 		auto pSprite = new SpriteComponent(file);
 		pGold->AddComponent(pSprite);
 
-		auto pGoldComp = new GoldComponent();
-		pGold->AddComponent(pGoldComp);
-
 		auto pCollider = new ColliderComponent(ColliderType::DYNAMIC, true);
 		pGold->AddComponent(pCollider);
 
-		auto pTrigger = new ColliderComponent(ColliderType::DYNAMIC, true);
+		auto pTrigger = new ColliderComponent(ColliderType::STATIC, true);
 		pTrigger->SetIsTrigger(true);
 		pGold->AddComponent(pTrigger);
 
-		pGold->SetTag("Gold");
+		auto pGoldComp = new GoldComponent();
+		pGold->AddComponent(pGoldComp);
 
 		return pGold;
 	}
@@ -169,14 +163,13 @@ namespace DoritoFactory
 	inline GameObject* MakeHUD(Scene* pScene)
 	{
 		auto pHUD = new GameObject(pScene);
+		pHUD->SetTag("HUD");
 
 		auto pText = new TextComponent("Score: ", "Lingua.otf", 50);
 		pHUD->AddComponent(pText);
 
 		auto pHUDComp = new HUDComponent();
 		pHUD->AddComponent(pHUDComp);
-
-		pHUD->SetTag("HUD");
 
 		return pHUD;
 	}
@@ -230,6 +223,7 @@ namespace DoritoFactory
 		GameObject* pCenter = MakeChunkCenter(pScene, file, type);
 		pCenter->GetTransform()->SetPosition(center);
 		pCenter->GetTransform()->SetScale(generalScale);
+
 		pScene->AddObject(pCenter);
 		
 
@@ -241,11 +235,10 @@ namespace DoritoFactory
 		for (UINT i{}; i < 4; i++)
 		{
 			auto pCorner = MakeDirtBlock(pScene, "Digger/dirt_corner.png");
-			
-			pCorners.push_back(pCorner);
 			pCorner->GetTransform()->SetScale(generalScale);
-
 			pScene->AddObject(pCorner);
+
+			pCorners.push_back(pCorner);
 		}
 
 		auto cornerBounds = pCorners[0]->GetComponent<ColliderComponent>()->GetCollider();
@@ -267,10 +260,11 @@ namespace DoritoFactory
 		std::vector<GameObject*> pHorizontals;
 		for (UINT i{}; i < 2; i++)
 		{
-			auto pSide = MakeDirtBlock(pScene, "Digger/dirt_horizontal.png");
-			pHorizontals.push_back(pSide);
+			auto pSide = MakeDirtBlock(pScene, "Digger/dirt_horizontal.png");			
 			pSide->GetTransform()->SetScale(generalScale);
 			pScene->AddObject(pSide);
+
+			pHorizontals.push_back(pSide);
 		}
 		//Top
 		pHorizontals[0]->GetTransform()->SetPosition(relativeCenter.x, relativeCenter.y - centerBounds.h/2 - cornerBounds.h/2 - offset);
@@ -282,9 +276,10 @@ namespace DoritoFactory
 		for (UINT i{}; i < 2; i++)
 		{
 			auto pSide = MakeDirtBlock(pScene, "Digger/dirt_vertical.png");
-			pVerticals.push_back(pSide);
 			pSide->GetTransform()->SetScale(generalScale);
 			pScene->AddObject(pSide);
+
+			pVerticals.push_back(pSide);
 		}
 
 		//Left

@@ -24,8 +24,9 @@ public:
 	Scene& operator=(Scene&& other) = delete;
 
 	void AddObject(GameObject* object);
-	void AddPhysicsObject(ColliderComponent* pColl);
 	void RemoveObject(GameObject* object);
+	void ClearObjectsWithTag(const std::string& tag);
+	void ClearAllObjects();
 
 	const std::string& GetName() const { return m_Name; }
 	Subject* GetSubject() const { return m_pSubject; }
@@ -46,15 +47,21 @@ private:
 	std::string m_Name;
 
 	std::list<GameObject*> m_pBasicObjects;
-	std::vector<ColliderComponent*> m_pPhysicsComponents;
-	std::vector<ColliderComponent*> m_pPhysCompDel;
+
+	std::vector<ColliderComponent*> m_pDynamicColliders;
+	std::vector<ColliderComponent*> m_pStaticColliders;
+	
+	std::vector<ColliderComponent*> m_pDynamicCollDel;
+	std::vector<ColliderComponent*> m_pStaticCollDel;
 
 	Subject* m_pSubject;
 	CollisionGrid* m_pGrid;
 
 	GameInfo m_GameInfo;
-	bool m_IsInit;
 
-	void RemovePhysicsComponents();
+	bool m_IsInit;
+	
+	void RemoveDynamicColliders();
+	void RemoveStaticColliders();
 };
 

@@ -30,7 +30,6 @@ class SpriteComponent : public BaseComponent
 {
 public:
 	explicit SpriteComponent(const std::string& file, bool isCentered = true, bool isUsingRelativeTrans = false, AnimationInfo animInfo = AnimationInfo());
-	~SpriteComponent();
 
 	SpriteComponent(const SpriteComponent&) = delete;
 	SpriteComponent(SpriteComponent&&) = delete;

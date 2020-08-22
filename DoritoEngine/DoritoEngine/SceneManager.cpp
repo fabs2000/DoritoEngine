@@ -4,13 +4,11 @@
 #include <algorithm>
 
 SceneManager::SceneManager()
-	: m_pScenes(std::vector<Scene*>())
+	: m_pScenes(std::list<Scene*>())
 	, m_pActiveScene(nullptr)
 	, m_pNewActiveScene(nullptr)
 	, m_IsInit(false)
-{
-
-}
+{}
 
 void SceneManager::Update(float dt)
 {
@@ -83,3 +81,23 @@ Scene* SceneManager::GetScene(const std::string& sceneName)
 
 	return nullptr;
 }
+
+void SceneManager::RemoveScene(const std::string& sceneName)
+{
+	const auto it = find_if(m_pScenes.begin(), m_pScenes.end(), [sceneName](Scene* scene)
+		{
+			return strcmp(scene->GetName().c_str(), sceneName.c_str()) == 0;
+		});
+
+	if (it != m_pScenes.end())
+	{
+		auto scene = (*it);
+		SafeDelete(scene);
+		m_pScenes.erase(it);
+	}
+	else
+	{
+		std::cout << "No scene found\n";
+	}
+}
+

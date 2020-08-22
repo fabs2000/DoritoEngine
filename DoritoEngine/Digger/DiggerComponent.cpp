@@ -15,6 +15,7 @@ DiggerComponent::DiggerComponent(PlayerControllers playerID)
 	, m_Velocity(0.f, 0.f)
 	, m_MovementAcceleration(200.f)
 	, m_pCollider(nullptr)
+	, m_pSprite(nullptr)
 	, m_GameInfoRef()
 	, m_FireTimer(1.f)
 	, m_FireRate(0.25f)
@@ -31,7 +32,7 @@ void DiggerComponent::Initialize()
 	m_pSprite = GetGameObject()->GetComponent<SpriteComponent>();
 
 	if (m_pCollider)
-	{
+	{ 
 		//Only handles collisions with gold
 		HandleCollisions();
 	}
@@ -78,15 +79,16 @@ void DiggerComponent::InitInput()
 		if (m_FireTimer >= 0.f)
 			return;
 
-		auto transform = GetParentTransform();
+		auto go = GetGameObject();
+		go;
 
-		auto direction = sf::Vector2f(cosf(transform->GetRotationRadians()), sinf(transform->GetRotationRadians()));
+		auto direction = sf::Vector2f(cosf(GetParentTransform()->GetRotationRadians()), sinf(GetParentTransform()->GetRotationRadians()));
 
-		if (std::signbit(transform->GetScale().x))
+		if (std::signbit(GetParentTransform()->GetScale().x))
 			direction *= -1.f;
 
 		auto pBubble = DoritoFactory::MakeFireball(GetGameObject()->GetScene(), "Digger/fireball.png", DoritoMath::Normalize(direction));
-		auto pos = transform->GetPosition();
+		auto pos = GetParentTransform()->GetPosition();
 		pBubble->GetTransform()->SetScale(0.1f, 0.1f);
 		pBubble->GetTransform()->SetPosition(pos);
 
