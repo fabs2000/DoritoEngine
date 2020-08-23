@@ -82,7 +82,7 @@ void GoldComponent::HandleCollisions()
 		case GoldState::IN_BAG:
 			if (m_Velocity.y > 250.f)
 			{
-				if (otherTag == "Enemy")
+				if (otherTag == "Hobbin" || otherTag == "Nobbin")
 					other->Delete();
 
 				else if (otherTag == "Digger")
@@ -94,14 +94,14 @@ void GoldComponent::HandleCollisions()
 					{
 						digger->SetState(DiggerState::DEAD);
 						first->GetScene()->GetSubject()->Notify(3);
-						sprite->SetTexture("Digger/grave.png");
+						sprite->SetTexture("grave.png");
 					}
 				}
 			}
 			break;
 
 		case GoldState::OUT_BAG:
-			if (otherTag == "Enemy")
+			if (otherTag == "Hobbin")
 			{
 				first->Delete();
 			}
@@ -135,7 +135,7 @@ void GoldComponent::HandleCollisions()
 					m_State = GoldState::OUT_BAG;
 
 					if (m_pSprite)
-						m_pSprite->SetTexture("Digger/goldcoins.png");
+						m_pSprite->SetTexture("goldcoins.png");
 				}
 
 				m_OriginalPos = GetParentTransform()->GetPosition();

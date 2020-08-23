@@ -25,6 +25,8 @@ public:
 
 	void AddObject(GameObject* object);
 	void RemoveObject(GameObject* object);
+
+	GameObject* GetObjectWithTag(const std::string& tag);
 	void ClearObjectsWithTag(const std::string& tag);
 	void ClearAllObjects();
 
@@ -32,6 +34,9 @@ public:
 	Subject* GetSubject() const { return m_pSubject; }
 	CollisionGrid* GetGrid() const { return m_pGrid; }
 	const GameInfo& GetGameInfo() const{ return m_GameInfo; }
+
+	const std::vector<ColliderComponent*>& GetStaticColliders() const
+	{ return m_pStaticColliders; };
 
 	void RootInit();
 	void RootUpdate(float dt);
@@ -54,6 +59,9 @@ private:
 	std::vector<ColliderComponent*> m_pDynamicCollDel;
 	std::vector<ColliderComponent*> m_pStaticCollDel;
 
+	std::vector<ColliderComponent*> m_pPhysicsComps;
+	std::vector<ColliderComponent*> m_pPhysicsCompsDel;
+
 	Subject* m_pSubject;
 	CollisionGrid* m_pGrid;
 
@@ -63,5 +71,7 @@ private:
 	
 	void RemoveDynamicColliders();
 	void RemoveStaticColliders();
+
+	void RemoveAllColliders();
 };
 

@@ -1,16 +1,27 @@
 #include "DoritoPCH.h"
 #include "ResourceManager.h"
+#include <filesystem>
 
 #include "Renderer.h"
 
 void ResourceManager::Init(const std::string& dataPath)
 {
 	m_DataPath = dataPath;
+
+	//Load all necessary textures and fonts beforehand here
+	for (auto& it : std::filesystem::recursive_directory_iterator(m_DataPath))
+	{
+		std::stringstream ss;
+		ss << it.path();
+		LoadResources(ss.str());
+	}
+
+	PostLoad();
 }
 
 sf::Sprite* ResourceManager::LoadSprite(const std::string& file)
 {
-	sf::Texture* pTexture = LoadTexture(file);
+	sf::Texture* pTexture = (*m_pTextures.find(file)).second;
 	sf::Sprite* pSprite = nullptr;
 
 	auto it = m_pSprites.find(pTexture);
@@ -30,7 +41,7 @@ sf::Sprite* ResourceManager::LoadSprite(const std::string& file)
 
 sf::Text* ResourceManager::LoadText(const std::string& text, const std::string& file, unsigned int size)
 {
-	sf::Font* font = LoadFont(file);
+	sf::Font* font = (*m_pFonts.find(file)).second;
 	sf::Text* pText = nullptr;
 
 	auto it = m_pTexts.find(text);
@@ -47,7 +58,7 @@ sf::Text* ResourceManager::LoadText(const std::string& text, const std::string& 
 	return pText;
 }
 
-sf::Texture* ResourceManager::LoadTexture(const std::string& file)
+void ResourceManager::LoadTexture(const std::string& file)
 {
 	sf::Texture* pTexture = nullptr;
 	auto it = m_pTextures.find(file);
@@ -61,7 +72,6 @@ sf::Texture* ResourceManager::LoadTexture(const std::string& file)
 	else
 	{
 		pTexture = new sf::Texture();
-		m_pTextures.emplace(file, pTexture);
 
 		const auto& fullPath = m_DataPath + file;
 
@@ -69,12 +79,12 @@ sf::Texture* ResourceManager::LoadTexture(const std::string& file)
 		{
 			throw  std::runtime_error(std::string("Failed to load texture: " + fullPath));
 		}
-	}
 
-	return pTexture;
+		m_pTextures.emplace(file, pTexture);
+	}
 }
 
-sf::Font* ResourceManager::LoadFont(const std::string& file)
+void ResourceManager::LoadFont(const std::string& file)
 {
 	sf::Font* pFont = nullptr;
 	auto it = m_pFonts.find(file);
@@ -88,17 +98,15 @@ sf::Font* ResourceManager::LoadFont(const std::string& file)
 	else
 	{
 		pFont = new sf::Font();
-		m_pFonts.emplace(file, pFont);
-
 		const auto& fullPath = m_DataPath + file;
 
 		if (!pFont->loadFromFile(fullPath))
 		{
 			throw  std::runtime_error(std::string("Failed to load font: " + fullPath));
 		}
-	}
 
-	return pFont;
+		m_pFonts.emplace(file, pFont);
+	}
 }
 
 void ResourceManager::Destroy()
@@ -121,5 +129,41 @@ void ResourceManager::Destroy()
 	for (auto& font : m_pFonts)
 	{
 		SafeDelete(font.second);
+	}
+}
+
+void ResourceManager::LoadResources(const std::string& path)
+{
+	auto lastDot = path.find_last_of('.');
+	auto lastBackSlash = path.find_last_of('\\');
+
+	if (lastDot == -1)
+		return;
+
+	auto fileType = path.substr(lastDot);
+	fileType = fileType.substr(0, fileType.size() - 1);
+	
+	auto fileName = path.substr(lastBackSlash + 2, (lastDot - lastBackSlash) - 2);
+
+	auto lastSlash = fileName.find_last_of('/');
+	fileName = fileName.substr(lastSlash + 1);
+
+	if (fileType == ".png")
+	{
+		auto loadFunc = std::bind(&ResourceManager::LoadTexture, this, std::placeholders::_1);
+		m_pFutures.push_back(std::async(std::launch::async, loadFunc, fileName + fileType));
+	}
+	else if (fileType == ".otf")
+	{
+		auto loadFunc = std::bind(&ResourceManager::LoadFont, this, std::placeholders::_1);
+		m_pFutures.push_back(std::async(std::launch::async, loadFunc, fileName + fileType));
+	}
+}
+
+void ResourceManager::PostLoad()
+{
+	for (auto& thread : m_pFutures)
+	{
+		thread.get();
 	}
 }

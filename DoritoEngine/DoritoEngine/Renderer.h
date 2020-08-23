@@ -32,4 +32,6 @@ private:
 	sf::RenderWindow m_pRenderer;
 
 	bool m_IsDebugRenderingOn = false;
+	unsigned int m_FrameCap;
+
 };

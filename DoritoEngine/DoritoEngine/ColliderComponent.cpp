@@ -81,7 +81,6 @@ void ColliderComponent::Update(float)
 {
 	//Needs to be called here in order to update dimensions in case of a transformation
 	//Could be better with a boolean as to not set these every frame
-	//TODO: BOOLEAN
 	SetColliderSettings();
 }
 

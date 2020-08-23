@@ -14,14 +14,14 @@ Level_1::Level_1(const std::string& sceneName, const GameInfo& gameInfo)
 	, m_pDigger(nullptr)
 	, m_FPSNb()
 	, m_LevelState(LevelState::LEVEL_1)
+	, m_EnemySpawnTimer(6.f)
 {
 }
 
 void Level_1::Initialize()
 {
 #pragma region CONSTAT_ACROSS_LEVELS
-	GetSubject()->AddObserver("PlayerStats", new PlayerStatsSystem(19, 1));
-	m_pGameStats = static_cast<PlayerStatsSystem*>(GetSubject()->GetObserver("PlayerStats"));
+	GetSubject()->AddObserver("PlayerStats", new PlayerStatsSystem(19, 5));
 
 	//FPS
 	auto pFPS = DoritoFactory::MakeTextObject(this, "FPS: ", "Lingua.otf", 50);
@@ -33,20 +33,30 @@ void Level_1::Initialize()
 	AddObject(pHUD);
 
 	//Character
-	m_pDigger = DoritoFactory::MakeDigger(this, "Digger/digger.png", PlayerControllers::Player1);
+	m_pDigger = DoritoFactory::MakeDigger(this, "digger.png", PlayerControllers::Player1);
 	m_pDigger->GetTransform()->SetPosition(978, 773);
 	m_pDigger->GetTransform()->SetScale(0.2f, 0.2f);
 	AddObject(m_pDigger);
 
+
 	//Updating Text
 	m_pTextComp = pFPS->GetComponent<TextComponent>();
+	m_pGameStats = static_cast<PlayerStatsSystem*>(GetSubject()->GetObserver("PlayerStats"));
 
 #pragma endregion 
 
-	//LEVEL 1
-	DoritoFactory::MakeLevel(this, "Levels/level-1.json");
+	//LEVEL 1 INFO
+	DoritoFactory::MakeLevel(this, "level-1.json");
 
-	Renderer::GetInstance()->SetDebugRendering(false);
+	m_MaxEnemies = m_pGameStats->GetEnemyCount();
+
+	//Enemy
+	auto enemy = DoritoFactory::MakeEnemyBase(this, "nobbin.png");
+	enemy->GetTransform()->SetPosition(1479, 767);
+	enemy->GetTransform()->SetScale(0.2f, 0.2f);
+	AddObject(enemy);
+
+	Renderer::GetInstance()->SetDebugRendering(true);
 }
 
 void Level_1::Update(float dt)
@@ -54,6 +64,18 @@ void Level_1::Update(float dt)
 	//FPS
 	m_FPSNb = int(1 / dt);
 	m_pTextComp->SetText("FPS: " + std::to_string(m_FPSNb));
+
+	//if(m_EnemySpawnTimer > 0.f)
+	//	m_EnemySpawnTimer -= dt;
+	//if (m_EnemySpawnTimer <= 0.f && m_EnemyCount < m_MaxEnemies)
+	//{
+	//	auto enemy = DoritoFactory::MakeEnemyBase(this, "nobbin.png");
+	//	enemy->GetTransform()->SetPosition(1479, 257);
+	//	enemy->GetTransform()->SetScale(0.2f, 0.2f);
+	//	AddObject(enemy);
+	//	m_EnemyCount++;
+	//	m_EnemySpawnTimer = 6.f;
+	//}
 
 	if (m_pGameStats->GetIsGameOver())
 	{
@@ -73,13 +95,11 @@ void Level_1::Update(float dt)
 			
 			//Enemies need to be cleared when there are enemies
 
-
 			GetSubject()->Notify(6);
 			m_LevelState = LevelState::LEVEL_2;
 
 			m_pDigger->GetTransform()->SetPosition(978, 773);
-
-			DoritoFactory::MakeLevel(this, "Levels/level-2.json");
+			DoritoFactory::MakeLevel(this, "level-2.json");
 		}
 		break;
 
@@ -96,7 +116,7 @@ void Level_1::Update(float dt)
 			m_LevelState = LevelState::LEVEL_3;
 
 			m_pDigger->GetTransform()->SetPosition(978, 773);
-			DoritoFactory::MakeLevel(this, "Levels/level-1.json");
+			DoritoFactory::MakeLevel(this, "level-3.json");
 		}
 		break;
 

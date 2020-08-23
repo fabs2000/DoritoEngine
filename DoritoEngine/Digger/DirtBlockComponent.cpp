@@ -27,7 +27,7 @@ void DirtBlockComponent::HandleInTrigger()
 	{
 		//std::cout << "CollidesDirt\n";
 
-		if (other->GetTag() == "Digger")
+		if (other->GetTag() == "Digger" || other->GetTag() == "Hobbin")
 		{
 			first->Delete();
 		}

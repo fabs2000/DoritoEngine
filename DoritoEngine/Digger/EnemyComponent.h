@@ -4,12 +4,20 @@
 
 enum class EnemyType
 {
-	HOBBIN,
-	NOBBIN
+	NOBBIN,
+	HOBBIN
+};
+
+enum class MovementDirection
+{
+	UP,
+	DOWN, 
+	RIGHT,
+	LEFT
 };
 
 class ColliderComponent;
-
+class Scene;
 
 class EnemyComponent final : public BaseComponent
 {
@@ -29,10 +37,25 @@ protected:
 private:
 	sf::Vector2f m_Velocity;
 	ColliderComponent* m_pCollider;
+	Scene* m_pSceneRef;
 
-	float m_MovementAcceleration;
+	EnemyType m_Type;
+	//MovementDirection m_Direction;
+
+	sf::Vector2f m_Direction;
+
+	std::vector<ColliderComponent*> m_pDirt;
+
+
+	float m_MovementAcceleration
+		, m_DetectionRange
+		, m_TimeForHobbin;
 
 	void HandleMovement(float dt);
-	void HandleCollisions();
+	void HandleEnemyType();
+
+	//std::map<MovementDirection, SDL_Rect> m_Casts;
+
+	std::array<SDL_Rect, 4> m_Casts;
 };
 

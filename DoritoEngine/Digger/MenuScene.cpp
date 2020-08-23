@@ -14,7 +14,7 @@ void MenuScene::Initialize()
 {
 	auto window = GetGameInfo().windowSettings;
 
-	auto pBackground = DoritoFactory::MakeSprite(this, "Digger/TitleScreen.png");
+	auto pBackground = DoritoFactory::MakeSprite(this, "TitleScreen.png");
 	pBackground->GetTransform()->SetPosition(static_cast<float>(window.width / 2),
 		static_cast<float>(window.height / 2));
 	AddObject(pBackground);

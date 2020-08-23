@@ -45,7 +45,7 @@ void FireBallComponent::HandleInTrigger()
 		if (other->GetTag() == "Digger")
 			return;
 
-		if (other->GetTag() == "Enemy")
+		if (other->GetTag() == "Nobbin" || other->GetTag() == "Hobbin")
 		{
 			auto comp = other->GetComponent<EnemyComponent>();
 

@@ -82,12 +82,13 @@ void DiggerComponent::InitInput()
 		auto go = GetGameObject();
 		go;
 
-		auto direction = sf::Vector2f(cosf(GetParentTransform()->GetRotationRadians()), sinf(GetParentTransform()->GetRotationRadians()));
+		auto direction = sf::Vector2f(cosf(GetParentTransform()->GetRotationRadians())
+			, sinf(GetParentTransform()->GetRotationRadians()));
 
 		if (std::signbit(GetParentTransform()->GetScale().x))
 			direction *= -1.f;
 
-		auto pBubble = DoritoFactory::MakeFireball(GetGameObject()->GetScene(), "Digger/fireball.png", DoritoMath::Normalize(direction));
+		auto pBubble = DoritoFactory::MakeFireball(GetGameObject()->GetScene(), "fireball.png", DoritoMath::Normalize(direction));
 		auto pos = GetParentTransform()->GetPosition();
 		pBubble->GetTransform()->SetScale(0.1f, 0.1f);
 		pBubble->GetTransform()->SetPosition(pos);

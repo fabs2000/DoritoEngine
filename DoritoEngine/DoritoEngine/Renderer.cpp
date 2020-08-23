@@ -11,23 +11,27 @@ void Renderer::Init(const GameInfo::WindowSettings& windowSettings)
 	m_pRenderer.create(sf::VideoMode(windowSettings.width, windowSettings.height), windowSettings.title,
 		sf::Style::Titlebar | sf::Style::Close);
 
-	if (!m_pRenderer.isOpen()) 
+	if (!m_pRenderer.isOpen())
 	{
 		throw std::runtime_error(std::string("SFML Window not created"));
 	}
 
 	m_pRenderer.setVerticalSyncEnabled(windowSettings.isVsyncOn);
+	m_FrameCap = windowSettings.frameCap;
 
-	m_pRenderer.setFramerateLimit(windowSettings.frameCap);
+	m_pRenderer.setFramerateLimit(m_FrameCap);
 }
 
 void Renderer::Render()
 {
-	m_pRenderer.clear();
+	while (m_pRenderer.isOpen())
+	{
+		m_pRenderer.clear();
 
-	SceneManager::GetInstance()->Render();
-	
-	m_pRenderer.display();
+		SceneManager::GetInstance()->Render();
+
+		m_pRenderer.display();
+	}
 }
 
 void Renderer::RenderSprite(sf::Sprite* pSprite, TransformComponent* transform)

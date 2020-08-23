@@ -234,7 +234,7 @@ namespace DoritoFactory
 		std::vector<GameObject*> pCorners;
 		for (UINT i{}; i < 4; i++)
 		{
-			auto pCorner = MakeDirtBlock(pScene, "Digger/dirt_corner.png");
+			auto pCorner = MakeDirtBlock(pScene, "dirt_corner.png");
 			pCorner->GetTransform()->SetScale(generalScale);
 			pScene->AddObject(pCorner);
 
@@ -260,7 +260,7 @@ namespace DoritoFactory
 		std::vector<GameObject*> pHorizontals;
 		for (UINT i{}; i < 2; i++)
 		{
-			auto pSide = MakeDirtBlock(pScene, "Digger/dirt_horizontal.png");			
+			auto pSide = MakeDirtBlock(pScene, "dirt_horizontal.png");			
 			pSide->GetTransform()->SetScale(generalScale);
 			pScene->AddObject(pSide);
 
@@ -275,7 +275,7 @@ namespace DoritoFactory
 		std::vector<GameObject*> pVerticals;
 		for (UINT i{}; i < 2; i++)
 		{
-			auto pSide = MakeDirtBlock(pScene, "Digger/dirt_vertical.png");
+			auto pSide = MakeDirtBlock(pScene, "dirt_vertical.png");
 			pSide->GetTransform()->SetScale(generalScale);
 			pScene->AddObject(pSide);
 

@@ -38,29 +38,37 @@ void ChunkCenterComponent::HandleInTrigger()
 
 		//std::cout << first->GetTransform()->GetPosition().x << ", " << first->GetTransform()->GetPosition().y << "\n";
 
-		if (other->GetTag() == "Digger")
+		if (other->GetTag() == "Digger" || other->GetTag() == "Hobbin")
 		{
 			GameObject* pGold = nullptr;
-			first->Delete();
 
 			switch (m_ChunkType)
 			{
 			case ChunkType::EMERALD:
-				first->GetScene()->GetSubject()->Notify(0);
+				if (other->GetTag() == "Digger")
+				{
+					first->GetScene()->GetSubject()->Notify(0);
+					first->Delete();
+				}
 				break;
 
 			case ChunkType::GOLD:
+				if (other->GetTag() == "Digger")
+				{
+					pGold = DoritoFactory::MakeGoldBag(GetGameObject()->GetScene(), "gold.png");
+					pGold->GetTransform()->SetScale(0.2f, 0.2f);
+					pGold->GetTransform()->SetPosition(GetParentTransform()->GetPosition());
+					GetGameObject()->GetScene()->AddObject(pGold);
 
-				pGold = DoritoFactory::MakeGoldBag(GetGameObject()->GetScene(), "Digger/gold.png");
-				pGold->GetTransform()->SetScale(0.2f, 0.2f);
-				pGold->GetTransform()->SetPosition(GetParentTransform()->GetPosition());
-				GetGameObject()->GetScene()->AddObject(pGold);
+					first->Delete();
+				}
 
 				//std::cout << "Spawned Gold\n";
 				break;
 
 			case ChunkType::DIRT:
 				//Does nothing
+				first->Delete();
 				break;
 			}
 		}

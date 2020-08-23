@@ -13,6 +13,9 @@ Scene::Scene(const std::string& name, const GameInfo& gameInfo)
 	, m_pDynamicCollDel(std::vector<ColliderComponent*>())
 	, m_pStaticCollDel(std::vector<ColliderComponent*>())
 
+	, m_pPhysicsComps(std::vector<ColliderComponent*>())
+	, m_pPhysicsCompsDel(std::vector<ColliderComponent*>())
+
 	, m_pSubject(new Subject())
 	, m_pGrid(new CollisionGrid())
 	, m_GameInfo(gameInfo)
@@ -26,13 +29,13 @@ Scene::~Scene()
 
 	for (auto& pSceneObject : m_pBasicObjects)
 	{
-		//if (pSceneObject->GetTag() == "Digger")
-		//	std::cout << "dig\n";
-
 		SafeDelete(pSceneObject);
 	}
 
 	m_pBasicObjects.clear();
+
+	m_pPhysicsComps.clear();
+	m_pPhysicsCompsDel.clear();
 	
 	m_pDynamicColliders.clear();
 	m_pStaticColliders.clear();
@@ -56,11 +59,12 @@ void Scene::AddObject(GameObject* object)
 			case ColliderType::DYNAMIC:
 				m_pDynamicColliders.push_back(comp);
 				break;
-
 			case ColliderType::STATIC:
 				m_pStaticColliders.push_back(comp);
 				break;
 			}
+
+			//m_pPhysicsComps.push_back(comp);
 		}
 	}
 
@@ -82,15 +86,29 @@ void Scene::RemoveObject(GameObject* object)
 			case ColliderType::DYNAMIC:
 				m_pDynamicCollDel.push_back(comp);		
 				break;
-
 			case ColliderType::STATIC:
 				m_pStaticCollDel.push_back(comp);
 				break;
 			}
+
+			//m_pPhysicsCompsDel.push_back(comp);
 		}
 	}
 
 	SafeDelete(object);
+}
+
+GameObject* Scene::GetObjectWithTag(const std::string& tag)
+{
+	for (auto& obj : m_pBasicObjects)
+	{
+		if (obj->GetTag() == tag)
+			return obj;
+	}
+	
+	std::cout << "No object with tag: " + tag << "\n";
+
+	return nullptr;
 }
 
 void Scene::ClearObjectsWithTag(const std::string& tag)
@@ -136,13 +154,22 @@ void Scene::RootUpdate(float dt)
 		}
 	}
 
+	//RemoveAllColliders();
+
 	RemoveStaticColliders();
 	RemoveDynamicColliders();
 }
 
 void Scene::RootCollisionUpdate()
 {
-	//m_pGrid->HandleCollisions();
+	//for (auto& coll : m_pPhysicsComps)
+	//{
+	//	for (auto& otherColl : m_pPhysicsComps)
+	//	{
+	//		if (coll != otherColl)
+	//			coll->CheckCollisions(otherColl);
+	//	}
+	//}
 
 	for (auto& dynamicColl : m_pDynamicColliders)
 	{
@@ -210,4 +237,19 @@ void Scene::RemoveStaticColliders()
 	m_pStaticCollDel.clear();
 
 	//std::cout << "Static Colliders: " << m_pStaticColliders.size() << "\n";
+}
+
+void Scene::RemoveAllColliders()
+{
+ 	for (auto it = m_pPhysicsComps.begin(); it != m_pPhysicsComps.end(); it++)
+	{
+		auto pCompIt = std::find(m_pPhysicsComps.begin(), m_pPhysicsComps.end(), *it);
+
+		if (pCompIt != m_pPhysicsComps.end())
+		{
+			m_pPhysicsComps.erase(pCompIt);
+		}
+	}
+
+	m_pPhysicsCompsDel.clear();
 }

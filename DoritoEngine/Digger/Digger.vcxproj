@@ -196,7 +196,6 @@ xcopy "$(SolutionDir)3rdParty\SFML\SFML(x64)\bin\sfml-window-2.dll" "$(OutputPat
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AIController.cpp" />
     <ClCompile Include="ChunkCenterComponent.cpp" />
     <ClCompile Include="DiggerComponent.cpp" />
     <ClCompile Include="DirtBlockComponent.cpp" />
@@ -212,7 +211,6 @@ xcopy "$(SolutionDir)3rdParty\SFML\SFML(x64)\bin\sfml-window-2.dll" "$(OutputPat
     <ClCompile Include="TestScene.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AIController.h" />
     <ClInclude Include="ChunkCenterComponent.h" />
     <ClInclude Include="DiggerComponent.h" />
     <ClInclude Include="DirtBlockComponent.h" />

@@ -35,6 +35,10 @@ private:
 	
 	int m_FPSNb;
 
+	float m_EnemySpawnTimer;
+	int m_MaxEnemies
+		, m_EnemyCount;
+
 	LevelState m_LevelState;
 };
 
