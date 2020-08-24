@@ -6,6 +6,7 @@
 
 TextComponent::TextComponent(const std::string& text, const std::string& file, unsigned int size)
 	: m_pText(ResourceManager::GetInstance()->LoadText(text, file, size))
+	, m_Text(text)
 {
 }
 
@@ -14,9 +15,8 @@ void TextComponent::Initialize()
 
 }
 
-void TextComponent::Update(float dt)
+void TextComponent::Update(float)
 {
-	dt;
 }
 
 void TextComponent::Render()
@@ -26,7 +26,8 @@ void TextComponent::Render()
 
 void TextComponent::SetText(const std::string& textToDisplay)
 {
-	m_pText->setString(textToDisplay);
+	m_Text = textToDisplay;
+	m_pText->setString(m_Text);
 }
 
 void TextComponent::SetSize(unsigned int size)

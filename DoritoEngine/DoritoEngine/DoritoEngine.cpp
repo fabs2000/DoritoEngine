@@ -43,13 +43,6 @@ void DoritoEngine::Run()
 #endif 
 
 	auto renderer = Renderer::GetInstance();
-	renderer->GetRenderer().setActive(false);
-
-	//Sends drawing to separate thread
-	auto render = std::bind(&Renderer::Render, renderer);
-	sf::Thread rendThread(render, &renderer->GetRenderer());
-
-	rendThread.launch();
 
 	auto prevTime = std::chrono::high_resolution_clock::now();
 
@@ -62,6 +55,8 @@ void DoritoEngine::Run()
 		m_GameInfo.pInput->ProcessInput(renderer->GetRenderer());
 		
 		m_GameInfo.pSceneManager->Update(dt);		
+
+		renderer->Render();
 	}
 }
 

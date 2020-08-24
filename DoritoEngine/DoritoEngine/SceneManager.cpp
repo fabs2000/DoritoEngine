@@ -10,6 +10,7 @@ SceneManager::SceneManager()
 	, m_IsInit(false)
 {}
 
+
 void SceneManager::Update(float dt)
 {
 	if (m_pNewActiveScene)
@@ -82,22 +83,15 @@ Scene* SceneManager::GetScene(const std::string& sceneName)
 	return nullptr;
 }
 
-void SceneManager::RemoveScene(const std::string& sceneName)
+bool SceneManager::IsActiveScene(const std::string& sceneName)
 {
 	const auto it = find_if(m_pScenes.begin(), m_pScenes.end(), [sceneName](Scene* scene)
 		{
 			return strcmp(scene->GetName().c_str(), sceneName.c_str()) == 0;
 		});
 
-	if (it != m_pScenes.end())
-	{
-		auto scene = (*it);
-		SafeDelete(scene);
-		m_pScenes.erase(it);
-	}
-	else
-	{
-		std::cout << "No scene found\n";
-	}
-}
+	if (*it == m_pActiveScene)
+		return true;
 
+	return false;
+}

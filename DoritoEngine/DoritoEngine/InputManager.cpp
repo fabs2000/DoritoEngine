@@ -24,9 +24,16 @@ void InputManager::ProcessInput(sf::RenderWindow& window)
 			break;
 		}
 		window.setKeyRepeatEnabled(false);
+
+		if (eS.type == sf::Event::TextEntered)
+		{
+			m_InputText += eS.text.unicode;
+		}
 		
 		RegisterKeyboardInput(eS);
 	}
+
+
 
 	//Gamepad Input
 	RegisterGamepadInput();

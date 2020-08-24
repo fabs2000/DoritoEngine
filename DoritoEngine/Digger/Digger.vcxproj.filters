@@ -69,6 +69,9 @@
     <ClCompile Include="HUDComponent.cpp">
       <Filter>GameElements</Filter>
     </ClCompile>
+    <ClCompile Include="EntityControllerComponent.cpp">
+      <Filter>GameElements\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -109,6 +112,9 @@
     </ClInclude>
     <ClInclude Include="MenuScene.h">
       <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityControllerComponent.h">
+      <Filter>GameElements\Player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

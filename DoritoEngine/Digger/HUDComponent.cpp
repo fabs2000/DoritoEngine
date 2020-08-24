@@ -32,7 +32,7 @@ void HUDComponent::Initialize()
 
 	for (int32_t i{}; i < m_pGameStats->GetLives(); i++)
 	{
-		auto sprite = DoritoFactory::MakeSprite(m_pSceneRef, "Digger/digger.png");
+		auto sprite = DoritoFactory::MakeSprite(m_pSceneRef, "digger.png");
 		m_pLivesSprite.push_back(sprite->GetComponent<SpriteComponent>());
 
 		sprite->GetTransform()->SetScale(0.2f, 0.2f);

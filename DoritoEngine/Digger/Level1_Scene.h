@@ -10,6 +10,7 @@ enum class LevelState
 
 class TextComponent;
 class PlayerStatsSystem;
+class GameObject;
 
 class Level_1 : public Scene
 {
@@ -32,6 +33,7 @@ private:
 	PlayerStatsSystem* m_pGameStats;
 
 	GameObject* m_pDigger;
+	GameObject* m_pEnemyPlayer;
 	
 	int m_FPSNb;
 
@@ -39,6 +41,17 @@ private:
 	int m_MaxEnemies
 		, m_EnemyCount;
 
-	LevelState m_LevelState;
+	LevelState m_GameState;
+
+	sf::Vector2f m_EnemySpawnPos;
+
+	void ResetToLevel1();
+	void SetLevel2();
+	void SetLevel3();
+
+	void EnemySpawner(float dt);
+
+	bool m_FirstLevelInit
+		, m_SecondPlayerJoined;
 };
 

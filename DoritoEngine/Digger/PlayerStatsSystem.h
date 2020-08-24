@@ -36,7 +36,8 @@ private:
 	uint32_t m_EmeraldCount
 		, m_EmeraldStreak;
 
-	uint32_t m_EnemyCount;
+	uint32_t m_EnemyCount
+		, m_MaxEnemies;
 
 	bool m_IsGameOver
 		, m_LostLife

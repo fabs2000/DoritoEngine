@@ -56,6 +56,9 @@ void FireBallComponent::HandleInTrigger()
 				first->GetScene()->GetSubject()->Notify(1);
 			}
 		}
+
+		if(other->GetTag() == "Dirt" || other->GetTag() == "Limit")
+			first->Delete();
 	};
 
 	m_pCollider->SetTriggerCallback(killEnemy);

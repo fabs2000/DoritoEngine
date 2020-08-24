@@ -27,8 +27,10 @@ public:
 	void RemoveObject(GameObject* object);
 
 	GameObject* GetObjectWithTag(const std::string& tag);
+	std::vector<GameObject*> GetObjectsWithEitherTag(const std::string& tag, const std::string& tag2);
 	void ClearObjectsWithTag(const std::string& tag);
 	void ClearAllObjects();
+
 
 	const std::string& GetName() const { return m_Name; }
 	Subject* GetSubject() const { return m_pSubject; }

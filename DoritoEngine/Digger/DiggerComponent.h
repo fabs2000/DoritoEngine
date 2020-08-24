@@ -11,11 +11,12 @@ enum class DiggerState
 
 class ColliderComponent;
 class SpriteComponent;
+class EntityControllerComponent;
 
 class DiggerComponent final : public BaseComponent
 {
 public:
-	explicit DiggerComponent(PlayerControllers playerID = PlayerControllers::Player1);
+	DiggerComponent();
 
 	DiggerComponent(const DiggerComponent&) = delete;
 	DiggerComponent(DiggerComponent&&) = delete;
@@ -31,15 +32,13 @@ protected:
 	void Render() override;
 
 private:
-	PlayerControllers m_PlayerID;
-
-	sf::Vector2f m_Velocity;
-	float m_MovementAcceleration;
-
 	ColliderComponent* m_pCollider;
 	SpriteComponent* m_pSprite;
+	EntityControllerComponent* m_pController;
 
 	GameInfo m_GameInfoRef;
+
+	sf::Vector2f m_StartPos;
 
 	float m_FireTimer
 		, m_FireRate
@@ -49,8 +48,5 @@ private:
 
 	//Actions
 	void InitInput();
-
-	void HandleMovement(float dt);
 	void HandleCollisions();
-
 };

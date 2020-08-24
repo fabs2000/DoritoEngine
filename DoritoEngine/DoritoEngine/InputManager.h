@@ -162,6 +162,9 @@ public:
 	void BindGamepadAxisAction(const std::string& actionName, DoritoAxis func);
 	void BindKeyboardAction(const std::string& actionName, DoritoAction func);
 
+	//const std::string& GetInputText() const { return m_InputText; }
+	//void CleanInputText() { m_InputText = " "; }
+
 private:
 	InputManager() = default;
 
@@ -202,4 +205,6 @@ private:
 		std::map<std::string, KeyBoardEvent>();
 
 	bool m_IsKeyDown = false;
+
+	sf::String m_InputText;
 };

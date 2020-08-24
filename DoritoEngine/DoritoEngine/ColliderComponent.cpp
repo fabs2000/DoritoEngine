@@ -86,7 +86,10 @@ void ColliderComponent::Update(float)
 
 void ColliderComponent::Render()
 {
-	Renderer::GetInstance()->RenderShape(m_DebugShape);
+	if (Renderer::GetInstance()->GetDebugRendering())
+	{
+		Renderer::GetInstance()->RenderShape(m_DebugShape);
+	}
 }
 
 void ColliderComponent::SetColliderSettings()

@@ -20,14 +20,14 @@ GoldComponent::GoldComponent()
 	, m_BreakingSpeed(800.f)
 	, m_BreakingDistance(205.f)
 	, m_IsColliding(false)
-	, m_FallTimer(0.6f)
+	, m_FallTimer(0.8f)
 {
 }
 
 void GoldComponent::Initialize()
 {
-	auto colliders = GetGameObject()->GetComponents<ColliderComponent>();
 	m_pSprite = GetGameObject()->GetComponent<SpriteComponent>();
+	auto colliders = GetGameObject()->GetComponents<ColliderComponent>();
 
 	for (auto& coll : colliders)
 	{

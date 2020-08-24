@@ -1,4 +1,5 @@
 #include "Scene.h"
+#include <set>
 
 class TextComponent;
 
@@ -18,5 +19,8 @@ public:
 	void Render() const override;
 
 private:
-	TextComponent* m_pNameScore;
+	std::vector<TextComponent*> m_pNamesScores;
+	std::vector<int> m_AllScores;
+
+	bool m_InitScores;
 };

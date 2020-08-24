@@ -34,6 +34,6 @@ private:
 	ChunkType m_ChunkType;
 
 	void HandleInTrigger();
-
+	void HandleInTrigger(GameObject* first, GameObject* other);
 };
 

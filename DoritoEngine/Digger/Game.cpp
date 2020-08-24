@@ -26,7 +26,10 @@ void Game::LoadGame(const GameInfo& gameInfo)
 
 
 #ifdef GAME
+	
+	gameInfo.pSceneManager->CreateScene(new Level_1("Level1", gameInfo));
 	gameInfo.pSceneManager->CreateScene(new MenuScene("Menu", gameInfo));
 	gameInfo.pSceneManager->SetActiveGameScene("Menu");
+
 #endif
 }

@@ -30,6 +30,7 @@ public:
 	void SetScene(Scene* pScene) { m_pScene = pScene; }
 
 	void AddComponent(BaseComponent* pComp);
+	void AddComponentUpd(BaseComponent* pComp);
 	void RemoveComponent(BaseComponent* pComp);
 
 	bool GetMarkedForDelete() { return m_MarkedForDelete; }

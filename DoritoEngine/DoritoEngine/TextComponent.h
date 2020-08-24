@@ -27,4 +27,6 @@ protected:
 
 private:
 	sf::Text* m_pText;
+
+	std::string m_Text;
 };

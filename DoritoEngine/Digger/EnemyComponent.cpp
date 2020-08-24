@@ -2,30 +2,64 @@
 #include "EnemyComponent.h"
 
 #include "ColliderComponent.h"
+#include "SpriteComponent.h"
 #include "GameObject.h"
 #include "Scene.h"
 #include "Renderer.h"
+#include "GoldComponent.h"
+#include "DiggerComponent.h"
 
 #include "MathHelpers.h"
 
 
-EnemyComponent::EnemyComponent()
+EnemyComponent::EnemyComponent(const sf::Vector2f& startPos)
 	: m_Velocity(0.f, 0.f)
 	, m_pCollider(nullptr)
+	, m_pTrigger(nullptr)
 	, m_pSceneRef(nullptr)
+	, m_pSprite(nullptr)
 	, m_Type(EnemyType::NOBBIN)
-	//, m_Direction(MovementDirection::LEFT)
-	, m_Direction(0.f,0.f)
-	, m_MovementAcceleration(120.f)
-	, m_DetectionRange(80.f)
+	, m_Direction(0.f, 0.f)
+	, m_StartPos(startPos)
+	, m_MovementAcceleration(130.f)
+	, m_DetectionRange(500.f)
 	, m_TimeForHobbin(15.f)
-	//, m_Casts(std::map<MovementDirection, SDL_Rect>())
+	, m_Casts(std::array<SDL_Rect, 4>())
+	, m_ControlledByPlayer(false)
+	, m_FollowingPlayer(false)
 {
 }
 
 void EnemyComponent::Initialize()
 {
 	m_pSceneRef = GetGameObject()->GetScene();
+	m_pSprite = GetGameObject()->GetComponent<SpriteComponent>();
+	auto colliders = GetGameObject()->GetComponents<ColliderComponent>();
+
+	for (auto& coll : colliders)
+	{
+		if (coll->GetIsTrigger())
+		{
+			m_pTrigger = coll;
+			continue;
+		}
+
+		m_pCollider = coll;
+	}
+
+	if ((m_pTrigger && m_pCollider) &&
+		(m_pTrigger->GetIsTrigger() && !m_pCollider->GetIsTrigger()))
+	{
+		HandleCollisions();
+	}
+
+
+	m_pCollider = GetGameObject()->GetComponent<ColliderComponent>();
+
+	if (m_pCollider->GetIsTrigger())
+	{
+
+	}
 
 	SDL_Rect up;
 	up.x = 0; up.y = 0;
@@ -43,14 +77,6 @@ void EnemyComponent::Initialize()
 	left.x = 0; left.y = 0;
 	left.w = -70; left.h = 5;
 
-	//m_Casts =
-	//{
-	//	{MovementDirection::UP, up},
-	//	{MovementDirection::DOWN, down},
-	//	{MovementDirection::RIGHT, right},
-	//	{MovementDirection::LEFT, left}
-	//};
-
 	m_Casts.at(0) = up;
 	m_Casts.at(1) = down;
 	m_Casts.at(2) = right;
@@ -59,69 +85,55 @@ void EnemyComponent::Initialize()
 
 void EnemyComponent::Update(float dt)
 {
-	HandleEnemyType();
+	if (!m_ControlledByPlayer)
+	{
+		if (m_TimeForHobbin > 0.f)
+			m_TimeForHobbin -= dt;
 
-	//switch (m_Direction)
-	//{
-	//case MovementDirection::UP:
-	//	std::cout << "UP\n";
-	//	m_Velocity.y = -m_MovementAcceleration;
-	//	m_Velocity.x = 0;
-	//	break;
-	//case MovementDirection::DOWN:
-	//	std::cout << "DOWN\n";
-	//	m_Velocity.y = m_MovementAcceleration;
-	//	m_Velocity.x = 0;
-	//	break;
-	//case MovementDirection::LEFT:
-	//	std::cout << "LEFT\n";
-	//	m_Velocity.x = -m_MovementAcceleration;
-	//	m_Velocity.y = 0;
-	//	break;
-	//case MovementDirection::RIGHT:
-	//	std::cout << "RIGHT\n";
-	//	m_Velocity.x = m_MovementAcceleration;
-	//	m_Velocity.y = 0;
-	//	break;
-	//}
+		if (m_TimeForHobbin <= 0.f && m_Type != EnemyType::HOBBIN)
+		{
+			m_Type = EnemyType::HOBBIN;
+			m_MovementAcceleration = 120.f;
+			m_DetectionRange = 700.f;
+			GetGameObject()->SetTag("Hobbin");
+			m_pSprite->SetTexture("hobbin.png");
+		}
 
-	float angleToPlayer = DoritoMath::RadiansToDegrees(atan2f(m_Direction.x, m_Direction.y));
+		HandleDirToPlayer();
 
-	std::cout << angleToPlayer << "\n";
+		float angleToPlayer = DoritoMath::RadiansToDegrees(atan2f(m_Direction.x, m_Direction.y));
 
-	//DOWN
-	if (angleToPlayer < 45.f && angleToPlayer > -45.f)
-		m_Direction = sf::Vector2f(0, 1);
-	//RIGHT
-	else if (angleToPlayer > 45.f && angleToPlayer < 135.f)
-		m_Direction = sf::Vector2f(1, 0);
-	//UP
-	else if (angleToPlayer > 135.f && angleToPlayer < -135.f)
-		m_Direction = sf::Vector2f(0, -1);
-	//LEFT
-	else if (angleToPlayer > -135.f && angleToPlayer < -45.f)
-		m_Direction = sf::Vector2f(-1,0);
+		//DOWN
+		if (angleToPlayer < 45.f && angleToPlayer > -45.f)
+			m_Direction = sf::Vector2f(0, 1);
+		//RIGHT
+		else if (angleToPlayer > 45.f && angleToPlayer < 135.f)
+			m_Direction = sf::Vector2f(1, 0);
+		//UP
+		else if (angleToPlayer > 135.f && angleToPlayer < -135.f)
+			m_Direction = sf::Vector2f(0, -1);
+		//LEFT
+		else if (angleToPlayer > -135.f && angleToPlayer < -45.f)
+			m_Direction = sf::Vector2f(-1, 0);
 
-	HandleMovement(dt);
+		HandleMovement(dt);
+	}
 }
 
 void EnemyComponent::Render()
 {
 	if (Renderer::GetInstance()->GetDebugRendering())
 	{
-		for (auto& box : m_Casts)
-		{
-			sf::RectangleShape debugShape{};
+		sf::CircleShape range;
+		range.setRadius(m_DetectionRange);
+		range.setOrigin(GetParentTransform()->GetOrigin());
+		range.setPosition(GetParentTransform()->GetPosition());
+		range.setPointCount(60);
+		range.setFillColor(sf::Color(0, 0, 0, 127));
+		range.setOutlineThickness(1.f);
+		range.setOutlineColor(sf::Color(255, 0, 0, 127));
 
-			debugShape.setPosition(sf::Vector2f(static_cast<float>(box.x), static_cast<float>(box.y)));
-			debugShape.setSize(sf::Vector2f(static_cast<float>(box.w), static_cast<float>(box.h)));
-
-			debugShape.setFillColor(sf::Color(0, 0, 0, 127));
-			debugShape.setOutlineThickness(1.f);
-			debugShape.setOutlineColor(sf::Color(255, 0, 0, 127));
-
-			Renderer::GetInstance()->RenderShape(debugShape);
-		}
+		Renderer::GetInstance()->RenderShape(range);
 	}
 }
 
@@ -139,51 +151,21 @@ void EnemyComponent::HandleMovement(float dt)
 	//	GetParentTransform()->GetPosition().y << "\n";
 }
 
-void EnemyComponent::HandleEnemyType()
+void EnemyComponent::HandleDirToPlayer()
 {
+	auto enemyPos = GetParentTransform()->GetPosition();
 	auto diggerPos = m_pSceneRef->GetObjectWithTag("Digger")->GetTransform()->GetPosition();
 
-	auto directionToPlayer = diggerPos - GetParentTransform()->GetPosition();
+	float distance = DoritoMath::Distance(enemyPos, diggerPos);
 
-	if (m_Type == EnemyType::NOBBIN)
-	{
-		m_pDirt = m_pSceneRef->GetStaticColliders();
-
-		//Update raycast Pos
-		for (auto& box : m_Casts)
-		{
-			box.x = static_cast<int>(GetParentTransform()->GetPosition().x);
-			box.y = static_cast<int>(GetParentTransform()->GetPosition().y);
-		}
-
-		//For all Raycasts compare to all colliders 
-		for (auto& staticColl : m_pDirt)
-		{
-			for (auto& direction : m_Casts)
-			{
-				SDL_Rect other = staticColl->GetCollider();
-
-				auto enemyPos = GetParentTransform()->GetPosition();
-
-				if (enemyPos.x == 0.f && enemyPos.y == 0.f)
-					continue;
-
-				float distance = DoritoMath::Distance(enemyPos,
-					sf::Vector2f(static_cast<float>(other.x), static_cast<float>(other.y)));
-
-				if (distance < m_DetectionRange)
-				{
-					if (!SDL_HasIntersection(&direction, &other))
-					{
-						m_Direction = DoritoMath::Normalize(directionToPlayer);
-					}
-				}
-			}
-		}
-	}
+	if (distance < m_DetectionRange)
+		m_FollowingPlayer = true;
 	else
+		m_FollowingPlayer = false;
+
+	if (m_FollowingPlayer)
 	{
-		GetGameObject()->SetTag("Hobbin");
+		auto directionToPlayer = diggerPos - GetParentTransform()->GetPosition();
 
 		if (std::fabs(directionToPlayer.x) > std::fabs(directionToPlayer.y)
 			|| DoritoMath::FEquals(directionToPlayer.x, directionToPlayer.y))
@@ -201,4 +183,119 @@ void EnemyComponent::HandleEnemyType()
 				m_Direction = sf::Vector2f(0.f, 1.f);
 		}
 	}
+
+
+	if (enemyPos.x > 1600.f || enemyPos.x < 0.f  || enemyPos.y > 900.f || enemyPos.y < 102.f)
+		GetParentTransform()->SetPosition(m_StartPos);
+	//if (m_Type == EnemyType::NOBBIN)
+		//{
+		//	m_pDirt = m_pSceneRef->GetStaticColliders();
+		//	//Update raycast Pos
+		//	for (auto& box : m_Casts)
+		//	{
+		//		box.x = static_cast<int>(GetParentTransform()->GetPosition().x);
+		//		box.y = static_cast<int>(GetParentTransform()->GetPosition().y);
+		//	}
+		//	//For all Raycasts compare to all colliders 
+		//	for (auto& staticColl : m_pDirt)
+		//	{
+		//		for (auto& direction : m_Casts)
+		//		{
+		//			SDL_Rect other = staticColl->GetCollider();
+		//			auto enemyPos = GetParentTransform()->GetPosition();
+		//			if (enemyPos.x == 0.f && enemyPos.y == 0.f)
+		//				continue;
+		//
+		//			float distance = DoritoMath::Distance(enemyPos,
+		//				sf::Vector2f(static_cast<float>(other.x), static_cast<float>(other.y)));
+		//			if (distance < m_DetectionRange)
+		//			{
+		//				if (!SDL_HasIntersection(&direction, &other))
+		//				{
+		//					m_Direction = DoritoMath::Normalize(directionToPlayer);
+		//				}
+		//			}
+		//		}
+		//	}
+		//}
+		//else
+		//{
+		//	if (std::fabs(directionToPlayer.x) > std::fabs(directionToPlayer.y)
+		//		|| DoritoMath::FEquals(directionToPlayer.x, directionToPlayer.y))
+		//	{
+		//		if (std::signbit(directionToPlayer.x))
+		//			m_Direction = sf::Vector2f(-1.f, 0.f);
+		//		else
+		//			m_Direction = sf::Vector2f(1.f, 0.f);
+		//	}
+		//	else
+		//	{
+		//		if (std::signbit(directionToPlayer.y))
+		//			m_Direction = sf::Vector2f(0.f, -1.f);
+		//		else
+		//			m_Direction = sf::Vector2f(0.f, 1.f);
+		//	}
+		//}
+}
+
+void EnemyComponent::HandleCollisions()
+{
+	auto triggerCallback = [this](GameObject* first, GameObject* other)
+	{
+		if (other->GetTag() == "Digger")
+		{
+			auto digger = other->GetComponent<DiggerComponent>();
+			auto sprite = other->GetComponent<SpriteComponent>();
+
+			if (digger->GetState() == DiggerState::MOVING)
+			{
+				digger->SetState(DiggerState::DEAD);
+
+				first->GetScene()->GetSubject()->Notify(3);
+				sprite->SetTexture("grave.png");
+			}
+		}
+	};
+
+	m_pTrigger->SetTriggerCallback(triggerCallback);
+
+	auto collisionCallback = [this](const SDL_Rect& inter, GameObject* first, GameObject* other)
+	{
+		if (m_Type == EnemyType::NOBBIN)
+		{
+			if (other->GetTag() == "Dirt" || other->GetTag() == "Limit")
+			{
+				auto firstPos = first->GetTransform()->GetPosition();
+				auto vector = firstPos - other->GetTransform()->GetPosition();
+				float angle = DoritoMath::RadiansToDegrees(std::atan2f(vector.x, vector.y));
+
+				if (angle > 60.f && angle < 120.f)
+				{
+					first->GetTransform()->SetPosition(firstPos.x + static_cast<float>(inter.w), firstPos.y);
+
+					m_Direction = sf::Vector2f(0.f, -1.f);
+				}
+				else if (angle < -60.f && angle > -120.f)
+				{
+					first->GetTransform()->SetPosition(firstPos.x - static_cast<float>(inter.w), firstPos.y + static_cast<float>(inter.h));
+
+					m_Direction = sf::Vector2f(0.f, 1.f);
+				}
+				else if (angle < 60.f && angle > -60.f)
+				{
+					first->GetTransform()->SetPosition(firstPos.x, firstPos.y + static_cast<float>(inter.h));
+
+					m_Direction = sf::Vector2f(1.f, 0.f);
+				}
+				else if (angle > 120.f && angle > -120.f)
+				{
+					first->GetTransform()->SetPosition(firstPos.x, firstPos.y - static_cast<float>(inter.h));
+
+					m_Direction = sf::Vector2f(-1.f, 0.f);
+				}
+			}
+		}
+	};
+
+	m_pCollider->SetCollisionCallback(collisionCallback);
 }

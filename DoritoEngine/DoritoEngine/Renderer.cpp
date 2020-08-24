@@ -24,14 +24,11 @@ void Renderer::Init(const GameInfo::WindowSettings& windowSettings)
 
 void Renderer::Render()
 {
-	while (m_pRenderer.isOpen())
-	{
-		m_pRenderer.clear();
+	m_pRenderer.clear();
 
-		SceneManager::GetInstance()->Render();
+	SceneManager::GetInstance()->Render();
 
-		m_pRenderer.display();
-	}
+	m_pRenderer.display();
 }
 
 void Renderer::RenderSprite(sf::Sprite* pSprite, TransformComponent* transform)

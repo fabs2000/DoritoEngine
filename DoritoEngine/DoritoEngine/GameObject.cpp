@@ -33,6 +33,13 @@ void GameObject::AddComponent(BaseComponent* pComp)
 	m_pComponents.push_back(pComp);
 }
 
+void GameObject::AddComponentUpd(BaseComponent* pComp)
+{
+	pComp->SetGameObject(this);
+	pComp->RootInitialize();
+	m_pComponents.push_back(pComp);
+}
+
 void GameObject::RemoveComponent(BaseComponent* pComp)
 {
 	auto it = find(m_pComponents.begin(), m_pComponents.end(), pComp);

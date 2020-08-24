@@ -111,6 +111,19 @@ GameObject* Scene::GetObjectWithTag(const std::string& tag)
 	return nullptr;
 }
 
+std::vector<GameObject*> Scene::GetObjectsWithEitherTag(const std::string& tag, const std::string& tag2)
+{
+	std::vector<GameObject*> objects;
+
+	for (auto& obj : m_pBasicObjects)
+	{
+		if (obj->GetTag() == tag || obj->GetTag() == tag2)
+			objects.push_back(obj);
+	}
+
+	return objects;
+}
+
 void Scene::ClearObjectsWithTag(const std::string& tag)
 {
 	for (auto& obj : m_pBasicObjects)
@@ -139,7 +152,6 @@ void Scene::RootUpdate(float dt)
 
 	for (auto pObj = m_pBasicObjects.begin(); pObj != m_pBasicObjects.end();)
 	{
-		(*pObj)->RootUpdate(dt);
 
 		//https://stackoverflow.com/a/16269740
 		if ((*pObj)->GetMarkedForDelete())
@@ -150,6 +162,7 @@ void Scene::RootUpdate(float dt)
 		}
 		else
 		{
+			(*pObj)->RootUpdate(dt);
 			++pObj;
 		}
 	}

@@ -3,7 +3,7 @@
 #include "Scene.h"
 
 PlayerStatsSystem::PlayerStatsSystem(uint32_t maxEmeralds, uint32_t maxEnemies)
-	: m_Lives(0)
+	: m_Lives(3)
 
 	, m_TotalScore()
 	, m_ScoreForLife()
@@ -12,6 +12,7 @@ PlayerStatsSystem::PlayerStatsSystem(uint32_t maxEmeralds, uint32_t maxEnemies)
 	, m_EmeraldStreak()
 
 	, m_EnemyCount(maxEnemies)
+	, m_MaxEnemies(maxEnemies)
 	
 	, m_IsGameOver(false)
 	, m_LostLife(false)
@@ -55,7 +56,7 @@ void PlayerStatsSystem::InitFunctions()
 	{
 		m_Lives--;
 		m_EmeraldStreak = 0;
-		
+
 		m_LostLife = true;
 		m_GainedLife = false;
 
@@ -84,16 +85,31 @@ void PlayerStatsSystem::InitFunctions()
 		std::cout << "EMERALD STREAK\n";
 	};
 
+	auto level1 = [this]()->void
+	{
+		m_EmeraldCount = 19;
+		m_EmeraldStreak = 0;
+		m_EnemyCount = 5;
+
+		m_Lives = 3;
+		m_TotalScore = 0;
+		m_ScoreForLife = 0;
+
+		m_IsGameOver = false;
+		m_GainedLife = false;
+		m_LostLife = false;
+	};
+
 	auto level2 = [this]()->void
 	{
 		m_EmeraldCount = 21;
-		m_EnemyCount = 1;
+		m_EnemyCount = 7;
 	};
 
 	auto level3 = [this]()->void
 	{
 		m_EmeraldCount = 26;
-		m_EnemyCount = 1;
+		m_EnemyCount = 9;
 	};
 
 	m_Actions = std::map<uint32_t, std::function<void()>>
@@ -104,14 +120,15 @@ void PlayerStatsSystem::InitFunctions()
 		{3, lifeLost}, 
 		{4, extraLife}, 
 		{5, emeraldStreak},
-		{6, level2},
-		{7, level3}
+		{6, level1},
+		{7, level2},
+		{8, level3}
 	};
 }
 
 void PlayerStatsSystem::Update()
 {
-	if (m_ScoreForLife >= 20000)
+	if (m_ScoreForLife >= 5000)
 	{
 		OnNotify(4);
 	}

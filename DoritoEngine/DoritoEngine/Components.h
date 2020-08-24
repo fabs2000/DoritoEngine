@@ -13,6 +13,7 @@
 
 //Game Components
 #include "../Digger/DiggerComponent.h"
+#include "../Digger/EntityControllerComponent.h"
 #include "../Digger/EnemyComponent.h"
 #include "../Digger/FireBallComponent.h"
 #include "../Digger/DirtBlockComponent.h"

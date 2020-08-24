@@ -45,7 +45,6 @@ sf::Text* ResourceManager::LoadText(const std::string& text, const std::string& 
 	sf::Text* pText = nullptr;
 
 	auto it = m_pTexts.find(text);
-
 	if (it != m_pTexts.end())
 	{
 		pText = (*it).second;
@@ -55,6 +54,7 @@ sf::Text* ResourceManager::LoadText(const std::string& text, const std::string& 
 		pText = new sf::Text(text, *font, size);
 		m_pTexts.emplace(text, pText);
 	}
+
 	return pText;
 }
 

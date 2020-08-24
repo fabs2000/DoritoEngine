@@ -15,7 +15,9 @@ public:
 	BaseComponent& operator=(const BaseComponent& other) = delete;
 	BaseComponent& operator=(BaseComponent&& other) noexcept = delete;
 
-	GameObject* GetGameObject() const { return m_pGameObject; };
+
+	GameObject* GetGameObject() const{ return m_pGameObject; }
+
 	void SetGameObject(GameObject* pParent) { m_pGameObject = pParent; };
 
 	TransformComponent* GetParentTransform() const;
@@ -29,6 +31,7 @@ protected:
 	virtual void Initialize() = 0;
 	virtual void Update(float dt) = 0;
 	virtual void Render() = 0;
+
 
 private:
 	TransformComponent* m_pTransform;
