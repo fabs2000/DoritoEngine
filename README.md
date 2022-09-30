@@ -1,13 +1,3 @@
- //  _____     ____    _____    _____   _______    ____      ______   _   _    _____   _____   _   _   ______   //
- // |  __ \   / __ \  |  __ \  |_   _| |__   __|  / __ \    |  ____| | \ | |  / ____| |_   _| | \ | | |  ____|  //
- // | |  | | | |  | | | |__) |   | |      | |    | |  | |   | |__    |  \| | | |  __    | |   |  \| | | |__     //
- // | |  | | | |  | | |  _  /    | |      | |    | |  | |   |  __|   | . ` | | | |_ |   | |   | . ` | |  __|    // 
- // | |__| | | |__| | | | \ \   _| |_     | |    | |__| |   | |____  | |\  | | |__| |  _| |_  | |\  | | |____   //
- // |_____/   \____/  |_|  \_\ |_____|    |_|     \____/    |______| |_| \_|  \_____| |_____| |_| \_| |______   //
- // ----------------------------------------------------------------------------------------------------------- //
- 
- Link to Source: https://github.com/fabs2000/DoritoEngine
- 
  Dorito Engine is an SFML engine written using part of the design patterns in the book "Game Programming Patterns".
  
  Towards the start of development, the debate on whether to use SDL or SFML to base the engine on was the main thing I thought about. 
